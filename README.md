@@ -1,6 +1,12 @@
 # InjectGUI
 
-macOS Integrated Injection Framework (GUI version)
+macOS Integrated Injection Framework -- InjectLib (GUI Qiuchenly ILOVEU version)
+
+## Drawing Big 🍪
+
+- Customize Remote Git Repo, branch, and commit
+- Drag your favorite InjectLib to inject
+- Automatically download the original package and inject
 
 ## References
 
