@@ -143,6 +143,15 @@ enum Tccutil: Codable {
             try container.encode(x)
         }
     }
+
+    var allStrings: [String] {
+        switch self {
+        case .stringArray(let x):
+            return x
+        default:
+            return []
+        }
+    }
 }
 
 // MARK: - BasePublicConfig
@@ -333,6 +342,19 @@ class InjectConfiguration: ObservableObject {
             return nil
         }
         return app
+    }
+
+    /// 检查此 package 是否被支持
+    func checkPackageIsSupported(package: String) -> Bool {
+        print("[*] Checking if \(package) is supported...")
+        guard let conf = remoteConf else {
+            return false
+        }
+        let package = conf.appList.first { $0.packageName.allStrings.contains(package) }
+        guard let package = package else {
+            return false
+        }
+        return true
     }
 
 }

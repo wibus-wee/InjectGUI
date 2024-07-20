@@ -32,31 +32,35 @@ struct SidebarView: View {
             .padding()
 
             Group {
-                List(softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }) { app in
-                    HStack {
-                        Image(nsImage: app.detail.icon)
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                            .cornerRadius(4)
-                        VStack (alignment: .leading) {
-                            Text(app.detail.name)
-                                .font(.headline)
+                List(softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }.sorted { $0.detail.name < $1.detail.name }, id: \.id) { app in
+                    NavigationLink {
+                        AppDetailView(appId: app.detail.identifier)
+                    } label: {
+                        HStack {
+                            Image(nsImage: app.detail.icon)
+                                .resizable()
+                                .frame(width: 32, height: 32)
+                                .cornerRadius(4)
                             VStack (alignment: .leading) {
-                                Text(app.detail.identifier)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Text("Version: \(app.detail.version)")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Text(app.detail.name)
+                                    .font(.headline)
+                                VStack (alignment: .leading) {
+                                    Text(app.detail.identifier)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    Text("Version: \(app.detail.version)")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
                             }
                         }
+                        .padding(.horizontal, 8)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .contentShape(Rectangle())
                     }
-                    .padding(.horizontal, 8)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .contentShape(Rectangle())
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }

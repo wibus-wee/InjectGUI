@@ -24,11 +24,18 @@ struct WelcomeView: View {
   var body: some View {
     ZStack {
             VStack(spacing: 4) {
+                Image("Avatar")
+                    .antialiased(true)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 128, height: 128)
+
+                Spacer().frame(height: 16)
+
                 Text("Welcome to InjectGUI")
-                    .font(.system(.title, design: .rounded, weight: .black))
-                Text("By wibus. Based on Qiuchenly/InjectLib")
-                    .font(.system(.subheadline, design: .rounded))
-                    .foregroundColor(.secondary)
+                    .font(.system(.title2, design: .rounded, weight: .bold))
+                Text("By wibus")
+                    .font(.system(.body, design: .rounded))
 
                 Spacer().frame(height: 24)
             }
@@ -40,5 +47,6 @@ struct WelcomeView: View {
             }
             .padding()
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
 }

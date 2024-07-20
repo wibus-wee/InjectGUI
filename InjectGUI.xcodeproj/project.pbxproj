@@ -20,6 +20,8 @@
 		38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A3C2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift */; };
 		38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F522C4B587900C3B60E /* SidebarView.swift */; };
 		38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F542C4B622500C3B60E /* WelcomeView.swift */; };
+		38BC1F582C4B973C00C3B60E /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 38BC1F572C4B973C00C3B60E /* ColorfulX */; };
+		38BC1F5A2C4B98A300C3B60E /* AppDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F592C4B98A300C3B60E /* AppDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,7 @@
 		38877A3C2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupApplicationSupportDirectory.swift; sourceTree = "<group>"; };
 		38BC1F522C4B587900C3B60E /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		38BC1F542C4B622500C3B60E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		38BC1F592C4B98A300C3B60E /* AppDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38BC1F582C4B973C00C3B60E /* ColorfulX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +110,7 @@
 				38877A1E2C4A6F83009F5910 /* ContentView.swift */,
 				38BC1F522C4B587900C3B60E /* SidebarView.swift */,
 				38BC1F542C4B622500C3B60E /* WelcomeView.swift */,
+				38BC1F592C4B98A300C3B60E /* AppDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -152,6 +157,9 @@
 			dependencies = (
 			);
 			name = InjectGUI;
+			packageProductDependencies = (
+				38BC1F572C4B973C00C3B60E /* ColorfulX */,
+			);
 			productName = InjectGUI;
 			productReference = 38877A192C4A6F83009F5910 /* InjectGUI.app */;
 			productType = "com.apple.product-type.application";
@@ -180,6 +188,9 @@
 				Base,
 			);
 			mainGroup = 38877A102C4A6F83009F5910;
+			packageReferences = (
+				38BC1F562C4B973C00C3B60E /* XCRemoteSwiftPackageReference "ColorfulX" */,
+			);
 			productRefGroup = 38877A1A2C4A6F83009F5910 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -207,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38877A1F2C4A6F83009F5910 /* ContentView.swift in Sources */,
+				38BC1F5A2C4B98A300C3B60E /* AppDetailView.swift in Sources */,
 				38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */,
 				38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */,
 				38877A372C4A7294009F5910 /* Configuration.swift in Sources */,
@@ -430,6 +442,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		38BC1F562C4B973C00C3B60E /* XCRemoteSwiftPackageReference "ColorfulX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Lakr233/ColorfulX.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		38BC1F572C4B973C00C3B60E /* ColorfulX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 38BC1F562C4B973C00C3B60E /* XCRemoteSwiftPackageReference "ColorfulX" */;
+			productName = ColorfulX;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 38877A112C4A6F83009F5910 /* Project object */;
 }
