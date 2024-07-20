@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "./InjectGUI/App"
+		},
+		{
+			"path": "./InjectGUI/Extension"
+		},
+		{
+			"path": "./InjectGUI/Util"
+		},
+		{
+			"path": "./InjectGUI/View"
+		},
+		{
+			"path": "InjectGUI"
+		},
+		{
+			"path": ".",
+			"name": "InjectGUI Root"
+		},
+	]
+}

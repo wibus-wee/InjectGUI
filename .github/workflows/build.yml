@@ -1,0 +1,46 @@
+name: Build
+on:
+  # push:
+  #   branches:
+  #     - '**'
+  #   paths-ignore:
+  #     - 'LICENSE'
+  #     - '**.md'
+  # pull_request:
+  # release:
+  #   types: [created]
+  workflow_dispatch:
+
+permissions:
+  write-all
+
+jobs:
+  build-mac:
+    name: Build for macOS (Universal)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build for macOS (Universal)
+        shell: bash
+        run: |
+          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build'
+      - name: Create DMG
+        shell: bash
+        run: |
+          hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/Release/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: InjectGUI.dmg
+          path: InjectGUI.dmg
+      - name: Upload DMG to GitHub Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: InjectGUI.dmg
+          asset_name: InjectGUI.dmg
+          asset_content_type: application/x-apple-diskimage

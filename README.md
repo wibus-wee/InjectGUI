@@ -4,7 +4,7 @@
   </p>
 	<h1 align="center"><b>InjectGUI</b></h1>
 	<p align="center">
-		macOS Integrated Injection Framework -- InjectLib (GUI Qiuchenly ILOVEU version)
+		macOS Integrated Injection Framework (GUI version)
     <br />
     <br />
     <b>Download for </b>
@@ -29,13 +29,13 @@ _**New to Swift. Poor code quality.**_
 
 ## 🍪 Plans
 
-- Customize Remote Git Repo, branch, and commit
-- Drag your favorite InjectLib to inject
-- Automatically download the original package and inject
+- [x] Customize Remote Git Repo, branch, and commit
+- [ ] Drag your favorite InjectLib to inject
+- [ ] Automatically download the original package and inject
 
 ## 🔗 References
 
-- [QiuChenly/InjectLib](https://github.com/QiuChenly/InjectLib)
+- [x] https://github.com/QiuChenly/InjectLib
 
 ## 🧑‍⚖️ Author
 
