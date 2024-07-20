@@ -83,6 +83,6 @@ class SoftwareManager: ObservableObject {
         }
     }
 
-    print("[*] App list: \(appListCache.keys)")
+    // print("[*] App list: \(appListCache.keys)")
   }
 }
