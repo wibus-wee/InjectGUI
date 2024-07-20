@@ -268,7 +268,7 @@ class InjectConfiguration: ObservableObject {
                 print("[*] Downloaded 91QiuChenly.dylib, save to \(path)")
                 try data.write(to: _url)
 
-                self.writeVersionMetadataIntoInjectLib(url: _url, version: version)
+                let _ = self.writeVersionMetadataIntoInjectLib(url: _url, version: version)
 
             } catch {
                 print("[E] Failed to write 91QiuChenly.dylib: \(error.localizedDescription)")
@@ -352,8 +352,6 @@ class InjectConfiguration: ObservableObject {
         let _url = "\(url)/raw/\(branchOrCommit)/tool/GenShineImpactStarter"
         let dataUrl = URL(string: _url)!
         
-        let version = commit ?? "\(branch ?? "main")/latest"
-
         let task = URLSession.shared.dataTask(with: dataUrl) { data, response, error in
             guard let data = data else {
                 print("[E] Failed to download GenShineImpactStarter: \(error?.localizedDescription ?? "Unknown error")")
@@ -401,7 +399,7 @@ class InjectConfiguration: ObservableObject {
         let package = conf.appList.first { $0.packageName.allStrings.contains(package) }
         guard let package = package else {
             return false
-        }
+        } != nil
         return true
     }
 
