@@ -2,17 +2,22 @@
 
 macOS Integrated Injection Framework -- InjectLib (GUI Qiuchenly ILOVEU version)
 
-## Drawing Big 🍪
+## 👀 Preview
+
+![telegram-cloud-photo-size-5-6113909371063875867-y](https://github.com/user-attachments/assets/22f787e9-9349-40c1-ac90-2e55ba8e61bb)
+
+
+## 🍪 Plans
 
 - Customize Remote Git Repo, branch, and commit
 - Drag your favorite InjectLib to inject
 - Automatically download the original package and inject
 
-## References
+## 🔗 References
 
 - [QiuChenly/InjectLib](https://github.com/QiuChenly/InjectLib)
 
-## Author
+## 🧑‍⚖️ Author
 
 InjectGUI © Wibus, Released under GPLv3. Created on Jul 19, 2024
 
