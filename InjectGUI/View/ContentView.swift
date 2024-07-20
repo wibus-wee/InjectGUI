@@ -14,9 +14,9 @@ struct ContentView: View {
             Group {
                 SidebarView()
             }
-            // .frame(maxWidth: .infinity, maxHeight: .infinity)
-            // .listStyle(.sidebar)
             .navigationTitle(Constants.appName)
+
+            WelcomeView()
         }
     }
 }

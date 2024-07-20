@@ -19,6 +19,7 @@
 		38877A3A2C4A730F009F5910 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A392C4A730F009F5910 /* Constants.swift */; };
 		38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A3C2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift */; };
 		38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F522C4B587900C3B60E /* SidebarView.swift */; };
+		38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F542C4B622500C3B60E /* WelcomeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		38877A392C4A730F009F5910 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		38877A3C2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupApplicationSupportDirectory.swift; sourceTree = "<group>"; };
 		38BC1F522C4B587900C3B60E /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		38BC1F542C4B622500C3B60E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			children = (
 				38877A1E2C4A6F83009F5910 /* ContentView.swift */,
 				38BC1F522C4B587900C3B60E /* SidebarView.swift */,
+				38BC1F542C4B622500C3B60E /* WelcomeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				38877A372C4A7294009F5910 /* Configuration.swift in Sources */,
 				38877A302C4A70DB009F5910 /* SoftwareManager.swift in Sources */,
 				38877A332C4A7222009F5910 /* PublishedStorage.swift in Sources */,
+				38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */,
 				38877A2E2C4A6FFA009F5910 /* InjectConfiguration.swift in Sources */,
 				38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */,
 				38877A352C4A7254009F5910 /* ViewKit.swift in Sources */,
