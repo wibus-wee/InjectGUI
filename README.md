@@ -2,6 +2,14 @@
 
 macOS Integrated Injection Framework -- InjectLib (GUI Qiuchenly ILOVEU version)
 
+<pre align="center">
+🧪 Working in Progress
+</pre>
+
+## ⚠️ Warning
+
+_**New to Swift. Poor code quality.**_
+
 ## 👀 Preview
 
 ![telegram-cloud-photo-size-5-6113909371063875867-y](https://github.com/user-attachments/assets/22f787e9-9349-40c1-ac90-2e55ba8e61bb)
