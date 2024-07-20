@@ -329,7 +329,7 @@ class InjectConfiguration: ObservableObject {
             let result = getxattr(_url.path, attributeName, &buffer, bufferLength, 0, 0)
             if result == -1 {
                 print("[E] Failed to get version metadata from 91QiuChenly.dylib: \(String(cString: strerror(errno)))")
-                return nil
+                return "Unknown Version"
             }
 
             buffer[bufferLength] = 0  // Ensure null termination

@@ -87,7 +87,7 @@ struct SettingsView: View {
             VStack (alignment: .leading, spacing: 4) {
 
               SettingItemView("Local Version") {
-                Text(injectConfiguration.getInjectLibVersion() ?? "Unknown")
+                Text(injectConfiguration.getInjectLibVersion() ?? "Non Exist")
                   .foregroundColor(.secondary)
               }
 
