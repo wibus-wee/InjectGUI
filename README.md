@@ -1,6 +1,18 @@
-# InjectGUI
-
-macOS Integrated Injection Framework -- InjectLib (GUI Qiuchenly ILOVEU version)
+<p align="center">
+  <p align="center">
+   <img width="150" height="150" src="/InjectGUI/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png" alt="Logo">
+  </p>
+	<h1 align="center"><b>InjectGUI</b></h1>
+	<p align="center">
+		macOS Integrated Injection Framework -- InjectLib (GUI Qiuchenly ILOVEU version)
+    <br />
+    <br />
+    <b>Download for </b>
+		<a href="https://github.com/wibus-wee/PhotosProcessor/archive/refs/heads/main.zip">Source Code</a> · macOS
+    <br />
+    <i>~ Links for macOS will be added once a release is available. ~</i>
+  </p>
+</p>
 
 <pre align="center">
 🧪 Working in Progress
