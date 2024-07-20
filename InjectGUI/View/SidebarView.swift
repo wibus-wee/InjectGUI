@@ -19,8 +19,21 @@ enum DisplayMode {
 
 struct SidebarView: View {
     @State var displayMode: DisplayMode = .local
-
+    @State var searchText: String = ""
+    
     @StateObject var softwareManager = SoftwareManager.shared
+    
+    var filteredApps: [AppEntry] {
+        let apps = softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }
+        if searchText.isEmpty {
+            return apps.sorted { $0.detail.name < $1.detail.name }
+        } else {
+            return apps.filter {
+                $0.detail.name.lowercased().contains(searchText.lowercased()) ||
+                $0.detail.identifier.lowercased().contains(searchText.lowercased())
+            }.sorted { $0.detail.name < $1.detail.name }
+        }
+    }
     
     var body: some View {
         VStack {
@@ -29,10 +42,23 @@ struct SidebarView: View {
                 Text("Remote").tag(DisplayMode.remote)
             }
             .pickerStyle(.segmented)
-            .padding()
+            .padding(.horizontal)
+            
+            HStack {
+                Image(systemName: "magnifyingglass") // 添加放大镜图标
+                    .foregroundColor(.secondary)
+                TextField("Search", text: $searchText) // 添加搜索栏
+                    .textFieldStyle(PlainTextFieldStyle())
+            }
+            .padding(8)
+            .cornerRadius(8)
+            .padding(.horizontal)
+            
+            Divider() // 添加分隔线
 
+            
             Group {
-                List(softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }.sorted { $0.detail.name < $1.detail.name }, id: \.id) { app in
+                List(filteredApps, id: \.id) { app in
                     NavigationLink {
                         AppDetailView(appId: app.detail.identifier)
                     } label: {
@@ -67,8 +93,8 @@ struct SidebarView: View {
             .listStyle(SidebarListStyle())
         }
     }
-    
 }
+
 
 struct SidebarView_Previews: PreviewProvider {
     static var previews: some View {

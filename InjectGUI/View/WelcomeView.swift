@@ -34,8 +34,9 @@ struct WelcomeView: View {
 
                 Text("Welcome to InjectGUI")
                     .font(.system(.title2, design: .rounded, weight: .bold))
-                Text("By wibus")
-                    .font(.system(.body, design: .rounded))
+                Text("By wibus. Made with ❤️")
+                    .font(.system(.body, design: .rounded, weight: .bold))
+                    .foregroundColor(.secondary)
 
                 Spacer().frame(height: 24)
             }
