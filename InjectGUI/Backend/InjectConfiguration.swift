@@ -189,10 +189,16 @@ class InjectConfiguration: ObservableObject {
     func updateRemoteConf() {
         print("[*] Downloading config.json...")
         let url = configuration.remoteGit
+        if url.isEmpty {
+            configuration.remoteGit = "https://github.com/QiuChenly/InjectLib"
+            updateRemoteConf()
+            return
+        }
         let commit = configuration.remoteGitCommit
         let branch = configuration.remoteGitBranch
+        let branchOrCommit = !commit.isEmpty ? commit : !branch.isEmpty ? branch : "main"
         // <url>/raw/<branch or commit>/config.json
-        let _url = "\(url)/raw/\(branch ?? commit ?? "main")/config.json"
+        let _url = "\(url)/raw/\(branchOrCommit)/config.json"
         let dataUrl = URL(string: _url)!
         
         let task = URLSession.shared.dataTask(with: dataUrl) { data, response, error in
@@ -206,8 +212,11 @@ class InjectConfiguration: ObservableObject {
     }
     
     /// 设置远程配置来源
-    func customRemoteConf(url: String, commit: String?, branch: String?) {
+    func customRemoteConf(url: String, commit: String, branch: String) {
         configuration.remoteGit = url
+        if branch.isEmpty {
+            configuration.remoteGitBranch = "main"
+        }
         configuration.remoteGitBranch = branch
         configuration.remoteGitCommit = commit
         updateRemoteConf()
@@ -237,11 +246,12 @@ class InjectConfiguration: ObservableObject {
         let url = configuration.remoteGit
         let commit = configuration.remoteGitCommit
         let branch = configuration.remoteGitBranch
+        let branchOrCommit = !commit.isEmpty ? commit : !branch.isEmpty ? branch : "main"
         // <url>/raw/<branch or commit>/config.json
-        let _url = "\(url)/raw/\(branch ?? commit ?? "main")/tool/91QiuChenly.dylib"
+        let _url = "\(url)/raw/\(branchOrCommit)/tool/91QiuChenly.dylib"
         let dataUrl = URL(string: _url)!
         
-        let version = commit ?? "\(branch ?? "main")/latest"
+        let version = "\(branchOrCommit)/latest"
 
         let task = URLSession.shared.downloadTask(with: dataUrl) { url, response, error in
             if let error = error {
@@ -337,8 +347,9 @@ class InjectConfiguration: ObservableObject {
         let url = configuration.remoteGit
         let branch = configuration.remoteGitBranch
         let commit = configuration.remoteGitCommit
+        let branchOrCommit = !commit.isEmpty ? commit : !branch.isEmpty ? branch : "main"
         // <url>/raw/<branch or commit>/config.json
-        let _url = "\(url)/raw/\(branch ?? commit ?? "main")/tool/GenShineImpactStarter"
+        let _url = "\(url)/raw/\(branchOrCommit)/tool/GenShineImpactStarter"
         let dataUrl = URL(string: _url)!
         
         let version = commit ?? "\(branch ?? "main")/latest"

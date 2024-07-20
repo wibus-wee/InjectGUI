@@ -26,11 +26,11 @@ class Configuration: NSObject, ObservableObject {
     @PublishedStorage(key: "\(Constants.appKey).remoteGit", defaultValue: "https://github.com/QiuChenly/InjectLib")
     var remoteGit: String
     
-    @PublishedStorage(key: "\(Constants.appKey).remoteGitCommit", defaultValue: nil)
-    var remoteGitCommit: String?
+    @PublishedStorage(key: "\(Constants.appKey).remoteGitCommit", defaultValue: "")
+    var remoteGitCommit: String
     
-    @PublishedStorage(key: "\(Constants.appKey).remoteGitBranch", defaultValue: nil)
-    var remoteGitBranch: String?
+    @PublishedStorage(key: "\(Constants.appKey).remoteGitBranch", defaultValue: "main")
+    var remoteGitBranch: String
     
     
     
