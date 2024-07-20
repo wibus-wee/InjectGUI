@@ -24,5 +24,9 @@ struct InjectGUIApp: App {
         }
         .windowResizability(.contentSize)
         .commands { SidebarCommands() }
+
+        Settings {
+            SettingsView()
+        }
     }
 }
