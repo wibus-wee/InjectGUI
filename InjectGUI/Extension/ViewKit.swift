@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum InternalKit {
+enum ViewKit {
     typealias IsClickPrimaryButton = Bool
     
     struct AnySheetView: View {

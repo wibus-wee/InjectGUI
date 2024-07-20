@@ -9,12 +9,12 @@ import Foundation
 import AppKit
 
 
-struct AppDetail: Codable {
+struct AppDetail {
   let name: String // -> CFBundleName
   let identifier: String // -> CFBundleIdentifier
   let version: String // -> CFBundleVersion
   let path: String // -> path
-  let icon: String
+  let icon: NSImage
 }
 
 
@@ -24,7 +24,9 @@ class SoftwareManager: ObservableObject {
   @Published var appListCache: [String: AppDetail] = [:]
 
   init() {
-    getList()
+    DispatchQueue.main.async {
+      self.getList()
+    }
   }
 
   private func loadAppInfo(from plistPath: String) -> AppDetail? {
@@ -34,19 +36,38 @@ class SoftwareManager: ObservableObject {
               let bundleName = plist["CFBundleName"] as? String,
               let bundleIdentifier = plist["CFBundleIdentifier"] as? String,
               let bundleVersion = plist["CFBundleVersion"] as? String,
-              let bundleShortVersion = plist["CFBundleShortVersionString"] as? String,
-              let iconFile = (plist["CFBundleIconFile"] as? String ?? plist["CFBundleIconName"] as? String)?.appending(".icns") else {
+              let bundleShortVersion = plist["CFBundleShortVersionString"] as? String else {
             return nil
         }
 
-        let path = url.deletingLastPathComponent().path
-        let iconPath = URL(fileURLWithPath: plistPath).deletingLastPathComponent().appendingPathComponent("Resources").appendingPathComponent(iconFile).path
-        let icon = NSImage(contentsOfFile: iconPath)
+        // 获取图标文件名
+        let iconFileRaw = plist["CFBundleIconFile"] as? String ?? plist["CFBundleIconName"] as? String
 
-        return AppDetail(name: bundleName, identifier: bundleIdentifier, version: bundleVersion, path: path, icon: icon?.tiffRepresentation?.base64EncodedString() ?? "")
+        // 检查文件名并添加扩展名（如果需要）
+        let iconFile: String?
+        if let iconFileRaw = iconFileRaw {
+            iconFile = iconFileRaw.hasSuffix(".icns") ? iconFileRaw : iconFileRaw.appending(".icns")
+        } else {
+            iconFile = nil
+        }
+
+        // 检查 iconFile 是否为 nil
+        guard let finalIconFile = iconFile else {
+            return nil
+        }
+
+
+        let path = url.deletingLastPathComponent().path
+        let iconPath = URL(fileURLWithPath: plistPath).deletingLastPathComponent().appendingPathComponent("Resources").appendingPathComponent(finalIconFile).path
+        let icon = NSImage(contentsOfFile: iconPath)
+        if icon == nil {
+            print("[W] Failed to load icon from path: \(iconPath)")
+        }
+        return AppDetail(name: bundleName, identifier: bundleIdentifier, version: bundleVersion, path: path, icon: icon ?? NSImage())
   }
 
   func getList() {
+    print("[*] Getting app list...")
     let applicationDirectory = "/Applications"
     let fileManager = FileManager.default
 
@@ -61,5 +82,7 @@ class SoftwareManager: ObservableObject {
             appListCache[appInfo.identifier] = appInfo
         }
     }
+
+    print("[*] App list: \(appListCache.keys)")
   }
 }

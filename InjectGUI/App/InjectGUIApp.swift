@@ -22,5 +22,6 @@ struct InjectGUIApp: App {
         WindowGroup {
             ContentView()
         }
+        .windowResizability(.contentSize)
     }
 }
