@@ -331,6 +331,43 @@ class InjectConfiguration: ObservableObject {
         
         return nil
     }
+
+    func downloadGenShineImpactStarter() {
+        print("[*] Downloading GenShineImpactStarter...")
+        let url = configuration.remoteGit
+        let branch = configuration.remoteGitBranch
+        let commit = configuration.remoteGitCommit
+        // <url>/raw/<branch or commit>/config.json
+        let _url = "\(url)/raw/\(branch ?? commit ?? "main")/tool/GenShineImpactStarter"
+        let dataUrl = URL(string: _url)!
+        
+        let version = commit ?? "\(branch ?? "main")/latest"
+
+        let task = URLSession.shared.dataTask(with: dataUrl) { data, response, error in
+            guard let data = data else {
+                print("[E] Failed to download GenShineImpactStarter: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            do {
+                let path = getApplicationSupportDirectory().path
+                let _url = URL(fileURLWithPath: path).appendingPathComponent("GenShineImpactStarter")
+                try data.write(to: _url)
+
+                print("[I] Downloaded GenShineImpactStarter, save to \(path)")
+            } catch {
+                print("[E] Failed to download GenShineImpactStarter: \(error.localizedDescription)")
+            }
+        }
+
+        task.resume()
+    }
+
+    func isGenShineImpactStarterExist() -> Bool {
+        let path = getApplicationSupportDirectory().path
+        let _url = URL(fileURLWithPath: path).appendingPathComponent("GenShineImpactStarter")
+        return FileManager.default.fileExists(atPath: _url.path)
+    }
     
     /// 获取注入 package 的详细信息
     func injectDetail(package: String) -> AppList? {
