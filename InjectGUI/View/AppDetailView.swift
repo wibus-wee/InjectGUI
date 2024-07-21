@@ -32,7 +32,15 @@ struct AppDetailView: View {
 
   init(appId: String) {
     self.appId = appId
-    self._appDetail = State(wrappedValue: SoftwareManager.shared.appListCache[appId] ?? AppDetail(name: "", identifier: "", version: "", path: "", icon: NSImage()))
+    let appInjectConfDetail = injectConfiguration.injectDetail(package: appId)
+    self.appInjectConfDetail = appInjectConfDetail
+    let getAppDetailFromSoftwareManager = softwareManager.appListCache[appId]
+    if getAppDetailFromSoftwareManager != nil {
+      self.appDetail = SoftwareManager.shared.appListCache[appId]!
+    } else {
+        self.appDetail = AppDetail(name: appInjectConfDetail?.packageName.allStrings.first ?? "", identifier: appInjectConfDetail?.packageName.allStrings.first ?? "", version: "", path: "", icon: NSImage())
+    }
+    // self._appDetail = State(wrappedValue: SoftwareManager.shared.appListCache[appId] ?? AppDetail(name: "", identifier: "", version: "", path: "", icon: NSImage()))
     self._compatibility = State(wrappedValue: Compatibility(id: appId, inInjectLibList: false))
     self._appInjectConfDetail = State(wrappedValue: nil)
   }
@@ -56,7 +64,8 @@ struct AppDetailView: View {
             id: appId,
             inInjectLibList: inInjectLibList
           )
-        self.appInjectConfDetail = injectConfiguration.injectDetail(package: appId)
+        let appInjectConfDetail = injectConfiguration.injectDetail(package: appId)
+        self.appInjectConfDetail = appInjectConfDetail
     }
   }
 
