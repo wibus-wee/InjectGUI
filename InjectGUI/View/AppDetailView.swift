@@ -101,7 +101,7 @@ struct AppDetailView: View {
                   .font(.subheadline)
             }
 
-            if let isInList = compatibility.inInjectLibList, isInList {
+            if compatibility.inInjectLibList {
                 HStack {
                     Image(systemName: CompatibilityIcon.compatible.rawValue)
                         .foregroundColor(.green)
@@ -114,6 +114,7 @@ struct AppDetailView: View {
                     }
                 }
             }
+
             
             HStack {
                 Image(systemName: appInjectConfDetail?.deepSignApp ?? false ? CompatibilityIcon.compatible.rawValue : CompatibilityIcon.incompatible.rawValue)

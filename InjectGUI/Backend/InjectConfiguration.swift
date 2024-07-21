@@ -399,7 +399,7 @@ class InjectConfiguration: ObservableObject {
         let package = conf.appList.first { $0.packageName.allStrings.contains(package) }
         guard let package = package else {
             return false
-        } != nil
+        }
         return true
     }
 
