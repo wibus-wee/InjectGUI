@@ -100,6 +100,7 @@ struct SettingsView: View {
               SettingItemView("Download GenShineImpactStarter") {
                 Button(action: {
                   injectConfiguration.downloadGenShineImpactStarter()
+                  isGenShineImpactStarterExist = true
                 }) {
                   Text(isGenShineImpactStarterExist ? "Downloaded" : "Download")
                 }
@@ -215,6 +216,18 @@ struct SettingsView: View {
 
         }
       .padding(20)
+    }
+    .onAppear() {
+      print("SettingsView onAppear") 
+    }
+    .onDisappear() {
+      print("SettingsView onDisappear") 
+    }
+    .onReceive(NotificationCenter.default.publisher(for: NSApplication.willBecomeActiveNotification)) { _ in
+      print("SettingsView NSApplication.willBecomeActiveNotification")
+    }
+    .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+      print("SettingsView NSApplication.didBecomeActiveNotification")
     }
     .tabItem {
         Label("General", systemImage: "gear")

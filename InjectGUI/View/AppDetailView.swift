@@ -110,19 +110,19 @@ struct AppDetailView: View {
                   .font(.subheadline)
             }
 
-            if compatibility.inInjectLibList {
+            // if compatibility.inInjectLibList {
                 HStack {
                     Image(systemName: CompatibilityIcon.compatible.rawValue)
                         .foregroundColor(.green)
                     HStack {
                         Text("Compatible Version")
                             .font(.subheadline)
-                        Text("Universal Version")
+                        Text("Universal Version (? Maybe)")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                 }
-            }
+            // }
 
             
             HStack {
