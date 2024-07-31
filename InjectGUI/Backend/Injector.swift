@@ -174,11 +174,6 @@ class Injector: ObservableObject {
         self.emegencyStop = true
     }
 
-    // MARK: - 注入原神之检查注入工具还在不在
-    func checkToolIsExistOrInstall() {
-        
-    }
-
     // MARK: - 注入原神之 Keygen
     func handleKeygen() {
         let stage = InjectStage.handleKeygen

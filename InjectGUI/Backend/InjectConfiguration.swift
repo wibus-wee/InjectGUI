@@ -16,7 +16,12 @@ class InjectConfiguration: ObservableObject {
     @Published var remoteConf = nil as InjectConfigurationModel?
     
     private init() {
+        // 开发环境默认关掉捏，因为防止疯狂重新编译而导致一直在获取资源
+        #if !DEBUG && !TEST
         update()
+        #else
+        updateRemoteConf() // 配置还是需要 Fetch 的
+        #endif
     }
     
     private func downloadConfig(data: Data?) {
@@ -228,16 +233,24 @@ class InjectConfiguration: ObservableObject {
     }
 
     // MARK: - General Functions
+    let injectTools: [String] = [
+        "91QiuChenly.dylib",
+        "GenShineImpactStarter",
+        "insert_dylib",
+        "optool"
+    ]
 
     func updateInjectTools() {
-        updateInjectTool(name: "91QiuChenly.dylib")
-        updateInjectTool(name: "GenShineImpactStarter")
+        for tool in injectTools {
+            updateInjectTool(name: tool)
+        }
     }
 
 
     func downloadAllInjectTools() {
-        downloadInjectTool(name: "91QiuChenly.dylib")
-        downloadInjectTool(name: "GenShineImpactStarter")
+        for tool in injectTools {
+            downloadInjectTool(name: tool)
+        }
     }
     
     
