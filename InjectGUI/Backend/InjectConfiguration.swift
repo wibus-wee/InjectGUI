@@ -14,7 +14,6 @@ class InjectConfiguration: ObservableObject {
     static let shared = InjectConfiguration()
     
     @Published var remoteConf = nil as InjectConfigurationModel?
-    private var cancellables = Set<AnyCancellable>()
     
     private init() {
         updateRemoteConf()
@@ -266,11 +265,19 @@ struct Package: Identifiable {
 }
 
 // MARK: - InjectConfigurationModel
-struct InjectConfigurationModel: Codable {
+struct InjectConfigurationModel: Codable, Equatable {
+    static func == (lhs: InjectConfigurationModel, rhs: InjectConfigurationModel) -> Bool {
+        return lhs.project == rhs.project
+            && lhs.author == rhs.author
+            && lhs.version == rhs.version
+    }
+    
     let project, author: String
     let version: Double
     let basePublicConfig: BasePublicConfig
     let appList: [AppList]
+    
+    
 
     enum CodingKeys: String, CodingKey {
         case project

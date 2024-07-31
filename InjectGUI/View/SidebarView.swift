@@ -12,12 +12,15 @@ struct AppEntry: Identifiable {
     let detail: AppDetail
 }
 
+
 struct SidebarView: View {
     @State var searchText: String = ""
     
     @StateObject var softwareManager = SoftwareManager.shared
     
-    var filteredApps: [AppEntry] {
+    @State var filteredApps: [AppEntry] = []
+    
+    private func getFilteredApps() -> [AppEntry] {
         let apps = softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }
         // injectConfiguration.checkPackageIsSupported(package: app.detail.identifier)
         if searchText.isEmpty {
@@ -41,7 +44,7 @@ struct SidebarView: View {
             HStack {
                 Image(systemName: "magnifyingglass") // 添加放大镜图标
                     .foregroundColor(.secondary)
-                TextField("Search", text: $searchText) // 添加搜索栏
+                TextField("Search all local app", text: $searchText) // 添加搜索栏
                     .textFieldStyle(PlainTextFieldStyle())
             }
             .padding(8)
@@ -86,6 +89,12 @@ struct SidebarView: View {
             }
             .listStyle(SidebarListStyle())
             .frame(minWidth: 280)
+        }
+        .onChange(of: injectConfiguration.remoteConf) { _ in
+            filteredApps = getFilteredApps()
+        }
+        .onChange(of: searchText) { _ in
+            filteredApps = getFilteredApps()
         }
     }
 }
