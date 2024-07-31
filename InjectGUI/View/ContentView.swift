@@ -8,6 +8,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var softwareManager = SoftwareManager.shared
+    @State var showStatusSheet = false
 
     var body: some View {
         NavigationView {
@@ -29,6 +30,19 @@ struct ContentView: View {
                     Label("Toggle Sidebar", systemImage: "sidebar.leading")
                 }
             }
+
+            ToolbarItem {
+                Button {
+                    showStatusSheet.toggle()
+                } label: {
+                    Label("Status", systemImage: "list.bullet.rectangle")
+                }
+            }
+        }
+        .sheet(isPresented: $showStatusSheet) {
+            StatusView()
+                .background(.ultraThinMaterial)
+                .interactiveDismissDisabled(true) // disable esc to dismiss
         }
     }
 }

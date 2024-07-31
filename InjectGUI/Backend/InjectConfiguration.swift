@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine 
 
 struct Package: Identifiable {
     let id: String
@@ -16,7 +17,6 @@ struct Package: Identifiable {
 struct InjectConfigurationModel: Codable {
     let project, author: String
     let version: Double
-    let description: Description
     let basePublicConfig: BasePublicConfig
     let appList: [AppList]
 
@@ -24,7 +24,6 @@ struct InjectConfigurationModel: Codable {
         case project
         case author = "Author"
         case version = "Version"
-        case description = "Description"
         case basePublicConfig
         case appList = "AppList"
     }
@@ -43,11 +42,12 @@ struct AppList: Codable {
     let deepSignApp, noDeep: Bool?
     let entitlements: String?
     let useOptool, autoHandleSetapp: Bool?
+    let keygen: Bool?
 
     enum CodingKeys: String, CodingKey {
         case packageName, appBaseLocate, bridgeFile, injectFile, needCopyToAppDir, noSignTarget, autoHandleHelper, helperFile, tccutil, forQiuChenly, onlysh, extraShell
         case smExtra = "SMExtra"
-        case componentApp, deepSignApp, noDeep, entitlements, useOptool, autoHandleSetapp
+        case componentApp, deepSignApp, noDeep, entitlements, useOptool, autoHandleSetapp, keygen
     }
 }
 
@@ -159,19 +159,11 @@ struct BasePublicConfig: Codable {
     let bridgeFile: String
 }
 
-// MARK: - Description
-struct Description: Codable {
-    let desc, bridgeFile, packageName, injectFile: String
-    let supportVersion, supportSubVersion, extraShell, needCopyToAppDir: String
-    let deepSignApp, disableLibraryValidate, entitlements, noSignTarget: String
-    let noDeep, tccutil, autoHandleSetapp, autoHandleHelper: String
-    let helperFile, componentApp, forQiuChenly: String
-}
-
 class InjectConfiguration: ObservableObject {
     static let shared = InjectConfiguration()
     
-    var remoteConf = nil as InjectConfigurationModel?
+    @Published var remoteConf = nil as InjectConfigurationModel?
+    private var cancellables = Set<AnyCancellable>()
     
     private init() {
         updateRemoteConf()

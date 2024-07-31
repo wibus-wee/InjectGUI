@@ -14,6 +14,7 @@ struct AppDetail {
   let identifier: String // -> CFBundleIdentifier
   let version: String // -> CFBundleVersion
   let path: String // -> path
+  let executable: String // -> CFBundleExecutable
   let icon: NSImage
 }
 
@@ -45,6 +46,7 @@ class SoftwareManager: ObservableObject {
               let bundleName = plist["CFBundleName"] as? String,
               let bundleIdentifier = plist["CFBundleIdentifier"] as? String,
               let bundleVersion = plist["CFBundleVersion"] as? String,
+              let bundleExecutable = plist["CFBundleExecutable"] as? String,
               let bundleShortVersion = plist["CFBundleShortVersionString"] as? String else {
             return nil
         }
@@ -91,6 +93,7 @@ class SoftwareManager: ObservableObject {
             identifier: bundleIdentifier,
             version: bundleVersion,
             path: path,
+            executable: bundleExecutable,
             icon: icon ?? NSImage()
         )
     }

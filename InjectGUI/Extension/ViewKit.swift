@@ -46,16 +46,22 @@ enum ViewKit {
                     }
                     Divider()
                 }
-                content().frame(maxWidth: .infinity, maxHeight: .infinity)
+                content()
                 Divider()
                 HStack {
                     if !secondaryButton.isEmpty {
-                        Button { action(false) } label: { Text(secondaryButton) }
+                        Button {
+                            action(false)
+                            dismiss()
+                        } label: { Text(secondaryButton) }
                     }
                     Spacer()
                     if !primaryButton.isEmpty {
-                        Button { action(true) } label: { Text(primaryButton) }
-                            .buttonStyle(.borderedProminent)
+                        Button {
+                            action(true)
+                            dismiss()
+                        } label: { Text(primaryButton) }
+                        .buttonStyle(.borderedProminent)
                     }
                 }
                 .background(
