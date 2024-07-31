@@ -124,8 +124,8 @@ struct StatusView: View {
 
                 // MARK: - Buttons
                 Button(injector.stage.progress == 1 ? "Finished. Close" : "Stop Injecting") {
-                    print("Stop Injecting")
                     if injector.stage.progress == 1 {
+                        injector.stopInjectApp()
                         dismiss()
                         return
                     }

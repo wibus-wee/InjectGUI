@@ -11,13 +11,7 @@ import SwiftUI
 
 struct SettingsView: View {
 
-    @State var isGenShineImpactStarterExist = false
-
     @StateObject var configuration = Configuration.shared
-
-    init() {
-        self.isGenShineImpactStarterExist = injectConfiguration.isGenShineImpactStarterExist()
-    }
 
     var version: String {
         var ret = "Version: " +
@@ -87,23 +81,8 @@ struct SettingsView: View {
             VStack (alignment: .leading, spacing: 4) {
 
               SettingItemView("Local Version") {
-                Text(injectConfiguration.getInjectLibVersion() ?? "Non Exist")
-                  .foregroundColor(.secondary)
-              }
-
-              SettingItemView("Is GenShineImpactStarter Exist") {
-                Text(String(isGenShineImpactStarterExist) )
-                  .foregroundColor(.secondary)
-              }
-
-
-              SettingItemView("Download GenShineImpactStarter") {
-                Button(action: {
-                  injectConfiguration.downloadGenShineImpactStarter()
-                }) {
-                  Text(isGenShineImpactStarterExist ? "Downloaded" : "Download")
-                }
-                .disabled(isGenShineImpactStarterExist)
+                // Text(injectConfiguration.getInjectLibVersion() ?? "Non Exist")
+                //   .foregroundColor(.secondary)
               }
             }
 
@@ -194,18 +173,11 @@ struct SettingsView: View {
               Spacer(minLength: 10)
             
               HStack {
-                Button(action: {
-                  injectConfiguration.updateRemoteConf()
-                }) {
-                  Text("Update Remote Conf")
-                }
-                .disabled(configuration.remoteGit.isEmpty)
-                  
 
                 Spacer()
 
                 Button(action: {
-                  injectConfiguration.updateInjectLib()
+                  injectConfiguration.update()
                 }) {
                   Text("Update InjectLib & Tools")
                 }

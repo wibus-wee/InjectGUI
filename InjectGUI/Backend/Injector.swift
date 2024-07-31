@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import Combine 
+import Combine
+import SwiftUI
 
 enum InjectStatus {
     case none
@@ -83,30 +84,18 @@ struct InjectRunningStatus {
 
 class Injector: ObservableObject {
     static let shared = Injector()
+    
+    private let executor = Executor()
 
     @Published var shouldShowStatusSheet: Bool = false
     @Published var isRunning: Bool = false
     @Published var stage: InjectRunningStatus = .init(appId: "", appName: "", stages: [], message: "", progress: 0)
+    @State var injectDetail: AppList? = nil
+    @State var emegencyStop: Bool = false
 
-    init() {
-        // For testing
-        self.stage = InjectRunningStatus(
-            appId: "pl.maketheweb.cleanshotx",
-            appName: "CleanShot X",
-            stages: [
-                .init(stage: .start, message: InjectStage.start.description, progress: 1, status: .finished),
-                .init(stage: .checkVersionIsSupported, message: InjectStage.checkVersionIsSupported.description, progress: 1, error: .init(error: "Version is not supported", stage: .checkVersionIsSupported), status: .error),
-                .init(stage: .handleKeygen, message: InjectStage.handleKeygen.description, progress: 1, status: .finished),
-                .init(stage: .handleDeepCodeSign, message: InjectStage.handleDeepCodeSign.description, progress: 0.6, status: .running),
-            ],
-            message: "Injecting",
-            progress: 0.6
-        )
-    }
+    init() {}
 
-    func handleInjectApp() {
-
-    }
+    func handleInjectApp() {}
 
     func startInjectApp(package: String) {
         if self.isRunning {
@@ -115,35 +104,176 @@ class Injector: ObservableObject {
         guard let appDetail = softwareManager.appListCache[package] else {
             return
         }
+        guard let injectDetail = injectConfiguration.injectDetail(package: package) else {
+            return
+        }
+        self.injectDetail = injectDetail
         self.shouldShowStatusSheet = true
         self.stage = .init(
-            appId: appDetail.identifier, 
-            appName: appDetail.name, 
-            stages: [], 
+            appId: appDetail.identifier,
+            appName: appDetail.name,
+            stages: [],
             message: "Injecting",
             progress: 0
         )
         self.isRunning = true
+        self.updateInjectStage(stage: .start, message: InjectStage.start.description, progress: 1, status: .finished)
+
+        // 开始依次执行步骤
+        self.executeNextStep(steps: [
+            self.handleKeygen,
+            self.handleDeepCodeSign,
+            self.handleAutoHandleHelper,
+            self.handleSubApps,
+            self.handleTccutil,
+            self.handleExtraShell,
+            self.handleInjectLibInject
+        ])
+    }
+
+    func executeNextStep(steps: [() -> Void], index: Int = 0) {
+        guard index < steps.count else {
+            self.updateInjectStage(stage: .end, message: InjectStage.end.description, progress: 1, status: .finished)
+            return
+        }
+        steps[index]()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.executeNextStep(steps: steps, index: index + 1)
+        }
     }
 
     func updateInjectStage(stage: InjectStage, message: String, progress: Double, status: InjectStatus, error: InjectRunningError? = nil) {
         guard self.isRunning else {
             return
         }
-        self.stage.stages.append(
-            .init(
-                stage: stage,
-                message: message,
-                progress: progress,
-                error: error,
-                status: status
+        
+        if let index = self.stage.stages.firstIndex(where: { $0.stage == stage }) {
+            self.stage.stages[index].message = message
+            self.stage.stages[index].progress = progress
+            self.stage.stages[index].status = status
+            self.stage.stages[index].error = error
+        } else {
+            self.stage.stages.append(
+                .init(
+                    stage: stage,
+                    message: message,
+                    progress: progress,
+                    error: error,
+                    status: status
+                )
             )
-        )
-        self.stage.progress = progress
+        }
+        // 算一下总进度
+        self.stage.progress = self.stage.stages.reduce(0) { $0 + $1.progress } / Double(self.stage.stages.count)
     }
 
     func stopInjectApp() {
         self.stage = .init(appId: "", appName: "", stages: [], message: "", progress: 0)
+        self.injectDetail = nil
         self.isRunning = false
+        self.emegencyStop = true
+    }
+
+    // MARK: - 注入原神之检查注入工具还在不在
+    func checkToolIsExistOrInstall() {
+        
+    }
+
+    // MARK: - 注入原神之 Keygen
+    func handleKeygen() {
+        let stage = InjectStage.handleKeygen
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        self.executor.executeBinary(at: "/path/to/keygen") { [weak self] output, error in
+            if let error = error {
+                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+            } else {
+                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+            }
+        }
+    }
+
+    // MARK: - 注入原神之 DeepCodeSign
+    func handleDeepCodeSign() {
+        let stage = InjectStage.handleDeepCodeSign
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        self.executor.executeBinary(at: "/path/to/deepcodesign") { [weak self] output, error in
+            if let error = error {
+                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+            } else {
+                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+            }
+        }
+    }
+
+    // MARK: - 注入原神之 AutoHandleHelper
+    func handleAutoHandleHelper() {
+        let stage = InjectStage.handleAutoHandleHelper
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        self.executor.executeBinary(at: "/path/to/autohandlehelper") { [weak self] output, error in
+            if let error = error {
+                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+            } else {
+                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+            }
+        }
+    }
+
+    // MARK: - 注入原神之 SubApps
+    func handleSubApps() {
+        let stage = InjectStage.handleSubApps
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        self.executor.executeBinary(at: "/path/to/subapps") { [weak self] output, error in
+            if let error = error {
+                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+            } else {
+                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+            }
+        }
+    }
+
+    // MARK: - 注入原神之 Tccutil
+    func handleTccutil() {
+        let stage = InjectStage.handleTccutil
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        self.executor.executeBinary(at: "/path/to/tccutil") { [weak self] output, error in
+            if let error = error {
+                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+            } else {
+                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+            }
+        }
+    }
+
+    // MARK: - 注入原神之 ExtraShell
+    func handleExtraShell() {
+        let stage = InjectStage.handleExtraShell
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        self.executor.executeBinary(at: "/path/to/extrashell") { [weak self] output, error in
+            if let error = error {
+                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+            } else {
+                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+            }
+        }
+    }
+
+    // MARK: - 注入原神之 InjectLibInject
+    func handleInjectLibInject() {
+        let stage = InjectStage.handleInjectLibInject
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        self.executor.executeBinary(at: "/path/to/injectlibinject") { [weak self] output, error in
+            if let error = error {
+                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+            } else {
+                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+            }
+        }
     }
 }
