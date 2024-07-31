@@ -46,7 +46,6 @@ struct AppDetailView: View {
   }
 
   var body: some View {
-    // 去到最顶
     VStack(alignment: .leading, spacing: 10) {
 
       infoView
@@ -87,7 +86,20 @@ struct AppDetailView: View {
         }
         Spacer()
 
-        Button(action: { }) {
+        Button(action: {
+          if compatibility.inInjectLibList {
+            if !injector.isRunning {
+              injector.startInjectApp(package: appId)
+            } else {
+              let alert = NSAlert()
+              alert.messageText = "Inject is running"
+              alert.informativeText = "Please wait for the current inject to finish."
+              alert.alertStyle = .informational
+              alert.addButton(withTitle: "OK")
+              alert.runModal()
+            }
+          }
+         }) {
           Text("Inject")
         }
         .buttonStyle(.borderedProminent)

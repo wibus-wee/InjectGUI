@@ -10,6 +10,7 @@ import SwiftUI
 let configuration = Configuration.shared
 let injectConfiguration = InjectConfiguration.shared
 let softwareManager = SoftwareManager.shared
+let injector = Injector.shared
 
 @main
 struct InjectGUIApp: App {

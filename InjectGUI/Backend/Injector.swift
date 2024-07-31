@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine 
 
 enum InjectStatus {
     case none
@@ -83,9 +84,12 @@ struct InjectRunningStatus {
 class Injector: ObservableObject {
     static let shared = Injector()
 
+    @Published var shouldShowStatusSheet: Bool = false
+    @Published var isRunning: Bool = false
     @Published var stage: InjectRunningStatus = .init(appId: "", appName: "", stages: [], message: "", progress: 0)
 
     init() {
+        // For testing
         self.stage = InjectRunningStatus(
             appId: "pl.maketheweb.cleanshotx",
             appName: "CleanShot X",
@@ -100,5 +104,46 @@ class Injector: ObservableObject {
         )
     }
 
-    func startInjectApp(package: String) {}
+    func handleInjectApp() {
+
+    }
+
+    func startInjectApp(package: String) {
+        if self.isRunning {
+            return
+        }
+        guard let appDetail = softwareManager.appListCache[package] else {
+            return
+        }
+        self.shouldShowStatusSheet = true
+        self.stage = .init(
+            appId: appDetail.identifier, 
+            appName: appDetail.name, 
+            stages: [], 
+            message: "Injecting",
+            progress: 0
+        )
+        self.isRunning = true
+    }
+
+    func updateInjectStage(stage: InjectStage, message: String, progress: Double, status: InjectStatus, error: InjectRunningError? = nil) {
+        guard self.isRunning else {
+            return
+        }
+        self.stage.stages.append(
+            .init(
+                stage: stage,
+                message: message,
+                progress: progress,
+                error: error,
+                status: status
+            )
+        )
+        self.stage.progress = progress
+    }
+
+    func stopInjectApp() {
+        self.stage = .init(appId: "", appName: "", stages: [], message: "", progress: 0)
+        self.isRunning = false
+    }
 }

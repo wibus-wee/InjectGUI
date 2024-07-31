@@ -33,6 +33,14 @@ struct StatusView: View {
                         .foregroundColor(.secondary)
                 }
                 .padding()
+                Text("Click here to close this view.")
+                    .font(.subheadline)
+                    .underline()
+                    .foregroundColor(.secondary)
+                    .onTapGesture {
+                        dismiss()
+                    }
+                    .padding()
             } else {
                 // MARK: - App Info Display Box
 
@@ -41,7 +49,7 @@ struct StatusView: View {
                         .resizable()
                         .frame(width: 64, height: 64)
                         .cornerRadius(4)
-                    Spacer()
+                    // Spacer()
                     VStack(alignment: .leading, spacing: 4) {
                         Text(appDetail.name)
                             .font(.headline)
@@ -55,8 +63,6 @@ struct StatusView: View {
                 }
                 .frame(maxWidth: 260)
                 Divider()
-                
-
 
                 // MARK: - Inject Stage Display box
 
@@ -79,8 +85,8 @@ struct StatusView: View {
                                             .foregroundColor(.red)
                                     }
                                     Text("\(stage.description)")
-                                            .fontDesign(.rounded)
-                                            .fontWeight(injector.stage.stages[index].status == .running ? .bold : .regular)
+                                        .fontDesign(.rounded)
+                                        .fontWeight(injector.stage.stages[index].status == .running ? .bold : .regular)
                                     // Text(injector.stage.stages[index].message)
                                     //     .font(.subheadline)
                                     //     .foregroundColor(.secondary)
@@ -99,8 +105,9 @@ struct StatusView: View {
                     }
                 }
                 Spacer()
-                
+
                 // MARK: - Progress Bar
+
                 ProgressBar(value: $injector.stage.progress)
                     .frame(height: 10)
                 HStack {
@@ -117,20 +124,31 @@ struct StatusView: View {
 
                 // MARK: - Buttons
                 Button(injector.stage.progress == 1 ? "Finished. Close" : "Stop Injecting") {
-                    
-                    dismiss()
+                    print("Stop Injecting")
+                    if injector.stage.progress == 1 {
+                        dismiss()
+                        return
+                    }
+                    let alert = NSAlert()
+                    alert.messageText = "Are you sure you want to stop injecting?"
+                    alert.informativeText = "The app may not work properly if you stop injecting."
+                    alert.addButton(withTitle: "Stop")
+                    alert.addButton(withTitle: "Cancel")
+                    alert.beginSheetModal(for: NSApp.keyWindow!) { response in
+                        if response == .alertFirstButtonReturn {
+                            injector.stopInjectApp()
+                            dismiss()
+                        }
+                    }
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.large)
                 .keyboardShortcut(.defaultAction)
                 .frame(maxWidth: .infinity)
-
-
-                
             }
         }
         .onChange(of: injector.stage.appId) { appId in
-            guard let appDetail = SoftwareManager.shared.appListCache[appId] else {
+            guard let appDetail = softwareManager.appListCache[appId] else {
                 return
             }
             self.appDetail = appDetail
@@ -138,7 +156,7 @@ struct StatusView: View {
         .frame(minWidth: 350, minHeight: appDetail.name.isEmpty ? 200 : 380)
         .padding()
         .onAppear {
-            guard let appDetail = SoftwareManager.shared.appListCache[injector.stage.appId] else {
+            guard let appDetail = softwareManager.appListCache[injector.stage.appId] else {
                 return
             }
             self.appDetail = appDetail
@@ -146,7 +164,6 @@ struct StatusView: View {
         .background(Color(.windowBackgroundColor))
     }
 }
-
 
 struct ProgressBar: View {
     @Binding var value: Double

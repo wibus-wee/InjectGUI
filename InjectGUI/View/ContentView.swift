@@ -8,8 +8,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var softwareManager = SoftwareManager.shared
-    @State var showStatusSheet = false
-
+    @StateObject var injector = Injector.shared
     var body: some View {
         NavigationView {
             Group {
@@ -33,13 +32,13 @@ struct ContentView: View {
 
             ToolbarItem {
                 Button {
-                    showStatusSheet.toggle()
+                    injector.shouldShowStatusSheet.toggle()
                 } label: {
                     Label("Status", systemImage: "list.bullet.rectangle")
                 }
             }
         }
-        .sheet(isPresented: $showStatusSheet) {
+        .sheet(isPresented: $injector.shouldShowStatusSheet) { 
             StatusView()
                 .background(.ultraThinMaterial)
                 .interactiveDismissDisabled(true) // disable esc to dismiss
