@@ -16,7 +16,7 @@ class InjectConfiguration: ObservableObject {
     @Published var remoteConf = nil as InjectConfigurationModel?
     
     private init() {
-        updateRemoteConf()
+        update()
     }
     
     private func downloadConfig(data: Data?) {
@@ -121,6 +121,14 @@ class InjectConfiguration: ObservableObject {
                 try data.write(to: _url)
 
                 print("[I] Downloaded \(name), save to \(path)")
+                
+                let process = Process()
+                process.launchPath = "/bin/chmod"
+                process.arguments = ["+x", _url.path]
+                process.launch()
+                process.waitUntilExit()
+                
+                print("[I] chmod +x \(name)")
 
                 let _ = writeVersionMetadataIntoInjectTools(name: name, url: _url, version: "WIP")
             } catch {
@@ -135,6 +143,15 @@ class InjectConfiguration: ObservableObject {
         let path = getApplicationSupportDirectory().path
         let _url = URL(fileURLWithPath: path).appendingPathComponent(name)
         return FileManager.default.fileExists(atPath: _url.path)
+    }
+
+    func getInjecToolPath(name: String) -> URL? {
+        let path = getApplicationSupportDirectory().path
+        let _url = URL(fileURLWithPath: path).appendingPathComponent(name)
+        if FileManager.default.fileExists(atPath: _url.path) {
+            return _url
+        }
+        return nil
     }
 
     func updateInjectTool(name: String) {
@@ -164,7 +181,7 @@ class InjectConfiguration: ObservableObject {
         // }
     }
 
-
+    // MARK: - R/W Metadata Version
 
     private func writeVersionMetadataIntoInjectTools(name: String, url: URL, version: String) -> Int {
         print("[*] Writing version metadata into  \(name)...")
@@ -422,3 +439,4 @@ struct BasePublicConfig: Codable {
 struct GitCommit: Codable {
     let sha: String
 }
+
