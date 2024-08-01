@@ -88,7 +88,7 @@ struct InjectRunningStatus {
 class Injector: ObservableObject {
     static let shared = Injector()
 
-    private let executor = Executor()
+    @State private var executor = Executor()
 
     @Published var shouldShowStatusSheet: Bool = false
     @Published var isRunning: Bool = false
@@ -97,21 +97,7 @@ class Injector: ObservableObject {
     @State var appDetail: AppDetail? = nil
     @State var emegencyStop: Bool = false
 
-    init() {
-        executor.executeBinary(at: "/usr/bin/sudo", arguments: ["-v"]) { output, error in
-            // print(output ?? "")
-            // print(error ?? "")
-            // 弹窗显示
-            DispatchQueue.main.async {
-                let alert = NSAlert()
-                alert.messageText = "InjectGUI"
-                alert.informativeText = (output ?? "") + "\n" + (error?.localizedDescription ?? "")
-                alert.alertStyle = .informational
-                alert.addButton(withTitle: "OK")
-                alert.runModal()
-            }
-        }
-    }
+    init() {}
 
     func handleInjectApp() {}
 
@@ -232,35 +218,35 @@ class Injector: ObservableObject {
                 ["sudo", "pkill", "-f", getAppMainExecutable(app_base_locate)]
             )
         **/
-        self.executeNextStep(steps: [
-            {
-                self.executor.executeBinary(at: "/bin/chmod", arguments: ["-R", "777", self.appDetail?.path ?? ""]) { [weak self] _, error in
-                    if let error = error {
-                        self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-                    } else {
-                        self?.updateInjectStage(stage: stage, message: stage.description, progress: 0.33, status: .running)
-                    }
-                }
-            },
-            {
-                self.executor.executeBinary(at: "/usr/bin/xattr", arguments: ["-cr", self.appDetail?.path ?? ""]) { [weak self] _, error in
-                    if let error = error {
-                        self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 0.66, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-                    } else {
-                        self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-                    }
-                }
-            },
-            {
-                self.executor.executeBinary(at: "/usr/bin/pkill", arguments: ["-f", self.appDetail?.executable ?? ""]) { [weak self] _, error in
-                    if let error = error {
-                        self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-                    } else {
-                        self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-                    }
-                }
-            }
-        ])
+        // self.executeNextStep(steps: [
+        //     {
+        //         self.executor.executeBinary(at: "/bin/chmod", arguments: ["-R", "777", self.appDetail?.path ?? ""]) { [weak self] _, error in
+        //             if let error = error {
+        //                 self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+        //             } else {
+        //                 self?.updateInjectStage(stage: stage, message: stage.description, progress: 0.33, status: .running)
+        //             }
+        //         }
+        //     },
+        //     {
+        //         self.executor.executeBinary(at: "/usr/bin/xattr", arguments: ["-cr", self.appDetail?.path ?? ""]) { [weak self] _, error in
+        //             if let error = error {
+        //                 self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 0.66, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+        //             } else {
+        //                 self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+        //             }
+        //         }
+        //     },
+        //     {
+        //         self.executor.executeBinary(at: "/usr/bin/pkill", arguments: ["-f", self.appDetail?.executable ?? ""]) { [weak self] _, error in
+        //             if let error = error {
+        //                 self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+        //             } else {
+        //                 self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+        //             }
+        //         }
+        //     }
+        // ])
     }
 
     // MARK: - 注入原神之 Keygen
@@ -315,13 +301,13 @@ class Injector: ObservableObject {
         let stage = InjectStage.handleSubApps
         self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
 
-        self.executor.executeBinary(at: "/path/to/subapps") { [weak self] _, error in
-            if let error = error {
-                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-            } else {
-                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-            }
-        }
+        // self.executor.executeBinary(at: "/path/to/subapps") { [weak self] _, error in
+        //     if let error = error {
+        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+        //     } else {
+        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+        //     }
+        // }
     }
 
     // MARK: - 注入原神之 Tccutil
@@ -330,13 +316,13 @@ class Injector: ObservableObject {
         let stage = InjectStage.handleTccutil
         self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
 
-        self.executor.executeBinary(at: "/path/to/tccutil") { [weak self] _, error in
-            if let error = error {
-                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-            } else {
-                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-            }
-        }
+        // self.executor.executeBinary(at: "/path/to/tccutil") { [weak self] _, error in
+        //     if let error = error {
+        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+        //     } else {
+        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+        //     }
+        // }
     }
 
     // MARK: - 注入原神之 ExtraShell
@@ -345,13 +331,13 @@ class Injector: ObservableObject {
         let stage = InjectStage.handleExtraShell
         self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
 
-        self.executor.executeBinary(at: "/path/to/extrashell") { [weak self] _, error in
-            if let error = error {
-                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-            } else {
-                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-            }
-        }
+        // self.executor.executeBinary(at: "/path/to/extrashell") { [weak self] _, error in
+        //     if let error = error {
+        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+        //     } else {
+        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+        //     }
+        // }
     }
 
     // MARK: - 注入原神之 InjectLibInject
@@ -360,12 +346,12 @@ class Injector: ObservableObject {
         let stage = InjectStage.handleInjectLibInject
         self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
 
-        self.executor.executeBinary(at: "/path/to/injectlibinject") { [weak self] _, error in
-            if let error = error {
-                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-            } else {
-                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-            }
-        }
+        // self.executor.executeBinary(at: "/path/to/injectlibinject") { [weak self] _, error in
+        //     if let error = error {
+        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+        //     } else {
+        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+        //     }
+        // }
     }
 }
