@@ -90,6 +90,11 @@ struct StatusView: View {
                                     // Text(injector.stage.stages[index].message)
                                     //     .font(.subheadline)
                                     //     .foregroundColor(.secondary)
+                                    if injector.stage.stages[index].error != nil {
+                                        Text("Error: \(injector.stage.stages[index].error!.error)")
+                                            .font(.subheadline)
+                                            .foregroundColor(.red)
+                                    }
                                     Spacer()
                                     Text("\(Int(injector.stage.stages[index].progress * 100))%")
                                         .font(.subheadline)
@@ -153,7 +158,7 @@ struct StatusView: View {
             }
             self.appDetail = appDetail
         }
-        .frame(minWidth: 350, minHeight: appDetail.name.isEmpty ? 200 : 380)
+        .frame(minWidth: 350, minHeight: appDetail.name.isEmpty ? 200 : 400)
         .padding()
         .onAppear {
             guard let appDetail = softwareManager.appListCache[injector.stage.appId] else {

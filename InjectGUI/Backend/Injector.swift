@@ -16,7 +16,7 @@ enum InjectStatus {
     case error
 }
 
-enum InjectStage {
+enum InjectStage: CaseIterable {
     case start
     case copyExecutableFileAsBackup
     case checkPermissionAndRun
@@ -31,10 +31,6 @@ enum InjectStage {
 }
 
 extension InjectStage {
-    static var allCases: [InjectStage] {
-        return [.start, .copyExecutableFileAsBackup, .checkPermissionAndRun, .handleKeygen, .handleDeepCodeSign, .handleAutoHandleHelper, .handleSubApps, .handleTccutil, .handleExtraShell, .handleInjectLibInject, .end]
-    }
-
     var description: String {
         switch self {
         case .start:
@@ -87,15 +83,15 @@ struct InjectRunningStatus {
 
 class Injector: ObservableObject {
     static let shared = Injector()
-
-    @State private var executor = Executor()
-
+    
+    private let executor = Executor.shared
+    
     @Published var shouldShowStatusSheet: Bool = false
     @Published var isRunning: Bool = false
     @Published var stage: InjectRunningStatus = .init(appId: "", appName: "", stages: [], message: "", progress: 0)
-    @State var injectDetail: AppList? = nil
-    @State var appDetail: AppDetail? = nil
-    @State var emegencyStop: Bool = false
+    @Published var injectDetail: AppList? = nil
+    @Published var appDetail: AppDetail? = nil
+    @Published var emergencyStop: Bool = false
 
     init() {}
 
@@ -123,28 +119,30 @@ class Injector: ObservableObject {
         )
         self.isRunning = true
         self.updateInjectStage(stage: .start, message: InjectStage.start.description, progress: 1, status: .finished)
-
         // 开始依次执行步骤
-        self.executeNextStep(steps: [
-            self.handleKeygen,
-            self.handleDeepCodeSign,
-            self.handleAutoHandleHelper,
-            self.handleSubApps,
-            self.handleTccutil,
-            self.handleExtraShell,
-            self.handleInjectLibInject
-        ])
+        self.executeNextStage(stages: InjectStage.allCases, index: 0)
     }
 
-    func executeNextStep(steps: [() -> Void], index: Int = 0) {
-        guard index < steps.count else {
+    func executeNextStage(stages: [InjectStage], index: Int) {
+        guard index < stages.count else {
             self.updateInjectStage(stage: .end, message: InjectStage.end.description, progress: 1, status: .finished)
             return
         }
-        steps[index]()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.executeNextStep(steps: steps, index: index + 1)
-        }
+
+        let stage = stages[index]
+        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
+
+        let commands = self.commandsForStage(stage)
+        self.executor.executeShellCommands(commands)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    self.updateInjectStage(stage: stage, message: "Error: \(error.localizedDescription)", progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+                } else {
+                    self.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
+                    self.executeNextStage(stages: stages, index: index + 1)
+                }
+            }, receiveValue: { _ in })
+            .store(in: &self.executor.cancellables)
     }
 
     func updateInjectStage(stage: InjectStage, message: String, progress: Double, status: InjectStatus, error: InjectRunningError? = nil) {
@@ -168,7 +166,6 @@ class Injector: ObservableObject {
                 )
             )
         }
-        // 算一下总进度
         self.stage.progress = self.stage.stages.reduce(0) { $0 + $1.progress } / Double(self.stage.stages.count)
     }
 
@@ -176,182 +173,108 @@ class Injector: ObservableObject {
         self.stage = .init(appId: "", appName: "", stages: [], message: "", progress: 0)
         self.injectDetail = nil
         self.isRunning = false
-        self.emegencyStop = true
+        self.emergencyStop = true
+    }
+
+    func commandsForStage(_ stage: InjectStage) -> [(command: String, isAdmin: Bool)] {
+        switch stage {
+        case .copyExecutableFileAsBackup:
+            return copyExecutableFileAsBackupCommands()
+        case .checkPermissionAndRun:
+            return checkPermissionAndRunCommands()
+        case .handleKeygen:
+            return handleKeygenCommands()
+        case .handleDeepCodeSign:
+            return handleDeepCodeSignCommands()
+        case .handleAutoHandleHelper:
+            return handleAutoHandleHelperCommands()
+        case .handleSubApps:
+            return handleSubAppsCommands()
+        case .handleTccutil:
+            return handleTccutilCommands()
+        case .handleExtraShell:
+            return handleExtraShellCommands()
+        case .handleInjectLibInject:
+            return handleInjectLibInjectAdminCommands()
+        default:
+            return []
+        }
     }
 
     // MARK: - 注入原神之 Copy Executable File as Backup
 
-    func copyExecutableFileAsBackup() {
-        let stage = InjectStage.copyExecutableFileAsBackup
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-//        let bridgeDir = self.injectDetail?.bridgeFile.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
-//        let source = self.appDetail?.path.appendingPathComponent(bridgeDir).appendingPathComponent(self.appDetail?.executable ?? "")
-//        guard let source = source else {
-//            self.updateInjectStage(stage: stage, message: "Source file not found", progress: 1, status: .error, error: InjectRunningError(error: "Source file not found", stage: stage))
-//            return
-//        }
-//        let destination = source.appending(".backup")
-//
-//        /// MARK: - ⚠️ 麻烦后续这里做一个判断是否要用已备份的，这里暂时默认用
-//        if FileManager.default.fileExists(atPath: destination) {
-//            self.updateInjectStage(stage: stage, message: "Backup file already exists", progress: 1, status: .none)
-//            return
-//        }
-//        self.executor.executeBinary(at: "/bin/cp", arguments: [source, destination]) { [weak self] _, error in
-//            if let error = error {
-//                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-//            } else {
-//                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-//            }
-//        }
+    func copyExecutableFileAsBackupCommands() -> [(command: String, isAdmin: Bool)] {
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
+        let source = (self.appDetail?.path ?? "") + bridgeDir + "/" + (self.injectDetail?.bridgeFile ?? self.appDetail?.executable ?? "")
+        let destination = source.appending(".backup")
+        print("Source: \(source). bridgeDir: \(bridgeDir). bridgeFile: \(self.injectDetail?.bridgeFile ?? ""). executable: \(self.appDetail?.executable ?? "")")
+        if !FileManager.default.fileExists(atPath: source) {
+            print("Source file not found: \(source)")
+            return []
+        }
+        if FileManager.default.fileExists(atPath: destination) {
+            print("Destination file already exists: \(destination)")
+            return []
+        }
+        return [("cp \(source) \(destination)", true)]
     }
 
     // MARK: - 注入原神之 权限与运行检查
-    func checkPermissionAndRun() {
-        let stage = InjectStage.checkPermissionAndRun
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-        /**
-            subprocess.run(["sudo", "chmod", "-R", "777", app_base_locate])
-            subprocess.run(["sudo", "xattr", "-cr", app_base_locate])
-
-            subprocess.run(
-                ["sudo", "pkill", "-f", getAppMainExecutable(app_base_locate)]
-            )
-        **/
-        // self.executeNextStep(steps: [
-        //     {
-        //         self.executor.executeBinary(at: "/bin/chmod", arguments: ["-R", "777", self.appDetail?.path ?? ""]) { [weak self] _, error in
-        //             if let error = error {
-        //                 self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-        //             } else {
-        //                 self?.updateInjectStage(stage: stage, message: stage.description, progress: 0.33, status: .running)
-        //             }
-        //         }
-        //     },
-        //     {
-        //         self.executor.executeBinary(at: "/usr/bin/xattr", arguments: ["-cr", self.appDetail?.path ?? ""]) { [weak self] _, error in
-        //             if let error = error {
-        //                 self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 0.66, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-        //             } else {
-        //                 self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-        //             }
-        //         }
-        //     },
-        //     {
-        //         self.executor.executeBinary(at: "/usr/bin/pkill", arguments: ["-f", self.appDetail?.executable ?? ""]) { [weak self] _, error in
-        //             if let error = error {
-        //                 self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-        //             } else {
-        //                 self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-        //             }
-        //         }
-        //     }
-        // ])
+    func checkPermissionAndRunCommands() -> [(command: String, isAdmin: Bool)] {
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
+        let source = self.appDetail?.path ?? "" + bridgeDir + (self.injectDetail?.bridgeFile ?? "")
+        let appBaseLocate = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "")
+        return [
+            ("sudo chmod -R 777 \(appBaseLocate)", true),
+            ("sudo xattr -cr \(appBaseLocate)", true),
+            ("sudo pkill -f \(source)", true)
+        ]
     }
 
     // MARK: - 注入原神之 Keygen
 
-    func handleKeygen() {
-        let stage = InjectStage.handleKeygen
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-        self.updateInjectStage(stage: stage, message: "Keygen not needed", progress: 1, status: .none)
+    func handleKeygenCommands() -> [(command: String, isAdmin: Bool)] {
+        return [("echo 'Keygen not needed'", false)]
     }
 
     // MARK: - 注入原神之 DeepCodeSign
 
-    func handleDeepCodeSign() {
-        let stage = InjectStage.handleDeepCodeSign
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-
-//        if self.injectDetail.isDeepCodeSign {
-//            self.executeDeepCodeSign(stage: stage)
-//        } else {
-//            self.updateInjectStage(stage: stage, message: "Deep Code Sign not needed", progress: 1, status: .none)
-//        }
-//        self.executor.executeBinary(at: "/path/to/deepcodesign") { [weak self] _, error in
-//            if let error = error {
-//                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-//            } else {
-//                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-//            }
-//        }
+    func handleDeepCodeSignCommands() -> [(command: String, isAdmin: Bool)] {
+        // Add actual deep code sign commands here
+        return []
     }
 
     // MARK: - 注入原神之 AutoHandleHelper
 
-    func handleAutoHandleHelper() {
-        let stage = InjectStage.handleAutoHandleHelper
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-
-//        self.executor.executeBinary(
-//            at: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.absoluteString ?? "",
-//            arguments: [injectDetail?.helperFile]
-//        ) { [weak self] output, error in
-//            if let error = error {
-//                self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-//            } else {
-//                self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-//            }
-//        }
+    func handleAutoHandleHelperCommands() -> [(command: String, isAdmin: Bool)] {
+        // Add actual auto handle helper commands here
+        return []
     }
 
     // MARK: - 注入原神之 SubApps
 
-    func handleSubApps() {
-        let stage = InjectStage.handleSubApps
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-
-        // self.executor.executeBinary(at: "/path/to/subapps") { [weak self] _, error in
-        //     if let error = error {
-        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-        //     } else {
-        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-        //     }
-        // }
+    func handleSubAppsCommands() -> [(command: String, isAdmin: Bool)] {
+        // Add actual sub apps handling commands here
+        return []
     }
 
     // MARK: - 注入原神之 Tccutil
 
-    func handleTccutil() {
-        let stage = InjectStage.handleTccutil
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-
-        // self.executor.executeBinary(at: "/path/to/tccutil") { [weak self] _, error in
-        //     if let error = error {
-        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-        //     } else {
-        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-        //     }
-        // }
+    func handleTccutilCommands() -> [(command: String, isAdmin: Bool)] {
+        // Add actual tccutil commands here
+        return []
     }
 
     // MARK: - 注入原神之 ExtraShell
 
-    func handleExtraShell() {
-        let stage = InjectStage.handleExtraShell
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-
-        // self.executor.executeBinary(at: "/path/to/extrashell") { [weak self] _, error in
-        //     if let error = error {
-        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-        //     } else {
-        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-        //     }
-        // }
+    func handleExtraShellCommands() -> [(command: String, isAdmin: Bool)] {
+        // Add actual extra shell commands here
+        return []
     }
 
     // MARK: - 注入原神之 InjectLibInject
 
-    func handleInjectLibInject() {
-        let stage = InjectStage.handleInjectLibInject
-        self.updateInjectStage(stage: stage, message: stage.description, progress: 0, status: .running)
-
-        // self.executor.executeBinary(at: "/path/to/injectlibinject") { [weak self] _, error in
-        //     if let error = error {
-        //         self?.updateInjectStage(stage: stage, message: error.localizedDescription, progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
-        //     } else {
-        //         self?.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
-        //     }
-        // }
+    func handleInjectLibInjectAdminCommands() -> [(command: String, isAdmin: Bool)] {
+        return [("injectlib <your_inject_lib_parameters>", true)]
     }
 }

@@ -93,8 +93,8 @@ struct AppDetailView: View {
             } else {
               let alert = NSAlert()
               alert.messageText = "Inject is running"
-              alert.informativeText = "Please wait for the current inject to finish."
-              alert.alertStyle = .informational
+              alert.informativeText = "It's a abnormal situation, it shouldn't be running, please report to developer."
+                alert.alertStyle = .warning
               alert.addButton(withTitle: "OK")
               alert.runModal()
             }

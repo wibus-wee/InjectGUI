@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    @AppStorage("showAdminPrivilegeView") private var showAdminPrivilegeView: Bool = true
     @StateObject var softwareManager = SoftwareManager.shared
     @StateObject var injector = Injector.shared
 
@@ -31,15 +31,19 @@ struct ContentView: View {
                     Label("Toggle Sidebar", systemImage: "sidebar.leading")
                 }
             }
-//
-//            ToolbarItem() {
-//                Button {
-//                    exe()    
-//                } label: {
-//                    Label("Test", systemImage: "info.circle")
-//                }
-//            }
 
+            if !showAdminPrivilegeView {
+                ToolbarItem() {
+                    Button {
+                        executor.password = ""
+                        showAdminPrivilegeView = true
+                    } label: {
+                        Label("Enter password again", systemImage: "lock")
+                    }
+                }
+            }
+
+            #if DEBUG
             ToolbarItem {
                 Button {
                     injector.shouldShowStatusSheet.toggle()
@@ -47,17 +51,12 @@ struct ContentView: View {
                     Label("Status", systemImage: "list.bullet.rectangle")
                 }
             }
+            #endif
         }
         .sheet(isPresented: $injector.shouldShowStatusSheet) { 
             StatusView()
                 .background(.ultraThinMaterial)
                 .interactiveDismissDisabled(true) // disable esc to dismiss
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

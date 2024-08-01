@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */; };
 		38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A1C2C4A6F83009F5910 /* InjectGUIApp.swift */; };
 		38877A1F2C4A6F83009F5910 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A1E2C4A6F83009F5910 /* ContentView.swift */; };
 		38877A212C4A6F87009F5910 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38877A202C4A6F87009F5910 /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPrivilegeView.swift; sourceTree = "<group>"; };
 		38877A192C4A6F83009F5910 /* InjectGUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InjectGUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38877A1C2C4A6F83009F5910 /* InjectGUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectGUIApp.swift; sourceTree = "<group>"; };
 		38877A1E2C4A6F83009F5910 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				38BC1F592C4B98A300C3B60E /* AppDetailView.swift */,
 				38AD95ED2C58F59C0032E79F /* StatusView.swift */,
 				38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */,
+				387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				38877A352C4A7254009F5910 /* ViewKit.swift in Sources */,
 				38877A3A2C4A730F009F5910 /* Constants.swift in Sources */,
 				38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */,
+				387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */,
 				38AD95EE2C58F59C0032E79F /* StatusView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
