@@ -7,21 +7,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var executor = Executor()
     
     @StateObject var softwareManager = SoftwareManager.shared
     @StateObject var injector = Injector.shared
-
-    func exe() {
-        executor.runAdminCommand("sudo -v")
-//        executor.executeAdminCommand("sudo -v")
-//        // executor.output 改变时，自动输出
-//        executor.$output
-//            .sink { output in
-//                print(output)
-//            }
-//            .store(in: &executor.cancellables)
-    }
 
     var body: some View {
         NavigationView {
@@ -43,14 +31,14 @@ struct ContentView: View {
                     Label("Toggle Sidebar", systemImage: "sidebar.leading")
                 }
             }
-
-            ToolbarItem() {
-                Button {
-                    exe()    
-                } label: {
-                    Label("Test", systemImage: "info.circle")
-                }
-            }
+//
+//            ToolbarItem() {
+//                Button {
+//                    exe()    
+//                } label: {
+//                    Label("Test", systemImage: "info.circle")
+//                }
+//            }
 
             ToolbarItem {
                 Button {

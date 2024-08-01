@@ -112,8 +112,9 @@ class Executor: ObservableObject {
     }
     
     /// 使用 AppleScript 执行具有管理员权限的命令
-    func runAdminCommand(_ command: String) -> Future<String, Error> {
+    private func runAdminCommand(_ command: String) -> Future<String, Error> {
         Future { promise in
+            command.replacingOccurrences(of: " ", with: "\\\\ ")
             let appleScript = """
             do shell script "\(command)" with administrator privileges
             """
