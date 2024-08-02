@@ -14,6 +14,8 @@ struct AppEntry: Identifiable {
 
 
 struct SidebarView: View {
+    @ObservedObject var injectConfiguration = InjectConfiguration.shared
+    
     @State var searchText: String = ""
     
     @StateObject var softwareManager = SoftwareManager.shared
