@@ -166,6 +166,13 @@ struct AppDetailView: View {
             }
             
             HStack {
+                Image(systemName: appInjectConfDetail?.keygen ?? false ? CompatibilityIcon.compatible.rawValue : CompatibilityIcon.incompatible.rawValue)
+                  .foregroundColor(appInjectConfDetail?.keygen ?? false ? .green : .red)
+                Text("This app can use keygen to generate key")
+                  .font(.subheadline)
+            }
+            
+            HStack {
                 Image(systemName: (appInjectConfDetail?.tccutil?.allStrings ?? []).count > 0 ? CompatibilityIcon.compatible.rawValue : CompatibilityIcon.incompatible.rawValue)
                   .foregroundColor((appInjectConfDetail?.tccutil?.allStrings ?? []).count > 0 ? .green : .red)
                 

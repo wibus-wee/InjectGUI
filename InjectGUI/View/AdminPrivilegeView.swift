@@ -57,7 +57,7 @@ struct AdminPrivilegeView: View {
         executor.password = password
         executor.executeAdminCommand("sudo -v")
             .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
+                if case .failure(_) = completion {
                     let alert = NSAlert()
                     alert.messageText = "Incorrect password"
                     alert.informativeText = "Please try again."

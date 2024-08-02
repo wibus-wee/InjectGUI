@@ -21,11 +21,11 @@ enum InjectStage: CaseIterable {
     case copyExecutableFileAsBackup
     case checkPermissionAndRun
     case handleKeygen
-    case handleDeepCodeSign
-    case handleAutoHandleHelper
-    case handleTccutil
-    case handleExtraShell
     case handleInjectLibInject
+    case handleDeepCodeSign
+    case handleExtraShell
+    case handleTccutil
+    case handleAutoHandleHelper
     case end
 }
 
@@ -80,9 +80,9 @@ struct InjectRunningStatus {
 
 class Injector: ObservableObject {
     static let shared = Injector()
-    
+
     private let executor = Executor.shared
-    
+
     @Published var shouldShowStatusSheet: Bool = false
     @Published var isRunning: Bool = false
     @Published var stage: InjectRunningStatus = .init(appId: "", appName: "", stages: [], message: "", progress: 0)
@@ -96,6 +96,15 @@ class Injector: ObservableObject {
 
     func startInjectApp(package: String) {
         if self.isRunning {
+            return
+        }
+        if injectConfiguration.allToolsExist() == false {
+            let alert = NSAlert()
+            alert.messageText = "Inject Tools Not Found"
+            alert.informativeText = "Inject tools not found, it may be caused by network issues or the tools are not available. Please try again later."
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
             return
         }
         guard let appDetail = softwareManager.appListCache[package] else {
@@ -176,21 +185,24 @@ class Injector: ObservableObject {
     func commandsForStage(_ stage: InjectStage) -> [(command: String, isAdmin: Bool)] {
         switch stage {
         case .copyExecutableFileAsBackup:
-            return copyExecutableFileAsBackupCommands()
+            return self.copyExecutableFileAsBackupCommands()
         case .checkPermissionAndRun:
-            return checkPermissionAndRunCommands()
+            return self.checkPermissionAndRunCommands()
         case .handleInjectLibInject:
-            return handleInjectLibInjectAdminCommands()
+            return self.handleInjectLibInjectAdminCommands()
         case .handleKeygen:
-            return handleKeygenCommands()
+            return self.handleKeygenCommands()
         case .handleDeepCodeSign:
-            return handleDeepCodeSignCommands()
+            return self.handleDeepCodeSignCommands()
         case .handleAutoHandleHelper:
-            return handleAutoHandleHelperCommands()
+            return self.handleAutoHandleHelperCommands()
         case .handleTccutil:
-            return handleTccutilCommands()
+            return self.handleTccutilCommands()
         case .handleExtraShell:
-            return handleExtraShellCommands()
+            return self.handleExtraShellCommands()
+        case .end:
+            let openApp = "open '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
+            return [(openApp, false)]
         default:
             return []
         }
@@ -199,8 +211,8 @@ class Injector: ObservableObject {
     // MARK: - 注入原神之 Copy Executable File as Backup
 
     func copyExecutableFileAsBackupCommands() -> [(command: String, isAdmin: Bool)] {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
-        let source = (self.appDetail?.path ?? "") + bridgeDir + "/" + (self.injectDetail?.bridgeFile ?? self.appDetail?.executable ?? "")
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
         let destination = source.appending(".backup")
         print("Source: \(source). bridgeDir: \(bridgeDir). bridgeFile: \(self.injectDetail?.bridgeFile ?? ""). executable: \(self.appDetail?.executable ?? "")")
         if !FileManager.default.fileExists(atPath: source) {
@@ -215,52 +227,62 @@ class Injector: ObservableObject {
     }
 
     // MARK: - 注入原神之 权限与运行检查
+
     func checkPermissionAndRunCommands() -> [(command: String, isAdmin: Bool)] {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
-        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.bridgeFile ?? self.appDetail?.executable ?? "")
-        let appBaseLocate = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "")
-        return [
-            ("sudo chmod -R 777 \(appBaseLocate)", true),
-            ("sudo xattr -cr \(appBaseLocate)", true),
-            ("sudo pkill -f \(source)", true)
-        ]
+        var shells: [(command: String, isAdmin: Bool)] = []
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
+        _ = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "")
+        shells.append(("sudo xattr -cr \(source)", true))
+        shells.append(("sudo chmod -R 777 \(source)", true))
+
+        // 检查是否运行中, 如果运行中则杀掉进程
+        let isRunning = NSRunningApplication.runningApplications(withBundleIdentifier: self.appDetail?.identifier ?? "").count > 0
+        if isRunning {
+            shells.append(("sudo pkill -f \(source)", true))
+        }
+        return shells
     }
 
     // MARK: - 注入原神之 Keygen
 
     func handleKeygenCommands() -> [(command: String, isAdmin: Bool)] {
         let userName = NSFullUserName()
-        let keygenStarterURL = injectConfiguration.getInjecToolPath(name: "KeygenStarter")
+        let keygenStarterURL = injectConfiguration.getInjecToolPath(name: "KeygenStarter")?.path().replacing("%20", with: "\\ ")
+        let bundleIdentifier = self.appDetail?.identifier ?? ""
         guard keygenStarterURL != nil else {
             return []
         }
-        return [("\(keygenStarterURL!) '\(bundleIdentifier)' '\(userName)'", false)]
+        if self.injectDetail?.keygen ?? false {
+            return [("\(keygenStarterURL!) '\(bundleIdentifier)' '\(userName)'", true)]
+        }
+        return []
     }
 
     // MARK: - 注入原神之 InjectLibInject
 
     func handleInjectLibInjectAdminCommands() -> [(command: String, isAdmin: Bool)] {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
-        let source = (self.appDetail?.path ?? "") + bridgeDir + "/" + (self.injectDetail?.bridgeFile ?? self.appDetail?.executable ?? "")
+        print("[*] Jump in injector:stages:handleInjectLibInjectAdminCommands")
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
         let destination = source.appending(".backup")
 
-        let insert_dylib_URL = injectConfiguration.getInjecToolPath(name: "insert_dylib")
-        let QiuchenlyDylib_URL = injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")
-        
+        let insert_dylib_URL = injectConfiguration.getInjecToolPath(name: "insert_dylib")?.path().replacing("%20", with: "\\ ")
+        let QiuchenlyDylib_URL = injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.path().replacing("%20", with: "\\ ")
+
         if insert_dylib_URL == nil || QiuchenlyDylib_URL == nil {
-            return []
-        }
-        
-        if !FileManager.default.fileExists(atPath: insert_dylib_URL?.path() ?? "") {
-            return []
-        }
-        if !FileManager.default.fileExists(atPath: QiuchenlyDylib_URL?.path() ?? "") {
+            let alert = NSAlert()
+            alert.messageText = "Inject Tools Path Not Found"
+            alert.informativeText = "This should not happen here, please report to the developer (Area: MainInject)"
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "OK")
             return []
         }
 
-        if injectDetail?.needCopyToAppDir == true {
+        if self.injectDetail?.needCopyToAppDir == true {
             let copyedQiuchenly_URL = (self.appDetail?.path ?? "") + bridgeDir + "/91Qiuchenly.dylib"
-            let softLink = ("ln -f -s '\(QiuchenlyDylib_URL)' '\(copyedQiuchenly_URL)'", true) // 为了防止原神更新后导致的插件失效，这里使用软链接
+            // QiuchenlyDylib_URL 得转回去，因为这个地方用了单引号，再 \ 会导致link不上
+            let softLink = ("ln -f -s '\(QiuchenlyDylib_URL!.replacing("\\ ", with: " "))' '\(copyedQiuchenly_URL)'", false) // 为了防止原神更新后导致的插件失效，这里使用软链接
             let desireApp = [
                 source
             ]
@@ -269,19 +291,19 @@ class Injector: ObservableObject {
             let componentApp = componentAppList.map { appBaseLocate + $0 }
             let componentAppExecutable = componentApp.map { $0 + "/Contents/MacOS/" + (self.readExecutableFile(app: URL(fileURLWithPath: $0)) ?? "") }
             let desireAppList = desireApp + componentAppExecutable
-            let insert_dylib_commands = desireAppList.map { "sudo \(insert_dylib_URL) '\(copyedQiuchenly_URL)' '\(destination)' '\($0)'" }
-            
+            let insert_dylib_commands = desireAppList.map { "sudo \(insert_dylib_URL!.replacing(" ", with: "\\ ")) '\(copyedQiuchenly_URL)' '\(destination)' '\($0)'" }
+
             return [softLink] + insert_dylib_commands.map { ($0, true) }
         }
 
-        return [("sudo \(insert_dylib_URL) '\(QiuchenlyDylib_URL)' '\(source)' '\(destination)'", true)]
+        return [("sudo \(insert_dylib_URL!.replacing(" ", with: "\\ ")) '\(QiuchenlyDylib_URL!.replacing(" ", with: "\\ "))' '\(source)' '\(destination)'", true)]
     }
 
     // MARK: - 注入原神之 DeepCodeSign
 
     func handleDeepCodeSignCommands() -> [(command: String, isAdmin: Bool)] {
         var shells: [(command: String, isAdmin: Bool)] = []
-        
+
         let sign_prefix = "/usr/bin/codesign -f -s - --timestamp=none --all-architectures"
         let no_deep = self.injectDetail?.noDeep
         var sign_prefix_with_deep = sign_prefix
@@ -294,17 +316,17 @@ class Injector: ObservableObject {
             sign_prefix_with_deep += " --entitlements \(entitlements)"
         }
 
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
-        let dest = (self.appDetail?.path ?? "") + bridgeDir + "/" + (self.injectDetail?.bridgeFile ?? self.appDetail?.executable ?? "")
-        
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
+        let dest = (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
+
         shells.append((sign_prefix_with_deep + " '\(dest)'", false))
-        
+
         let deepSignApp = self.injectDetail?.deepSignApp // Bool
         if deepSignApp == true {
             let deepSignAppPath = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "")
             shells.append((sign_prefix_with_deep + " '\(deepSignAppPath)'", false))
         }
-        
+
 //        let disableLibraryValidate = self.injectDetail?.dis
 //        if let disableLibraryValidate = disableLibraryValidate {
 //            shells.append(("sudo defaults write /Library/Preferences/com.apple.security.libraryvalidation.plist DisableLibraryValidation -bool true", true))
@@ -312,30 +334,72 @@ class Injector: ObservableObject {
 
         return shells
     }
-    
+
     // MARK: - 注入原神之 ExtraShell
 
     func handleExtraShellCommands() -> [(command: String, isAdmin: Bool)] {
-        let extraShell = self.injectDetail?.extraShell // String?
-        if extraShell == nil {
+        var shells: [(command: String, isAdmin: Bool)] = []
+        guard let extraShell = self.injectDetail?.extraShell else {
             return []
         }
-        let getToolDownloadURL = injectConfiguration.generateInjectToolDownloadURL(name: extraShell!)
-        guard getToolDownloadURL != nil else {
+        guard let getToolDownloadURL = injectConfiguration.generateInjectToolDownloadURL(name: extraShell) else {
             return []
         }
-        let downloadIntoTmpPath = try? FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: URL(fileURLWithPath: "/"), create: true)
-        let downloadPath = downloadIntoTmpPath?.appendingPathComponent(extraShell!)
-        let downloadCommand = "curl -L -o \(downloadPath?.path ?? "") \(getToolDownloadURL!)"
+        guard let downloadIntoTmpPath = try? FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: URL(fileURLWithPath: "/"), create: true) else {
+            return []
+        }
+        // extraShell 有可能是 Setapp/setapp.sh，这种情况下会导致下载的文件名有问题，所以需要处理一下，模仿它建立一个文件夹吧，比如 Setapp/setapp.sh -> Create Setapp Directory -> Setapp.sh
+        let extraShellComponents = extraShell.split(separator: "/")
+        if extraShellComponents.count > 1 {
+            let extraShellDir = downloadIntoTmpPath.appendingPathComponent(String(extraShellComponents[0]))
+            try? FileManager.default.createDirectory(at: extraShellDir, withIntermediateDirectories: true, attributes: nil)
+        }
+        let downloadPath = downloadIntoTmpPath.appendingPathComponent(extraShell).path
+        let downloadCommand = "curl -L -o \(downloadPath) \(getToolDownloadURL)"
 
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
-        let dest = (self.appDetail?.path ?? "") + bridgeDir + "/" + (self.injectDetail?.bridgeFile ?? self.appDetail?.executable ?? "")
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
+        let dest = (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
+        
+        // MARK: - 对某些 shell 脚本进行内容替换
+        var replaceSpecialShell: [(String, String)] = [] // (from, to)
 
-        return [
-            (downloadCommand, false),
-            ("sudo sh \(downloadPath?.path ?? "")", true),
-            ("sudo xattr -cr \(dest)", true)
-        ]
+        // tool/optool
+        if let optoolPath = injectConfiguration.getInjecToolPath(name: "optool")?.path().replacingOccurrences(of: "%20", with: "\\\\ ") {
+            replaceSpecialShell.append(("tool/optool", optoolPath))
+            replaceSpecialShell.append(("./tool/optool", optoolPath))
+        }
+
+        // tool/insert_dylib
+        if let insert_dylibPath = injectConfiguration.getInjecToolPath(name: "insert_dylib")?.path().replacingOccurrences(of: "%20", with: "\\\\ ") {
+            replaceSpecialShell.append(("tool/insert_dylib", insert_dylibPath))
+            replaceSpecialShell.append(("./tool/insert_dylib", insert_dylibPath))
+        }
+
+        // tool/91QiuChenly.dylib
+        if let dylibPath = injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.path().replacingOccurrences(of: "%20", with: "\\\\ ") {
+            replaceSpecialShell.append(("tool/91QiuChenly.dylib", dylibPath))
+            replaceSpecialShell.append(("./tool/91QiuChenly.dylib", dylibPath))
+        }
+
+        // tool/GenShineImpactStarter
+        if let genShineImpactStarterPath = injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.path().replacingOccurrences(of: "%20", with: "\\\\ ") {
+            replaceSpecialShell.append(("tool/GenShineImpactStarter", genShineImpactStarterPath))
+            replaceSpecialShell.append(("./tool/GenShineImpactStarter", genShineImpactStarterPath))
+        }
+
+        // 把 [0] 替换为 [1] 的内容
+        let replaceCommands = replaceSpecialShell.map { from, to in
+            "sed -i '' 's|\(from)|\(to)|g' \(downloadPath)"
+        }
+        
+        shells.append((downloadCommand, false))
+        shells.append(("chmod +x \(downloadPath)", false))
+        if replaceCommands.count > 0 {
+            shells.append(contentsOf: replaceCommands.map { ($0, false) })
+        }
+        shells.append(("sudo sh \(downloadPath)", true))
+        shells.append(("sudo xattr -cr \(dest)", true))
+        return shells
     }
 
     // MARK: - 注入原神之 AutoHandleHelper
@@ -350,31 +414,24 @@ class Injector: ObservableObject {
                 helpers = helperFile
 
                 for helper in helpers {
-                    let genShineImpactStarterURL = injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")
+                    let genShineImpactStarterURL = injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.path().replacing("%20", with: "\\ ")
                     let targetHelper = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + helper
                     let bridgeFile = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + (self.injectDetail?.bridgeFile ?? "")
-                    let insertDylibURL = injectConfiguration.getInjecToolPath(name: "insert_dylib")
+                    let insertDylibURL = injectConfiguration.getInjecToolPath(name: "insert_dylib")?.path().replacing("%20", with: "\\ ")
                     let helperName = targetHelper.split(separator: "/").last
                     let target = "/Library/LaunchDaemons/\(helperName!).plist"
-                    
+
                     var srcInfo = [(self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + "/Contents/Info.plist"]
                     if let componentApps = self.injectDetail?.componentApp {
                         srcInfo.append(contentsOf: componentApps.map { (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + $0 + "/Contents/Info.plist" })
                     }
-                    
+
                     let plistBuddy = "/usr/libexec/PlistBuddy"
-                    
-                    guard FileManager.default.fileExists(atPath: genShineImpactStarterURL?.path() ?? "") else {
-                        return []
-                    }
-                    guard FileManager.default.fileExists(atPath: insertDylibURL?.path() ?? "") else {
-                        return []
-                    }
                     guard FileManager.default.fileExists(atPath: targetHelper) else {
                         return []
                     }
-                    
-                    let genShineInjectCommand = ("\(genShineImpactStarterURL!) '\(targetHelper)' \(self.injectDetail?.smExtra ?? "")")
+
+                    let genShineInjectCommand = "\(genShineImpactStarterURL!) '\(targetHelper)' \(self.injectDetail?.smExtra ?? "")"
                     let insertDylibCommand = "\(insertDylibURL!) '\(bridgeFile)91QiuChenly.dylib' '\(targetHelper)' '\(targetHelper)'"
                     let unloadLaunchctlCommand = ("sudo /bin/launchctl unload \(target)", true)
                     let killAllCommand = ("sudo /usr/bin/killall -u root -9 \(helperName!)", true)
@@ -384,9 +441,9 @@ class Injector: ObservableObject {
                     let plistBuddyCommand = "\(plistBuddy) -c 'Set :SMPrivilegedExecutables:\(helperName!) 'identifier \\\"\(helperName!)\\\"'' \(srcInfo.joined(separator: " "))"
                     let codeSignHelperCommand = "/usr/bin/codesign -f -s - --all-architectures --deep '\(targetHelper)'"
                     let codeSignAppCommand = "/usr/bin/codesign -f -s - --all-architectures --deep '\(self.appDetail?.path ?? "".replacingOccurrences(of: "/Contents", with: ""))'"
-                    
-                    shells.append((genShineInjectCommand, true))
-                    shells.append((insertDylibCommand, true))
+
+                    shells.append((genShineInjectCommand, false))
+                    shells.append((insertDylibCommand, false))
                     if FileManager.default.fileExists(atPath: target) {
                         shells.append(unloadLaunchctlCommand)
                         shells.append(killAllCommand)
@@ -397,12 +454,12 @@ class Injector: ObservableObject {
                     shells.append((plistBuddyCommand, true))
                     shells.append((codeSignHelperCommand, true))
                     shells.append((codeSignAppCommand, true))
-                    
+
                     return shells
                 }
             }
         }
-        
+
         return []
     }
 
@@ -422,19 +479,17 @@ class Injector: ObservableObject {
         return []
     }
 
-
-    
     // MARK: - 额外原神之 临时读取 Executable
-    
+
     func readExecutableFile(app: URL) -> String? {
         let infoPlist = app.appendingPathComponent("Contents/Info.plist")
         let appInfo = NSDictionary(contentsOf: infoPlist)
         let executable = appInfo?["CFBundleExecutable"] as? String
         return executable
     }
-    
+
     // MARK: - 额外原神之 临时读取 BundleID
-    
+
     func readBundleID(app: URL) -> String? {
         let infoPlist = app.appendingPathComponent("Contents/Info.plist")
         let appInfo = NSDictionary(contentsOf: infoPlist)

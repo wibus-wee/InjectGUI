@@ -15,8 +15,18 @@ class InjectConfiguration: ObservableObject {
     
     @Published var remoteConf = nil as InjectConfigurationModel?
     
+    let injectTools: [String] = [
+        "91QiuChenly.dylib",
+        "GenShineImpactStarter",
+        "insert_dylib",
+        "optool",
+        "KeygenStarter",
+    ]
+
+    
     private init() {
-        // 开发环境默认关掉捏，因为防止疯狂重新编译而导致一直在获取资源
+        // 开发环境默认关掉每次启动下载捏，因为防止疯狂重新编译而导致一直在获取资源
+        // 可以在 SettingView 里面主动下载资源，不需要动这里
         #if !DEBUG && !TEST
         update()
         #else
@@ -27,7 +37,7 @@ class InjectConfiguration: ObservableObject {
     private func downloadConfig(data: Data?) {
         let decoder = JSONDecoder()
         let conf = try! decoder.decode(InjectConfigurationModel.self, from: data!)
-        remoteConf = conf
+        self.remoteConf = conf
         print("[I] Downloaded config.json")
     }
     
@@ -233,13 +243,6 @@ class InjectConfiguration: ObservableObject {
     }
 
     // MARK: - General Functions
-    let injectTools: [String] = [
-        "91QiuChenly.dylib",
-        "GenShineImpactStarter",
-        "insert_dylib",
-        "optool",
-        "KeygenStarter",
-    ]
 
     func updateInjectTools() {
         for tool in injectTools {
@@ -258,6 +261,15 @@ class InjectConfiguration: ObservableObject {
     func update() {
         updateRemoteConf()
         updateInjectTools()
+    }
+    
+    func allToolsExist() -> Bool {
+        for tool in injectTools {
+            if !isInjectToolExist(name: tool) {
+                return false
+            }
+        }
+        return true
     }
 
     // MARK: - Inject Infos

@@ -116,6 +116,10 @@ class Executor: ObservableObject {
         }
     }
 
+    /// 执行需要管理员权限的命令 - 使用 AppleScript
+    /// TIPS: 命令可能是有一个 Application\ Support 的，这个地方需要转义：Application\\ Support
+    /// 这里懒的搞了，我只想让它能跑起来，麻烦传过来的时候就转义好了。
+    /// 否则会爆：NSAppleScriptErrorMessage = Expected \U201c\"\U201d but found unknown token.
     private func runAdminCommand(_ command: String) -> Future<String, Error> {
         Future { promise in
             let username = NSFullUserName()
@@ -127,6 +131,7 @@ class Executor: ObservableObject {
             // """
             #if DEBUG
             print("Admin Command: \(command)")
+            print("Admin AppleScript: \(appleScript)")
             #endif
 
             var error: NSDictionary?
