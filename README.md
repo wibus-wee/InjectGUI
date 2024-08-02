@@ -22,6 +22,9 @@
 
 _**New to Swift. Poor code quality.**_
 
+- ❌ **Setapp**: Not supported yet. Because of the scan logic, `SetappAgent` can't be found. It will cause the app to inject failed.
+- ⚠️ Had better do not inject the app which has `Agent` Helper. Maybe the scan logic will miss some Helper, which will cause the app to inject failed.
+
 ## 👀 Preview
 
 ![telegram-cloud-photo-size-5-6113909371063875867-y](https://github.com/user-attachments/assets/22f787e9-9349-40c1-ac90-2e55ba8e61bb)
