@@ -237,7 +237,8 @@ class InjectConfiguration: ObservableObject {
         "91QiuChenly.dylib",
         "GenShineImpactStarter",
         "insert_dylib",
-        "optool"
+        "optool",
+        "KeygenStarter",
     ]
 
     func updateInjectTools() {

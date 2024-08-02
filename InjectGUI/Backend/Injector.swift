@@ -211,13 +211,13 @@ class Injector: ObservableObject {
             print("Destination file already exists: \(destination)")
             return []
         }
-        return [("cp \(source) \(destination)", true)]
+        return [("sudo cp \(source) \(destination)", true)]
     }
 
     // MARK: - 注入原神之 权限与运行检查
     func checkPermissionAndRunCommands() -> [(command: String, isAdmin: Bool)] {
         let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS"
-        let source = self.appDetail?.path ?? "" + bridgeDir + (self.injectDetail?.bridgeFile ?? "")
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.bridgeFile ?? self.appDetail?.executable ?? "")
         let appBaseLocate = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "")
         return [
             ("sudo chmod -R 777 \(appBaseLocate)", true),
@@ -229,7 +229,12 @@ class Injector: ObservableObject {
     // MARK: - 注入原神之 Keygen
 
     func handleKeygenCommands() -> [(command: String, isAdmin: Bool)] {
-        return [("echo 'Keygen not needed'", false)]
+        let userName = NSFullUserName()
+        let keygenStarterURL = injectConfiguration.getInjecToolPath(name: "KeygenStarter")
+        guard keygenStarterURL != nil else {
+            return []
+        }
+        return [("\(keygenStarterURL!) '\(bundleIdentifier)' '\(userName)'", false)]
     }
 
     // MARK: - 注入原神之 InjectLibInject
