@@ -40,8 +40,7 @@ struct AdminPrivilegeView: View {
                 .padding()
             
             Button(action: {
-                savePassword(password: password)
-                showAdminPrivilegeView = false
+                checkAndSavePassword(password: password)
             }) {
                 Text("Submit")
             }
@@ -54,7 +53,22 @@ struct AdminPrivilegeView: View {
         .frame(width: 400, height: 250)
     }
     
-    func savePassword(password: String) {
+    func checkAndSavePassword(password: String) {
         executor.password = password
+        executor.executeAdminCommand("sudo -v")
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    let alert = NSAlert()
+                    alert.messageText = "Incorrect password"
+                    alert.informativeText = "Please try again."
+                    alert.alertStyle = .warning
+                    alert.addButton(withTitle: "OK")
+                    alert.runModal()
+
+                }
+            }, receiveValue: { _ in
+                showAdminPrivilegeView = false
+            })
+            .store(in: &executor.cancellables)
     }
 }
