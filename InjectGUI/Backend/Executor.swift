@@ -10,7 +10,7 @@ import Foundation
 
 class Executor: ObservableObject {
     static let shared = Executor()
-    
+
     @Published var password: String = ""
     @Published var output: String = ""
     @Published var isRunning: Bool = false

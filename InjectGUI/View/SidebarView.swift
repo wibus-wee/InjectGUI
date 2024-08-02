@@ -12,7 +12,6 @@ struct AppEntry: Identifiable {
     let detail: AppDetail
 }
 
-
 struct SidebarView: View {
     @ObservedObject var injectConfiguration = InjectConfiguration.shared
     
@@ -31,18 +30,17 @@ struct SidebarView: View {
                 .sorted { $0.detail.name < $1.detail.name }
         } else {
             return apps
-            .filter {
-                injectConfiguration.checkPackageIsSupported(package: $0.detail.identifier) &&
-                $0.detail.name.lowercased().contains(searchText.lowercased()) ||
-                $0.detail.identifier.lowercased().contains(searchText.lowercased())
-            }
-            .sorted { $0.detail.name < $1.detail.name }
+                .filter {
+                    injectConfiguration.checkPackageIsSupported(package: $0.detail.identifier) &&
+                        $0.detail.name.lowercased().contains(searchText.lowercased()) ||
+                        $0.detail.identifier.lowercased().contains(searchText.lowercased())
+                }
+                .sorted { $0.detail.name < $1.detail.name }
         }
     }
     
     var body: some View {
         VStack {
-            
             HStack {
                 Image(systemName: "magnifyingglass") // 添加放大镜图标
                     .foregroundColor(.secondary)
@@ -55,7 +53,6 @@ struct SidebarView: View {
             
             Divider() // 添加分隔线
 
-            
             Group {
                 List(filteredApps, id: \.id) { app in
                     NavigationLink {
@@ -66,10 +63,10 @@ struct SidebarView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .cornerRadius(4)
-                            VStack (alignment: .leading) {
+                            VStack(alignment: .leading) {
                                 Text(app.detail.name)
                                     .font(.headline)
-                                VStack (alignment: .leading) {
+                                VStack(alignment: .leading) {
                                     Text(app.detail.identifier)
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
@@ -100,7 +97,6 @@ struct SidebarView: View {
         }
     }
 }
-
 
 struct SidebarView_Previews: PreviewProvider {
     static var previews: some View {

@@ -47,7 +47,6 @@ struct AdminPrivilegeView: View {
             .buttonStyle(.bordered)
             .controlSize(.large)
             .keyboardShortcut(.defaultAction)
-            
         }
         .padding()
         .frame(width: 400, height: 250)
@@ -57,14 +56,13 @@ struct AdminPrivilegeView: View {
         executor.password = password
         executor.executeAdminCommand("sudo -v")
             .sink(receiveCompletion: { completion in
-                if case .failure(_) = completion {
+                if case .failure = completion {
                     let alert = NSAlert()
                     alert.messageText = "Incorrect password"
                     alert.informativeText = "Please try again."
                     alert.alertStyle = .warning
                     alert.addButton(withTitle: "OK")
                     alert.runModal()
-
                 }
             }, receiveValue: { _ in
                 showAdminPrivilegeView = false

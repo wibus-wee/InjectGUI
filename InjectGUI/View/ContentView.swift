@@ -33,7 +33,7 @@ struct ContentView: View {
             }
 
             if !showAdminPrivilegeView {
-                ToolbarItem() {
+                ToolbarItem {
                     Button {
                         executor.password = ""
                         showAdminPrivilegeView = true
@@ -53,7 +53,7 @@ struct ContentView: View {
             }
             #endif
         }
-        .sheet(isPresented: $injector.shouldShowStatusSheet) { 
+        .sheet(isPresented: $injector.shouldShowStatusSheet) {
             StatusView()
                 .background(.ultraThinMaterial)
                 .interactiveDismissDisabled(true) // disable esc to dismiss

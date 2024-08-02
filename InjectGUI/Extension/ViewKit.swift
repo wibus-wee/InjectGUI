@@ -16,7 +16,7 @@ enum ViewKit {
         let secondaryButton: String
         let primaryButton: String
         let toolbar: (() -> (AnyView))?
-        let content: (() -> (AnyView))
+        let content: () -> (AnyView)
         let action: (IsClickPrimaryButton) -> Void
         
         init(
@@ -61,7 +61,7 @@ enum ViewKit {
                             action(true)
                             dismiss()
                         } label: { Text(primaryButton) }
-                        .buttonStyle(.borderedProminent)
+                            .buttonStyle(.borderedProminent)
                     }
                 }
                 .background(
@@ -120,7 +120,7 @@ enum ViewKit {
         alert.messageText = title
         alert.informativeText = message
         alert.alertStyle = .informational
-        alert.beginSheetModal(for: NSApp.mainWindow!) { response in
+        alert.beginSheetModal(for: NSApp.mainWindow!) { _ in
         }
     }
     
@@ -139,7 +139,7 @@ enum ViewKit {
         panel.canChooseDirectories = false
         panel.canCreateDirectories = false
         panel.allowsMultipleSelection = false
-        panel.beginSheetModal(for: NSApp.mainWindow!) { response in
+        panel.beginSheetModal(for: NSApp.mainWindow!) { _ in
             action(panel.url)
         }
     }
@@ -159,7 +159,7 @@ enum ViewKit {
         panel.canChooseDirectories = true
         panel.canCreateDirectories = true
         panel.allowsMultipleSelection = false
-        panel.beginSheetModal(for: NSApp.mainWindow!) { response in
+        panel.beginSheetModal(for: NSApp.mainWindow!) { _ in
             action(panel.url)
         }
     }
@@ -176,9 +176,8 @@ enum ViewKit {
         panel.message = message
         panel.prompt = primaryButton
         panel.canCreateDirectories = true
-        panel.beginSheetModal(for: NSApp.mainWindow!) { response in
+        panel.beginSheetModal(for: NSApp.mainWindow!) { _ in
             action(panel.url)
         }
     }
-    
 }

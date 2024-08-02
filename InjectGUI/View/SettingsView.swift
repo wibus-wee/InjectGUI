@@ -8,9 +8,7 @@
 import Foundation
 import SwiftUI
 
-
 struct SettingsView: View {
-
     @StateObject var configuration = Configuration.shared
 
     var version: String {
@@ -24,178 +22,166 @@ struct SettingsView: View {
         return ret
     }
 
-  private enum Tabs: Hashable {
-    case general
-    case about
-  }
-
-  var body: some View {
-    return TabView {
-      generalView
-      aboutView
+    private enum Tabs: Hashable {
+        case general
+        case about
     }
 
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-  }
-
-  func SettingItemView(_ title: String, @ViewBuilder content: @escaping () -> some View) -> some View {
-    HStack {
-      Text(title)
-      Spacer()
-      content()
-    }
-    .padding(10)
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .background(.secondary.opacity(0.1))
-    .cornerRadius(6)
-  }
-
-  var generalView: some View {
-    ScrollView {
-      VStack (alignment: .leading) {
-          
-          // Project info
-          VStack (alignment: .leading, spacing: 4) {
-            Text("InjectGUI")
-                  .font(.system(size: 14, weight: .semibold, design: .rounded))
-            Text("Version: \(version)")
-              .font(.subheadline)
-              .foregroundColor(.secondary)
-          }
-          .padding()
-
-          Divider()
-
-          VStack (alignment: .leading, spacing: 4) {
-            
-            VStack (alignment: .leading, spacing: 4) {
-              Text("InjectLib")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-              Text("Information About InjectLib")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            }
-
-            Spacer(minLength: 10)
-            
-            VStack (alignment: .leading, spacing: 4) {
-
-              SettingItemView("Local Version") {
-                // Text(injectConfiguration.getInjectLibVersion() ?? "Non Exist")
-                //   .foregroundColor(.secondary)
-              }
-            }
-
-            Spacer(minLength: 10)
-
-            Button(action: {
-              let getApplicationSupportDirectory = getApplicationSupportDirectory()
-              NSWorkspace.shared.open(getApplicationSupportDirectory)
-            }) {
-              Text("Open Support Folder")
-            }
-                  
-          }
-          .padding()
-
-
-          Divider()
-
-          VStack (alignment: .leading, spacing: 4) {
-            
-            VStack (alignment: .leading, spacing: 4) {
-              Text("Settings")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-              Text("Settings About InjectGUI")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            }
-
-            Spacer(minLength: 10)
-            
-            VStack (alignment: .leading, spacing: 4) {
-
-              SettingItemView("Remote InjectLib Git URL") {
-                  Group {
-                      if !configuration.remoteGit.isEmpty {
-                        Button(action: {
-                          configuration.remoteGit = "https://github.com/QiuChenly/InjectLib"
-                        }) {
-                          Image(systemName: "xmark.circle")
-                        }
-                      }
-
-                      TextField("URL", text: $configuration.remoteGit)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(maxWidth: 300)
-                        .padding(4)
-                  }
-              }
-
-
-              SettingItemView("Remote InjectLib Branch") {
-                  Group {
-                      if !configuration.remoteGitBranch.isEmpty {
-
-                        Button(action: {
-                          configuration.remoteGitBranch = ""
-                        }) {
-                          Image(systemName: "xmark.circle")
-                        }
-                      }
-
-                      TextField("Branch", text: $configuration.remoteGitBranch)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(maxWidth: 300)
-                        .padding(4)
-
-                  }
-              }
-
-              SettingItemView("Remote InjectLib Commit") {
-                  Group {
-                      if !configuration.remoteGitCommit.isEmpty {
-                        Button(action: {
-                          configuration.remoteGitCommit = ""
-                        }) {
-                          Image(systemName: "xmark.circle")
-                        }
-                      }
-
-                      TextField("Commit", text: $configuration.remoteGitCommit)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(maxWidth: 300)
-                        .padding(4)
-                  }
-                }
-              }
-            
-              Spacer(minLength: 10)
-            
-              HStack {
-
-                Spacer()
-
-                Button(action: {
-                  injectConfiguration.update()
-                }) {
-                  Text("Update InjectLib & Tools")
-                }
-              }
-          }
-          .padding()
-
+    var body: some View {
+        return TabView {
+            generalView
+            aboutView
         }
-      .padding(20)
-    }
-    .tabItem {
-        Label("General", systemImage: "gear")
-      }
-    .tag(Tabs.general)
-  }
 
-  var aboutView: some View {
-    ZStack {
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    func SettingItemView(_ title: String, @ViewBuilder content: @escaping () -> some View) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            content()
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.secondary.opacity(0.1))
+        .cornerRadius(6)
+    }
+
+    var generalView: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                // Project info
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("InjectGUI")
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    Text("Version: \(version)")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("InjectLib")
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        Text("Information About InjectLib")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer(minLength: 10)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        SettingItemView("Local Version") {
+                            // Text(injectConfiguration.getInjectLibVersion() ?? "Non Exist")
+                            //   .foregroundColor(.secondary)
+                        }
+                    }
+
+                    Spacer(minLength: 10)
+
+                    Button(action: {
+                        let getApplicationSupportDirectory = getApplicationSupportDirectory()
+                        NSWorkspace.shared.open(getApplicationSupportDirectory)
+                    }) {
+                        Text("Open Support Folder")
+                    }
+                }
+                .padding()
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Settings")
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        Text("Settings About InjectGUI")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer(minLength: 10)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        SettingItemView("Remote InjectLib Git URL") {
+                            Group {
+                                if !configuration.remoteGit.isEmpty {
+                                    Button(action: {
+                                        configuration.remoteGit = "https://github.com/QiuChenly/InjectLib"
+                                    }) {
+                                        Image(systemName: "xmark.circle")
+                                    }
+                                }
+
+                                TextField("URL", text: $configuration.remoteGit)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .frame(maxWidth: 300)
+                                    .padding(4)
+                            }
+                        }
+
+                        SettingItemView("Remote InjectLib Branch") {
+                            Group {
+                                if !configuration.remoteGitBranch.isEmpty {
+                                    Button(action: {
+                                        configuration.remoteGitBranch = ""
+                                    }) {
+                                        Image(systemName: "xmark.circle")
+                                    }
+                                }
+
+                                TextField("Branch", text: $configuration.remoteGitBranch)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .frame(maxWidth: 300)
+                                    .padding(4)
+                            }
+                        }
+
+                        SettingItemView("Remote InjectLib Commit") {
+                            Group {
+                                if !configuration.remoteGitCommit.isEmpty {
+                                    Button(action: {
+                                        configuration.remoteGitCommit = ""
+                                    }) {
+                                        Image(systemName: "xmark.circle")
+                                    }
+                                }
+
+                                TextField("Commit", text: $configuration.remoteGitCommit)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .frame(maxWidth: 300)
+                                    .padding(4)
+                            }
+                        }
+                    }
+
+                    Spacer(minLength: 10)
+
+                    HStack {
+                        Spacer()
+
+                        Button(action: {
+                            injectConfiguration.update()
+                        }) {
+                            Text("Update InjectLib & Tools")
+                        }
+                    }
+                }
+                .padding()
+            }
+            .padding(20)
+        }
+        .tabItem {
+            Label("General", systemImage: "gear")
+        }
+        .tag(Tabs.general)
+    }
+
+    var aboutView: some View {
+        ZStack {
             VStack(spacing: 4) {
                 Image("Avatar")
                     .antialiased(true)
@@ -220,10 +206,10 @@ struct SettingsView: View {
                     .opacity(0.5)
             }
             .padding()
+        }
+        .tabItem {
+            Label("About", systemImage: "info.circle")
+        }
+        .tag(Tabs.about)
     }
-    .tabItem {
-        Label("About", systemImage: "info.circle")
-      }
-    .tag(Tabs.about)
-  }
 }

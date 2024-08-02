@@ -5,16 +5,16 @@
 //  Created by wibus on 2024/7/19.
 //
 
-import Foundation
 import Combine
-
+import Foundation
 
 // MARK: - InjectConfiguration
+
 class InjectConfiguration: ObservableObject {
     static let shared = InjectConfiguration()
-    
+
     @Published var remoteConf = nil as InjectConfigurationModel?
-    
+
     let injectTools: [String] = [
         "91QiuChenly.dylib",
         "GenShineImpactStarter",
@@ -23,7 +23,6 @@ class InjectConfiguration: ObservableObject {
         "KeygenStarter",
     ]
 
-    
     private init() {
         // 开发环境默认关掉每次启动下载捏，因为防止疯狂重新编译而导致一直在获取资源
         // 可以在 SettingView 里面主动下载资源，不需要动这里
@@ -33,14 +32,14 @@ class InjectConfiguration: ObservableObject {
         updateRemoteConf() // 配置还是需要 Fetch 的
         #endif
     }
-    
+
     private func downloadConfig(data: Data?) {
         let decoder = JSONDecoder()
         let conf = try! decoder.decode(InjectConfigurationModel.self, from: data!)
-        self.remoteConf = conf
+        remoteConf = conf
         print("[I] Downloaded config.json")
     }
-    
+
     /// 更新远程配置
     func updateRemoteConf() {
         print("[*] Downloading config.json...")
@@ -56,8 +55,8 @@ class InjectConfiguration: ObservableObject {
         // <url>/raw/<branch or commit>/config.json
         let _url = "\(url)/raw/\(branchOrCommit)/config.json"
         let dataUrl = URL(string: _url)!
-        
-        let task = URLSession.shared.dataTask(with: dataUrl) { data, response, error in
+
+        let task = URLSession.shared.dataTask(with: dataUrl) { data, _, error in
             if let error = error {
                 print("[W] Failed to download config.json: \(error.localizedDescription)")
                 return
@@ -66,7 +65,7 @@ class InjectConfiguration: ObservableObject {
         }
         task.resume()
     }
-    
+
     /// 设置远程配置来源
     func customRemoteConf(url: String, commit: String, branch: String) {
         configuration.remoteGit = url
@@ -92,7 +91,7 @@ class InjectConfiguration: ObservableObject {
                 }
             }
         }
-        
+
         return packages
     }
 
@@ -124,25 +123,25 @@ class InjectConfiguration: ObservableObject {
             return
         }
         let dataUrl = url
-        let task = URLSession.shared.dataTask(with: dataUrl) { [self] data, response, error in
+        let task = URLSession.shared.dataTask(with: dataUrl) { [self] data, _, error in
             guard let data = data else {
                 print("[E] Failed to download \(name): \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
-            
+
             do {
                 let path = getApplicationSupportDirectory().path
                 let _url = URL(fileURLWithPath: path).appendingPathComponent(name)
                 try data.write(to: _url)
 
                 print("[I] Downloaded \(name), save to \(path)")
-                
+
                 let process = Process()
                 process.launchPath = "/bin/chmod"
                 process.arguments = ["+x", _url.path]
                 process.launch()
                 process.waitUntilExit()
-                
+
                 print("[I] chmod +x \(name)")
 
                 let _ = writeVersionMetadataIntoInjectTools(name: name, url: _url, version: "WIP")
@@ -178,21 +177,21 @@ class InjectConfiguration: ObservableObject {
                 // let commit = getRemoteGitCommit()
                 // let fileCommit = getInjectToolVersion(name: name)
                 // if fileCommit != commit {
-                    try FileManager.default.removeItem(at: _url)
-                    print("[*] Removed \(name)")
+                try FileManager.default.removeItem(at: _url)
+                print("[*] Removed \(name)")
 
-                    // downloadInjectTool(name: name)
+                // downloadInjectTool(name: name)
                 // } else {
-                    // print("[*] Same version.")
-                    // return
+                // print("[*] Same version.")
+                // return
                 // }
             } catch {
                 print("[E] Failed to remove \(name): \(error.localizedDescription)")
             }
         }
         // } else {
-            // print("[*] Non exist. Download.")
-            downloadInjectTool(name: name)
+        // print("[*] Non exist. Download.")
+        downloadInjectTool(name: name)
         // }
     }
 
@@ -211,12 +210,11 @@ class InjectConfiguration: ObservableObject {
         return 1
     }
 
-
     func getInjectToolVersion(name: String) -> String? {
         let attributeName = "org.91QiuChenly.version"
         let path = getApplicationSupportDirectory().path
         let _url = URL(fileURLWithPath: path).appendingPathComponent(name)
-        
+
         if FileManager.default.fileExists(atPath: _url.path) {
             // Prepare the buffer to receive the attribute value
             let bufferLength = getxattr(_url.path, attributeName, nil, 0, 0, 0)
@@ -225,20 +223,20 @@ class InjectConfiguration: ObservableObject {
                 return nil
             }
 
-            var buffer = [CChar](repeating: 0, count: bufferLength + 1)  // +1 for the null terminator
+            var buffer = [CChar](repeating: 0, count: bufferLength + 1) // +1 for the null terminator
             let result = getxattr(_url.path, attributeName, &buffer, bufferLength, 0, 0)
             if result == -1 {
                 print("[E] Failed to get version metadata from  \(name): \(String(cString: strerror(errno)))")
                 return "Unknown Version"
             }
 
-            buffer[bufferLength] = 0  // Ensure null termination
+            buffer[bufferLength] = 0 // Ensure null termination
             let version = String(cString: buffer)
             return version
         } else {
             print("[E]  \(name) does not exist at path: \(_url.path)")
         }
-        
+
         return nil
     }
 
@@ -250,19 +248,17 @@ class InjectConfiguration: ObservableObject {
         }
     }
 
-
     func downloadAllInjectTools() {
         for tool in injectTools {
             downloadInjectTool(name: tool)
         }
     }
-    
-    
+
     func update() {
         updateRemoteConf()
         updateInjectTools()
     }
-    
+
     func allToolsExist() -> Bool {
         for tool in injectTools {
             if !isInjectToolExist(name: tool) {
@@ -298,9 +294,7 @@ class InjectConfiguration: ObservableObject {
         }
         return true
     }
-
 }
-
 
 struct Package: Identifiable {
     let id: String
@@ -308,19 +302,18 @@ struct Package: Identifiable {
 }
 
 // MARK: - InjectConfigurationModel
+
 struct InjectConfigurationModel: Codable, Equatable {
     static func == (lhs: InjectConfigurationModel, rhs: InjectConfigurationModel) -> Bool {
         return lhs.project == rhs.project
             && lhs.author == rhs.author
             && lhs.version == rhs.version
     }
-    
+
     let project, author: String
     let version: Double
     let basePublicConfig: BasePublicConfig
     let appList: [AppList]
-    
-    
 
     enum CodingKeys: String, CodingKey {
         case project
@@ -332,6 +325,7 @@ struct InjectConfigurationModel: Codable, Equatable {
 }
 
 // MARK: - AppList
+
 struct AppList: Codable {
     let packageName: PackageName
     let appBaseLocate, bridgeFile, injectFile: String?
@@ -379,7 +373,7 @@ enum HelperFile: Codable {
             try container.encode(x)
         }
     }
-    
+
     var allStrings: [String] {
         switch self {
         case .string(let x):
@@ -416,8 +410,7 @@ enum PackageName: Codable {
             try container.encode(x)
         }
     }
-    
-    
+
     var allStrings: [String] {
         switch self {
         case .string(let x):
@@ -466,12 +459,13 @@ enum Tccutil: Codable {
 }
 
 // MARK: - BasePublicConfig
+
 struct BasePublicConfig: Codable {
     let bridgeFile: String
 }
 
 // MARK: - GitCommit
+
 struct GitCommit: Codable {
     let sha: String
 }
-

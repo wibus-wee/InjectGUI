@@ -359,8 +359,9 @@ class Injector: ObservableObject {
 
         let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
         let dest = (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
-        
+
         // MARK: - 对某些 shell 脚本进行内容替换
+
         var replaceSpecialShell: [(String, String)] = [] // (from, to)
 
         // tool/optool
@@ -391,7 +392,7 @@ class Injector: ObservableObject {
         let replaceCommands = replaceSpecialShell.map { from, to in
             "sed -i '' 's|\(from)|\(to)|g' \(downloadPath)"
         }
-        
+
         shells.append((downloadCommand, false))
         shells.append(("chmod +x \(downloadPath)", false))
         if replaceCommands.count > 0 {

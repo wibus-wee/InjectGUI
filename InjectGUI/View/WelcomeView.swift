@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    
     var version: String {
         var ret = "Version: " +
             (Constants.appVersion)
@@ -20,9 +19,8 @@ struct WelcomeView: View {
         return ret
     }
 
-    
-  var body: some View {
-    ZStack {
+    var body: some View {
+        ZStack {
             VStack(spacing: 4) {
                 Image("Avatar")
                     .antialiased(true)
@@ -47,7 +45,7 @@ struct WelcomeView: View {
                     .opacity(0.5)
             }
             .padding()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-  }
 }

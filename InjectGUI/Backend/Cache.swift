@@ -12,6 +12,7 @@ enum CacheKey {
 }
 
 // MARK: - Cache Configuration
+
 // 存一个有关 main/latest commit hash 的缓存
 let diskConfig = DiskConfig(name: "InjectLib")
 let memoryConfig = MemoryConfig(expiry: .never, countLimit: 10, totalCostLimit: 10)

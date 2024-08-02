@@ -5,9 +5,8 @@
 //  Created by wibus on 2024/7/19.
 //
 
-import Foundation
 import Combine
-
+import Foundation
 
 class Configuration: NSObject, ObservableObject {
     static let shared = Configuration()
@@ -32,16 +31,12 @@ class Configuration: NSObject, ObservableObject {
     @PublishedStorage(key: "\(Constants.appKey).remoteGitBranch", defaultValue: "main")
     var remoteGitBranch: String
     
-    
-    
     public func save() {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(saveNow), object: nil)
         perform(#selector(saveNow), with: nil, afterDelay: 1)
     }
 
     @objc func saveNow() {
-        DispatchQueue.global().async {
-            
-        }
+        DispatchQueue.global().async {}
     }
 }

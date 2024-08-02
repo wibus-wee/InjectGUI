@@ -5,30 +5,28 @@
 //  Created by wibus on 2024/7/19.
 //
 
-import Foundation
 import AppKit
-
+import Foundation
 
 struct AppDetail {
-  let name: String // -> CFBundleName
-  let identifier: String // -> CFBundleIdentifier
-  let version: String // -> CFBundleVersion
-  let path: String // -> path
-  let executable: String // -> CFBundleExecutable
-  let icon: NSImage
+    let name: String // -> CFBundleName
+    let identifier: String // -> CFBundleIdentifier
+    let version: String // -> CFBundleVersion
+    let path: String // -> path
+    let executable: String // -> CFBundleExecutable
+    let icon: NSImage
 }
 
-
 class SoftwareManager: ObservableObject {
-  static let shared = SoftwareManager()
+    static let shared = SoftwareManager()
 
-  @Published var appListCache: [String: AppDetail] = [:]
+    @Published var appListCache: [String: AppDetail] = [:]
 
-  init() {
-    DispatchQueue.main.async {
-      self.getList()
+    init() {
+        DispatchQueue.main.async {
+            self.getList()
+        }
     }
-  }
 
     private func loadAppInfo(
         from plistPath: String
@@ -39,21 +37,22 @@ class SoftwareManager: ObservableObject {
         guard let data = try? Data(
             contentsOf: url
         ),
-              let plist = try? PropertyListSerialization.propertyList(
+            let plist = try? PropertyListSerialization.propertyList(
                 from: data,
                 format: nil
-              ) as? [String: Any],
-              let bundleName = plist["CFBundleName"] as? String,
-              let bundleIdentifier = plist["CFBundleIdentifier"] as? String,
-              let bundleVersion = plist["CFBundleVersion"] as? String,
-              let bundleExecutable = plist["CFBundleExecutable"] as? String,
-              let bundleShortVersion = plist["CFBundleShortVersionString"] as? String else {
+            ) as? [String: Any],
+            let bundleName = plist["CFBundleName"] as? String,
+            let bundleIdentifier = plist["CFBundleIdentifier"] as? String,
+            let bundleVersion = plist["CFBundleVersion"] as? String,
+            let bundleExecutable = plist["CFBundleExecutable"] as? String,
+            let bundleShortVersion = plist["CFBundleShortVersionString"] as? String
+        else {
             return nil
         }
-        
+
         // 获取图标文件名
         let iconFileRaw = plist["CFBundleIconFile"] as? String ?? plist["CFBundleIconName"] as? String
-        
+
         // 检查文件名并添加扩展名（如果需要）
         let iconFile: String?
         if let iconFileRaw = iconFileRaw {
@@ -65,13 +64,12 @@ class SoftwareManager: ObservableObject {
         } else {
             iconFile = nil
         }
-        
+
         // 检查 iconFile 是否为 nil
         guard let finalIconFile = iconFile else {
             return nil
         }
-        
-        
+
         let path = url.deletingLastPathComponent().path
         let iconPath = URL(
             fileURLWithPath: plistPath
@@ -97,37 +95,36 @@ class SoftwareManager: ObservableObject {
             icon: icon ?? NSImage()
         )
     }
-    
+
     func getList() {
         print(
             "[*] Getting app list..."
         )
         let applicationDirectory = "/Applications"
         let fileManager = FileManager.default
-        
+
         guard let appPaths = try? fileManager.contentsOfDirectory(
             atPath: applicationDirectory
         ) else {
             return
         }
-        
+
         for appPath in appPaths {
             let fullPath = "\(applicationDirectory)/\(appPath)"
             let infoPlistPath = "\(fullPath)/Contents/Info.plist"
             if let appInfo = loadAppInfo(
                 from: infoPlistPath
             ) {
-            appListCache[appInfo.identifier] = appInfo
+                appListCache[appInfo.identifier] = appInfo
+            }
         }
+
+        // print("[*] App list: \(appListCache.keys)")
     }
 
-    // print("[*] App list: \(appListCache.keys)")
-  }
-    
-  /// 检查某个软件是否存在于系统中
+    /// 检查某个软件是否存在于系统中
     func checkSoftwareIsInstalled(package: String) -> Bool {
         print("[*] Checking if \(package) is installed...")
         return appListCache[package] != nil
     }
-  
 }
