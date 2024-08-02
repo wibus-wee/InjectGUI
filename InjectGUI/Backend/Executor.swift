@@ -86,6 +86,10 @@ class Executor: ObservableObject {
 
             task.executableURL = URL(fileURLWithPath: "/bin/bash")
             task.arguments = ["-c", command]
+            // task.arguments = ["-c", "echo 123"]
+            #if DEBUG
+            print("command: \(command)")
+            #endif
 
             let pipe = Pipe()
             task.standardOutput = pipe
@@ -114,10 +118,16 @@ class Executor: ObservableObject {
 
     private func runAdminCommand(_ command: String) -> Future<String, Error> {
         Future { promise in
-            let username = NSUserName()
+            let username = NSFullUserName()
             let appleScript = """
             do shell script "\(command)" user name "\(username)" password "\(self.password)" with administrator privileges
             """
+            // let appleScript = """
+            // do shell script "echo testAppleScript" user name "\(username)" password "\(self.password)" with administrator privileges
+            // """
+            #if DEBUG
+            print("Admin Command: \(command)")
+            #endif
 
             var error: NSDictionary?
             if let scriptObject = NSAppleScript(source: appleScript) {

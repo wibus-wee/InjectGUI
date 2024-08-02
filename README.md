@@ -29,6 +29,14 @@ _**New to Swift. Poor code quality.**_
 
 ## 🍪 Plans
 
+- [x] Basic Functionality
+  - [x] Backup Executable File
+  - [x] Check Permission and kill process
+  - [x] Handle Keygen
+  - [x] Handle Deep Code Sign
+  - [x] Handle Tccutil
+  - [x] Handle Extra Shell
+  - [x] Inject Project
 - [x] Customize Remote Git Repo, branch, and commit
 - [ ] Drag your favorite InjectLib to inject
 - [ ] Automatically download the original package and inject
