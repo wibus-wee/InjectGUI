@@ -31,10 +31,14 @@ struct InjectGUIApp: App {
         }
         .windowResizability(.contentSize)
         .commands { SidebarCommands() }
-
+        
+        #if DEBUG
+        // 没写好，初期的 Release 不打算放出来了
         Settings {
             SettingsView()
         }
+        #endif
+        
     }
 
     func checkPassword() {
