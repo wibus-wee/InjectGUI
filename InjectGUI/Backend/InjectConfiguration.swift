@@ -366,6 +366,15 @@ enum HelperFile: Codable {
             try container.encode(x)
         }
     }
+    
+    var allStrings: [String] {
+        switch self {
+        case .string(let x):
+            return [x]
+        case .stringArray(let x):
+            return x
+        }
+    }
 }
 
 enum PackageName: Codable {
