@@ -1,14 +1,14 @@
-name: Build
+name: CI - Build Application
 on:
-  # push:
-  #   branches:
-  #     - '**'
-  #   paths-ignore:
-  #     - 'LICENSE'
-  #     - '**.md'
-  # pull_request:
-  # release:
-  #   types: [created]
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'LICENSE'
+      - '**.md'
+  pull_request:
+  release:
+    types: [created]
   workflow_dispatch:
 
 permissions:
@@ -21,20 +21,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-      - name: Set up Homebrew
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
-      - name: Install dependencies
-        run: |
-          brew install graphicsmagick imagemagick
-      - name: Build for macOS (Universal)
+
+      # - name: Set node
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20.x
+      # - name: Set up Homebrew
+      #   id: set-up-homebrew
+      #   uses: Homebrew/actions/setup-homebrew@master
+      # - name: Install dependencies
+      #   run: |
+      #     brew install graphicsmagick imagemagick
+
+      - name: Build for macOS (Universal) Debug
         shell: bash
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Debug' -destination 'platform=macOS' build  -derivedDataPath 'build'
+      - name: Build for macOS (Universal) Release
+        shell: bash
+        if: github.event_name == 'release'
         run: |
           xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build'
+
       - name: Create DMG
         shell: bash
         run: |
@@ -43,10 +52,11 @@ jobs:
       #   run: |
       #     npm install --global create-dmg
       #     create-dmg 'build/Build/Products/Release/InjectGUI.app' --overwrite --dmg-title='InjectGUI'
+
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: InjectGUI-Universal
+          name: InjectGUI
           path: InjectGUI.dmg
       - name: Upload DMG to GitHub Release
         if: github.event_name == 'release'
