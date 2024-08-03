@@ -142,6 +142,12 @@ class Injector: ObservableObject {
         self.executor.executeShellCommands(commands)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
+                    let alert = NSAlert()
+                    alert.messageText = "Command Execution Error"
+                    alert.informativeText = error.localizedDescription
+                    alert.alertStyle = .critical
+                    alert.addButton(withTitle: "OK")
+                    alert.runModal()
                     self.updateInjectStage(stage: stage, message: "Error: \(error.localizedDescription)", progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
                 } else {
                     self.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
