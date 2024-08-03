@@ -14,13 +14,13 @@ struct AppEntry: Identifiable {
 
 struct SidebarView: View {
     @ObservedObject var injectConfiguration = InjectConfiguration.shared
-    
+
     @State var searchText: String = ""
-    
+
     @StateObject var softwareManager = SoftwareManager.shared
-    
+
     @State var filteredApps: [AppEntry] = []
-    
+
     private func getFilteredApps() -> [AppEntry] {
         let apps = softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }
         // injectConfiguration.checkPackageIsSupported(package: app.detail.identifier)
@@ -38,7 +38,7 @@ struct SidebarView: View {
                 .sorted { $0.detail.name < $1.detail.name }
         }
     }
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -50,44 +50,64 @@ struct SidebarView: View {
             .padding(8)
             .cornerRadius(8)
             .padding(.horizontal)
-            
+
             Divider() // 添加分隔线
 
-            Group {
-                List(filteredApps, id: \.id) { app in
-                    NavigationLink {
-                        AppDetailView(appId: app.detail.identifier)
-                    } label: {
-                        HStack {
-                            Image(nsImage: app.detail.icon)
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                                .cornerRadius(4)
-                            VStack(alignment: .leading) {
-                                Text(app.detail.name)
-                                    .font(.headline)
+            if filteredApps.count > 0 {
+                Group {
+                    List(filteredApps, id: \.id) { app in
+                        NavigationLink {
+                            AppDetailView(appId: app.detail.identifier)
+                        } label: {
+                            HStack {
+                                Image(nsImage: app.detail.icon)
+                                    .resizable()
+                                    .frame(width: 32, height: 32)
+                                    .cornerRadius(4)
                                 VStack(alignment: .leading) {
-                                    Text(app.detail.identifier)
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    Text("Version: \(app.detail.version)")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Text(app.detail.name)
+                                        .font(.headline)
+                                    VStack(alignment: .leading) {
+                                        Text(app.detail.identifier)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                                        Text("Version: \(app.detail.version)")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
                                 }
                             }
+                            .padding(.horizontal, 8)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .contentShape(Rectangle())
                         }
-                        .padding(.horizontal, 8)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .contentShape(Rectangle())
+                        .contextMenu {
+                            Button("Open in Finder") {
+                                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: app.detail.path)
+                            }
+                            Button("Copy Bundle ID") {
+                                NSPasteboard.general.clearContents()
+                                NSPasteboard.general.setString(app.detail.identifier, forType: .string)
+                            }
+                        }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .listStyle(SidebarListStyle())
+                .frame(minWidth: 280)
+            } else {
+                VStack {
+                    Spacer()
+                    Text("No apps found.")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .listStyle(SidebarListStyle())
-            .frame(minWidth: 280)
         }
         .onChange(of: injectConfiguration.remoteConf) { _ in
             filteredApps = getFilteredApps()
@@ -95,11 +115,5 @@ struct SidebarView: View {
         .onChange(of: searchText) { _ in
             filteredApps = getFilteredApps()
         }
-    }
-}
-
-struct SidebarView_Previews: PreviewProvider {
-    static var previews: some View {
-        SidebarView()
     }
 }

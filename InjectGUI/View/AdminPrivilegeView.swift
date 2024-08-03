@@ -37,6 +37,8 @@ struct AdminPrivilegeView: View {
             SecureField("Password", text: $password)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .frame(width: 300)
+                .controlSize(.large)
+                .disableAutocorrection(true)
                 .padding()
             
             Button(action: {
