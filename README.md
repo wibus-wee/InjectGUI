@@ -21,9 +21,6 @@
 
 _**New to Swift. Poor code quality.**_
 
-- ❌ **Setapp**: Not supported yet. Because of the scan logic, `SetappAgent` can't be found. It will cause the app to inject failed.
-- ⚠️ Had better do not inject the app which has `Agent` Helper. Maybe the scan logic will miss some Helper, which will cause the app to inject failed.
-
 ## 🌟 Features
 
 - [x] Basic Functionality

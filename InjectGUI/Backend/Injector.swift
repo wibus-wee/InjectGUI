@@ -93,6 +93,7 @@ class Injector: ObservableObject {
     init() {}
 
     func startInjectApp(package: String) {
+        // MARK: - 拦截 Setapp 旗下软件
         if package.contains("com.setapp") {
             let alert = NSAlert()
             alert.messageText = "Please read the Setapp inject document first"
