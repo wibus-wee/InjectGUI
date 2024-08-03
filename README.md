@@ -8,9 +8,8 @@
     <br />
     <br />
     <b>Download for </b>
-		<a href="https://github.com/wibus-wee/PhotosProcessor/archive/refs/heads/main.zip">Source Code</a> · macOS
+		<a href="https://github.com/wibus-wee/InjectGUI/releases">macOS</a> · <a href="https://github.com/wibus-wee/PhotosProcessor/archive/refs/heads/main.zip">Source Code</a>
     <br />
-    <i>~ Links for macOS will be added once a release is available. ~</i>
   </p>
 </p>
 
@@ -25,12 +24,7 @@ _**New to Swift. Poor code quality.**_
 - ❌ **Setapp**: Not supported yet. Because of the scan logic, `SetappAgent` can't be found. It will cause the app to inject failed.
 - ⚠️ Had better do not inject the app which has `Agent` Helper. Maybe the scan logic will miss some Helper, which will cause the app to inject failed.
 
-## 👀 Preview
-
-![telegram-cloud-photo-size-5-6113909371063875867-y](https://github.com/user-attachments/assets/22f787e9-9349-40c1-ac90-2e55ba8e61bb)
-
-
-## 🍪 Plans
+## 🌟 Features
 
 - [x] Basic Functionality
   - [x] Backup Executable File
@@ -44,12 +38,16 @@ _**New to Swift. Poor code quality.**_
 - [ ] Drag your favorite InjectLib to inject
 - [ ] Automatically download the original package and inject
 
+## 👀 Preview
+
+![telegram-cloud-photo-size-5-6113909371063875867-y](https://github.com/user-attachments/assets/22f787e9-9349-40c1-ac90-2e55ba8e61bb)
+
 ## 🔗 References
 
 - [x] https://github.com/QiuChenly/InjectLib
 
 ## 🧑‍⚖️ Author
 
-InjectGUI © Wibus, Released under GPLv3. Created on Jul 19, 2024
+InjectGUI © Wibus, Released under GPLv3. Created on Jul 19, 2024.
 
 > [Personal Website](http://wibus.ren/) · [Blog](https://blog.wibus.ren/) · GitHub [@wibus-wee](https://github.com/wibus-wee/) · Telegram [@wibus✪](https://t.me/wibus_wee)
