@@ -34,7 +34,7 @@ jobs:
       - name: Build for macOS (Universal)
         shell: bash
         run: |
-          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build' -arch x86_64 -arch arm64
+          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build'
       # - name: Create DMG
       #   shell: bash
       #   run: |
