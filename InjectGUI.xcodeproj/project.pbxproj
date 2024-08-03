@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */; };
+		387CEA7B2C5DEF0600E3A5AC /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CEA7A2C5DEF0600E3A5AC /* Extension+String.swift */; };
 		38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A1C2C4A6F83009F5910 /* InjectGUIApp.swift */; };
 		38877A1F2C4A6F83009F5910 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A1E2C4A6F83009F5910 /* ContentView.swift */; };
 		38877A212C4A6F87009F5910 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38877A202C4A6F87009F5910 /* Assets.xcassets */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPrivilegeView.swift; sourceTree = "<group>"; };
+		387CEA7A2C5DEF0600E3A5AC /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
 		38877A192C4A6F83009F5910 /* InjectGUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InjectGUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38877A1C2C4A6F83009F5910 /* InjectGUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectGUIApp.swift; sourceTree = "<group>"; };
 		38877A1E2C4A6F83009F5910 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			children = (
 				38877A322C4A7222009F5910 /* PublishedStorage.swift */,
 				38877A342C4A7254009F5910 /* ViewKit.swift */,
+				387CEA7A2C5DEF0600E3A5AC /* Extension+String.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */,
 				38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */,
 				38E944F72C5A85E200B252A3 /* Cache.swift in Sources */,
+				387CEA7B2C5DEF0600E3A5AC /* Extension+String.swift in Sources */,
 				38877A372C4A7294009F5910 /* Configuration.swift in Sources */,
 				38AD95EA2C58E70E0032E79F /* Injector.swift in Sources */,
 				38877A302C4A70DB009F5910 /* SoftwareManager.swift in Sources */,
