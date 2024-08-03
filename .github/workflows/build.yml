@@ -48,7 +48,7 @@ jobs:
       - name: Create DMG
         shell: bash
         run: |
-          hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/${{ env.APP_BUILD }}/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
+          hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/${{ env.APP_CONF }}/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
 
       # - name: Create DMG
       #   run: |
