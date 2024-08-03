@@ -43,7 +43,6 @@ jobs:
           echo "APP_CONF=Release" >> $GITHUB_ENV
       - name: Build for macOS (Universal)
         shell: bash
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
           xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration '${{ env.APP_CONF }}' -destination 'platform=macOS' build  -derivedDataPath 'build'
       - name: Create DMG
