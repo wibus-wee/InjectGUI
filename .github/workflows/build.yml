@@ -62,9 +62,6 @@ jobs:
           path: InjectGUI.dmg
       - name: Upload DMG to GitHub Release
         if: github.event_name == 'release'
-        uses: actions/upload-release-asset@v1.0.2
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: InjectGUI.dmg
-          asset_name: InjectGUI.dmg
-          asset_content_type: application/x-apple-diskimage
+          files: InjectGUI.dmg
