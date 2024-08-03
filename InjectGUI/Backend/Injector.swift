@@ -233,20 +233,26 @@ class Injector: ObservableObject {
     }
 
     private func genSourcePath(for type: GenScriptType) -> String {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
-        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? "")
+        return self.transformPath(path: source, to: type)
+    }
+    
+    private func genSourcePath(for type: GenScriptType, executable: Bool? = nil) -> String {
+        let bridgeDir = executable ?? true ? "/MacOS/" : self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "//"
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (executable ?? true ? (self.appDetail?.executable ?? "") : (self.injectDetail?.injectFile ?? ""))
         return self.transformPath(path: source, to: type)
     }
 
     private func genSourcePath(for type: GenScriptType, file: String? = nil) -> String {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
-        let source = (self.appDetail?.path ?? "") + bridgeDir + (file ?? (self.appDetail?.executable ?? ""))
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (file ?? (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? ""))
         return self.transformPath(path: source, to: type)
     }
 
     private func genSourcePath(for type: GenScriptType, path: String? = nil) -> String {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/MacOS/"
-        let source = path ?? (self.appDetail?.path ?? "") + bridgeDir + (self.appDetail?.executable ?? "")
+        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+        let source = path ?? ((self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? ""))
         return self.transformPath(path: source, to: type)
     }
 
@@ -291,7 +297,7 @@ class Injector: ObservableObject {
         // 检查是否运行中, 如果运行中则杀掉进程
         let isRunning = NSRunningApplication.runningApplications(withBundleIdentifier: self.appDetail?.identifier ?? "").count > 0
         if isRunning {
-            shells.append(("sudo pkill -f \(source)", true))
+            shells.append(("sudo pkill -f \(self.genSourcePath(for: .appleScript, executable: true))", true))
         }
         return shells
     }
@@ -330,7 +336,7 @@ class Injector: ObservableObject {
         if self.injectDetail?.needCopyToAppDir == true {
 //            let copyedQiuchenly_URL = (self.appDetail?.path ?? "") + bridgeDir + "91Qiuchenly.dylib"
             let copyedQiuchenly_URL = self.genSourcePath(for: .none, file: "91Qiuchenly.dylib")
-            let softLink = ("ln -f -s '\(QiuchenlyDylib_URL!)' '\(copyedQiuchenly_URL)'", false) // 为了防止原神更新后导致的插件失效，这里使用软链接
+            let softLink = ("sudo ln -f -s '\(QiuchenlyDylib_URL!)' '\(copyedQiuchenly_URL)'", true) // 为了防止原神更新后导致的插件失效，这里使用软链接
             let desireApp = [
                 source.transformTo(to: .none)
             ]
@@ -361,7 +367,12 @@ class Injector: ObservableObject {
 
         let entitlements = self.injectDetail?.entitlements
         if let entitlements = entitlements {
-            sign_prefix_with_deep += " --entitlements \(entitlements)"
+            let entitlementDownloadURL = injectConfiguration.generateInjectToolDownloadURL(name: entitlements)
+            let downloadIntoTmpPath = try? FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: URL(fileURLWithPath: "/"), create: true)
+            let entitlementsPath = downloadIntoTmpPath?.appendingPathComponent(entitlements).path
+            let downloadCommand = "curl -L -o \(entitlementsPath!) \(entitlementDownloadURL!)"
+            shells.append((downloadCommand, false))
+            sign_prefix_with_deep += " --entitlements \(entitlementsPath!)"
         }
 
         let dest = self.genSourcePath(for: .bash)
