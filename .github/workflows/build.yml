@@ -33,21 +33,24 @@ jobs:
       #   run: |
       #     brew install graphicsmagick imagemagick
 
-      - name: Build for macOS (Universal) Debug
+      - name: Set up env.APP_CONF to Debug
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "APP_CONF=Debug" >> $GITHUB_ENV
+      - name: Set up env.APP_CONF to Release
+        if: github.event_name == 'release'
+        run: |
+          echo "APP_CONF=Release" >> $GITHUB_ENV
+      - name: Build for macOS (Universal)
         shell: bash
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
-          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Debug' -destination 'platform=macOS' build  -derivedDataPath 'build'
-      - name: Build for macOS (Universal) Release
-        shell: bash
-        if: github.event_name == 'release'
-        run: |
-          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build'
-
+          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration '${{ env.APP_CONF }}' -destination 'platform=macOS' build  -derivedDataPath 'build'
       - name: Create DMG
         shell: bash
         run: |
-          hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/Release/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
+          hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/${{ env.APP_BUILD }}/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
+
       # - name: Create DMG
       #   run: |
       #     npm install --global create-dmg
