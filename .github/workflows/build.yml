@@ -17,28 +17,40 @@ permissions:
 jobs:
   build-mac:
     name: Build for macOS (Universal)
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Set node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+      - name: Install dependencies
+        run: |
+          brew install graphicsmagick imagemagick
       - name: Build for macOS (Universal)
         shell: bash
         run: |
-          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build'
+          xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build' -arch x86_64 -arch arm64
+      # - name: Create DMG
+      #   shell: bash
+      #   run: |
+      #     hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/Release/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
       - name: Create DMG
-        shell: bash
         run: |
-          hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/Release/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
+          npm install --global create-dmg
+          create-dmg 'build/Build/Products/Release/InjectGUI.app' --overwrite --dmg-title='InjectGUI'
       - name: Upload DMG Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: InjectGUI.dmg
+          name: InjectGUI-Universal
           path: InjectGUI.dmg
       - name: Upload DMG to GitHub Release
         if: github.event_name == 'release'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/upload-release-asset@v2
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: InjectGUI.dmg
