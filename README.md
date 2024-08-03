@@ -40,7 +40,8 @@ _**New to Swift. Poor code quality.**_
 
 ## 👀 Preview
 
-![telegram-cloud-photo-size-5-6113909371063875867-y](https://github.com/user-attachments/assets/22f787e9-9349-40c1-ac90-2e55ba8e61bb)
+![macOS Dock](https://github.com/user-attachments/assets/c3dab2a9-2198-4066-aa12-d470c21e40b0)
+
 
 ## 🔗 References
 
