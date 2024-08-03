@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import SwiftUI
 
 // MARK: - InjectConfiguration
 
@@ -36,8 +37,15 @@ class InjectConfiguration: ObservableObject {
     private func downloadConfig(data: Data?) {
         let decoder = JSONDecoder()
         let conf = try! decoder.decode(InjectConfigurationModel.self, from: data!)
-        remoteConf = conf
-        print("[I] Downloaded config.json")
+        DispatchQueue.main.async {
+            self.remoteConf = conf
+            print("[I] Downloaded config.json")
+            let injectablePackages = self.remoteConf?.appList
+            let packages = injectablePackages?.filter { $0.appBaseLocate != nil }
+            packages?.forEach { app in
+                softwareManager.addAnMaybeExistAppToList(appBaseLocate: app.appBaseLocate!)
+            }
+        }
     }
 
     /// 更新远程配置

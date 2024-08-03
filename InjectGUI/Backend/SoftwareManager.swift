@@ -100,26 +100,37 @@ class SoftwareManager: ObservableObject {
         print(
             "[*] Getting app list..."
         )
-        let applicationDirectory = "/Applications"
+        let applicationDirectories = [
+            "/Applications",
+            "/Applications/Setapp",
+        ]
         let fileManager = FileManager.default
 
-        guard let appPaths = try? fileManager.contentsOfDirectory(
-            atPath: applicationDirectory
-        ) else {
-            return
-        }
+        for directory in applicationDirectories {
+            guard let appPaths = try? fileManager.contentsOfDirectory(atPath: directory) else {
+                continue
+            }
 
-        for appPath in appPaths {
-            let fullPath = "\(applicationDirectory)/\(appPath)"
-            let infoPlistPath = "\(fullPath)/Contents/Info.plist"
-            if let appInfo = loadAppInfo(
-                from: infoPlistPath
-            ) {
-                appListCache[appInfo.identifier] = appInfo
+            for appPath in appPaths {
+                let fullPath = "\(directory)/\(appPath)"
+                let infoPlistPath = "\(fullPath)/Contents/Info.plist"
+                if let appInfo = loadAppInfo(from: infoPlistPath) {
+                    appListCache[appInfo.identifier] = appInfo
+                }
             }
         }
 
         // print("[*] App list: \(appListCache.keys)")
+    }
+
+    func addAnMaybeExistAppToList(appBaseLocate: String) {
+//        print("[*] try to add \(appBaseLocate) to list...")
+        // "appBaseLocate": "/Applications/Setapp/AirBuddy.app/Contents/Library/LoginItems/AirBuddyHelper.app",
+        let infoPlistPath = "\(appBaseLocate)/Contents/Info.plist"
+        if let appInfo = loadAppInfo(from: infoPlistPath) {
+            print("[*] Add app to list: \(appInfo.name) [\(appInfo.identifier)]")
+            appListCache[appInfo.identifier] = appInfo
+        }
     }
 
     /// 检查某个软件是否存在于系统中
