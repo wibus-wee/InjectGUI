@@ -42,6 +42,15 @@ struct ContentView: View {
                     }
                 }
             }
+            
+            ToolbarItem() {
+                Button {
+                    softwareManager.getList()
+                    injectConfiguration.updateRemoteConf()
+                } label: {
+                    Label("Refresh app list", systemImage: "arrow.clockwise")
+                }
+            }
 
             #if DEBUG
             ToolbarItem {

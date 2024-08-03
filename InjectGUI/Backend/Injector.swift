@@ -92,9 +92,26 @@ class Injector: ObservableObject {
 
     init() {}
 
-    func handleInjectApp() {}
-
     func startInjectApp(package: String) {
+        if package.contains("com.setapp") {
+            let alert = NSAlert()
+            alert.messageText = "Please read the Setapp inject document first"
+            alert.informativeText = "It's important to read the Setapp inject document first before using the tool. Please"
+            alert.alertStyle = .informational
+            alert.addButton(withTitle: "I have read the document")
+            alert.addButton(withTitle: "Read the document")
+            alert.addButton(withTitle: "Cancel")
+            let response = alert.runModal()
+            if response == .alertFirstButtonReturn {
+                // Continue
+            } else if response == .alertSecondButtonReturn {
+                let url = URL(string: "https://qiuchenlyopensource.github.io/Documentaions/setapp%E6%BF%80%E6%B4%BB%E5%BF%85%E8%AF%BB.html")!
+                NSWorkspace.shared.open(url)
+                return
+            } else {
+                return
+            }
+        }
         if self.isRunning {
             return
         }
@@ -216,9 +233,9 @@ class Injector: ObservableObject {
             return self.handleTccutilCommands()
         case .handleExtraShell:
             return self.handleExtraShellCommands()
-        case .end:
-            let openApp = "open '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
-            return [(openApp, false)]
+        // case .end:
+        //     let openApp = "open '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
+        //     return [(openApp, false)]
         default:
             return []
         }
@@ -231,27 +248,35 @@ class Injector: ObservableObject {
         case appleScript
         case bash
     }
+    
+    private func getBridgeDir(executable: Bool? = nil) -> String {
+        if (executable ?? false) || self.injectDetail?.autoHandleSetapp == true {
+            return "/MacOS/"
+        } else {
+            return self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+        }
+    }
 
     private func genSourcePath(for type: GenScriptType) -> String {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+        let bridgeDir = self.getBridgeDir()
         let source = (self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? "")
         return self.transformPath(path: source, to: type)
     }
     
     private func genSourcePath(for type: GenScriptType, executable: Bool? = nil) -> String {
-        let bridgeDir = executable ?? true ? "/MacOS/" : self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "//"
+        let bridgeDir = self.getBridgeDir(executable: executable)
         let source = (self.appDetail?.path ?? "") + bridgeDir + (executable ?? true ? (self.appDetail?.executable ?? "") : (self.injectDetail?.injectFile ?? ""))
         return self.transformPath(path: source, to: type)
     }
 
     private func genSourcePath(for type: GenScriptType, file: String? = nil) -> String {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+        let bridgeDir = self.getBridgeDir()
         let source = (self.appDetail?.path ?? "") + bridgeDir + (file ?? (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? ""))
         return self.transformPath(path: source, to: type)
     }
 
     private func genSourcePath(for type: GenScriptType, path: String? = nil) -> String {
-        let bridgeDir = self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+        let bridgeDir = self.getBridgeDir()
         let source = path ?? ((self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? ""))
         return self.transformPath(path: source, to: type)
     }
