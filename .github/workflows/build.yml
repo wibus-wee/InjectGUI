@@ -35,14 +35,14 @@ jobs:
         shell: bash
         run: |
           xcodebuild -project 'InjectGUI.xcodeproj' -scheme 'InjectGUI' -configuration 'Release' -destination 'platform=macOS' build  -derivedDataPath 'build'
-      # - name: Create DMG
-      #   shell: bash
-      #   run: |
-      #     hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/Release/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
       - name: Create DMG
+        shell: bash
         run: |
-          npm install --global create-dmg
-          create-dmg 'build/Build/Products/Release/InjectGUI.app' --overwrite --dmg-title='InjectGUI'
+          hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/Release/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
+      # - name: Create DMG
+      #   run: |
+      #     npm install --global create-dmg
+      #     create-dmg 'build/Build/Products/Release/InjectGUI.app' --overwrite --dmg-title='InjectGUI'
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
