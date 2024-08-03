@@ -143,16 +143,26 @@ class Injector: ObservableObject {
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     let alert = NSAlert()
-                    alert.messageText = "Command Execution Error Occurred"
-                    alert.informativeText = "An error occurred while executing the command\nStage: \(stage.description)\n\n\(error.localizedDescription) \n\nPlease contact the developer for help."
+                    alert.messageText = "Command Execution Error"
+                    
+                    // Extracting the AppleScript error message
+                    var errorMessage = error.localizedDescription
+                    if let appleScriptError = error as NSError? {
+                        if let appleScriptErrorMessage = appleScriptError.userInfo["NSAppleScriptErrorMessage"] as? String {
+                            errorMessage = appleScriptErrorMessage
+                        }
+                    }
+
+                    alert.informativeText = "\(errorMessage) \n\nPlease check your application integrity and try again.\n\n(Stage: \(stage.description))"
                     alert.alertStyle = .critical
                     alert.addButton(withTitle: "OK")
                     alert.runModal()
-                    self.updateInjectStage(stage: stage, message: "Error: \(error.localizedDescription)", progress: 1, status: .error, error: InjectRunningError(error: error.localizedDescription, stage: stage))
+                    self.updateInjectStage(stage: stage, message: "Error: \(errorMessage)", progress: 1, status: .error, error: InjectRunningError(error: errorMessage, stage: stage))
                 } else {
                     self.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
                     self.executeNextStage(stages: stages, index: index + 1)
                 }
+
             }, receiveValue: { _ in })
             .store(in: &self.executor.cancellables)
     }

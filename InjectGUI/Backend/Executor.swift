@@ -139,7 +139,7 @@ class Executor: ObservableObject {
                 let output = scriptObject.executeAndReturnError(&error)
                 if let error = error {
                     print("AppleScript Error: \(error)")
-                    promise(.failure(NSError(domain: "Executor", code: 2, userInfo: [NSLocalizedDescriptionKey: "\(error)"])))
+                    promise(.failure(NSError(domain: "Executor", code: 2, userInfo: error.dictionaryWithValues(forKeys: [NSAppleScript.errorMessage]))))
                 } else {
                     promise(.success(output.stringValue ?? ""))
                 }
