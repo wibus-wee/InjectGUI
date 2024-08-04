@@ -1,0 +1,166 @@
+/* 
+  Localizable.strings
+  InjectGUI
+
+  Created by JerryXU on 2024/8/4.
+  
+*/
+
+/* No comment provided by engineer. */
+"" = "";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* No comment provided by engineer. */
+"%lld%%" = "%lld%%";
+
+/* No comment provided by engineer. */
+"About" = "关于";
+
+/* No comment provided by engineer. */
+"Branch" = "分支";
+
+/* No comment provided by engineer. */
+"By wibus. Made with ❤️" = "由 wibus 制作. Made with ❤️";
+
+/* No comment provided by engineer. */
+"Click here to close this view." = "点击以关闭此视图";
+
+/* No comment provided by engineer. */
+"Commit" = "提交";
+
+/* No comment provided by engineer. */
+"Compatible Version" = "兼容的版本";
+
+/* No comment provided by engineer. */
+"Copy Bundle ID" = "复制 Bundle ID";
+
+/* No comment provided by engineer. */
+"Enter password again" = "请再次输入密码";
+
+/* No comment provided by engineer. */
+"Error: %@" = "错误：%@";
+
+/* No comment provided by engineer. */
+"Finished. Close" = "完成. 关闭";
+
+/* No comment provided by engineer. */
+"General" = "通用";
+
+/* No comment provided by engineer. */
+"Information About InjectLib" = "关于 InjectLib 的信息";
+
+/* No comment provided by engineer. */
+"Inject" = "注入";
+
+/* No comment provided by engineer. */
+"Inject Configurations" = "注入配置";
+
+/* No comment provided by engineer. */
+"InjectGUI" = "InjectGUI";
+
+/* No comment provided by engineer. */
+"InjectGUI requires your password to perform administrative tasks." = "InjectGUI 需要您的密码来执行任务。";
+
+/* No comment provided by engineer. */
+"InjectLib" = "InjectLib";
+
+/* No comment provided by engineer. */
+"It will only show when the injector is running." = "这仅在注入器运行时显示。";
+
+/* No comment provided by engineer. */
+"No apps found." = "找不到软件。";
+
+/* No comment provided by engineer. */
+"Open in Finder" = "在访达中打开";
+
+/* No comment provided by engineer. */
+"Open Support Folder" = "打开";
+
+/* No comment provided by engineer. */
+"Password" = "密码";
+
+/* No comment provided by engineer. */
+"Please contact the developer if you see this view without running the injector." = "如果您在未运行注入器的情况下看到此视图，请联系开发人员。";
+
+/* No comment provided by engineer. */
+"Please enter your password to continue." = "请输入密码以继续";
+
+/* No comment provided by engineer. */
+"Progress: %lld%%" = "进度：%lld%%";
+
+/* No comment provided by engineer. */
+"Refresh app list" = "刷新软件列表";
+
+/* No comment provided by engineer. */
+"Released under GPLv3. Based on QiuChenly/InjectLib." = "根据 GPLv3 发布. 基于 QiuChenly/InjectLib。";
+
+/* No comment provided by engineer. */
+"Restarting the app will require your password again." = "重新启动应用程序将需要再次输入您的密码。";
+
+/* No comment provided by engineer. */
+"Search all local app" = "搜索所有本地软件";
+
+/* No comment provided by engineer. */
+"Settings" = "设置";
+
+/* No comment provided by engineer. */
+"Settings About InjectGUI" = "关于 InjectGUI 的设置";
+
+/* No comment provided by engineer. */
+"Status" = "状态";
+
+/* No comment provided by engineer. */
+"Stop Injecting" = "停止注入";
+
+/* No comment provided by engineer. */
+"Submit" = "提交";
+
+/* No comment provided by engineer. */
+"This app can use keygen to generate key" = "此应用程序可以使用keygen生成密钥";
+
+/* No comment provided by engineer. */
+"This app does not have extraShell" = "此软件没有 extraShell";
+
+/* No comment provided by engineer. */
+"This app has extraShell" = "此软件有extraShell";
+
+/* No comment provided by engineer. */
+"This app has sub app" = "此软件有附属软件";
+
+/* No comment provided by engineer. */
+"This app is supported by InjectLib." = "此应用程序由 InjectLib 支持。";
+
+/* No comment provided by engineer. */
+"This app need auto handle helper" = "此应用程序需要自动处理Helper";
+
+/* No comment provided by engineer. */
+"This app need deep codesign" = "此软件需要 deep codesign";
+
+/* No comment provided by engineer. */
+"This app needs to use tccutil to reset" = "此软件需要使用 tccutil 来重置";
+
+/* No comment provided by engineer. */
+"This is a status view for the injector." = "这是注入器的状态视图。";
+
+/* No comment provided by engineer. */
+"Toggle Sidebar" = "切换侧边栏";
+
+/* No comment provided by engineer. */
+"Universal Version (? Maybe)" = "通用版本（？应该是吧）";
+
+/* No comment provided by engineer. */
+"Update InjectLib & Tools" = "更新 InjectLib & 工具";
+
+/* No comment provided by engineer. */
+"URL" = "链接";
+
+/* No comment provided by engineer. */
+"Version: %@" = "版本：%@";
+
+/* No comment provided by engineer. */
+"Welcome to InjectGUI" = "欢迎使用 InjectGUI";
+
+/* No comment provided by engineer. */
+"Why you are seeing this?" = "你怎么看到的？";
