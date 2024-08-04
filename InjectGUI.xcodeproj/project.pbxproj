@@ -29,6 +29,7 @@
 		38E944F22C5A761B00B252A3 /* Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F12C5A761B00B252A3 /* Executor.swift */; };
 		38E944F52C5A7F6A00B252A3 /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = 38E944F42C5A7F6A00B252A3 /* Cache */; };
 		38E944F72C5A85E200B252A3 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F62C5A85E200B252A3 /* Cache.swift */; };
+		C4374EFF2C5F39A700090A00 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C4374EFE2C5F39A700090A00 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		38E944F12C5A761B00B252A3 /* Executor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Executor.swift; sourceTree = "<group>"; };
 		38E944F62C5A85E200B252A3 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		C4374EFE2C5F39A700090A00 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 		38877A102C4A6F83009F5910 = {
 			isa = PBXGroup;
 			children = (
+				C4374EFE2C5F39A700090A00 /* Localizable.xcstrings */,
 				38877A1B2C4A6F83009F5910 /* InjectGUI */,
 				38877A1A2C4A6F83009F5910 /* Products */,
 			);
@@ -207,6 +210,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 38877A102C4A6F83009F5910;
 			packageReferences = (
@@ -228,6 +232,7 @@
 			files = (
 				38877A252C4A6F87009F5910 /* Preview Assets.xcassets in Resources */,
 				38877A212C4A6F87009F5910 /* Assets.xcassets in Resources */,
+				C4374EFF2C5F39A700090A00 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
