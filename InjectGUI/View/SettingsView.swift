@@ -201,7 +201,7 @@ struct SettingsView: View {
             }
             VStack {
                 Spacer()
-                Text("Released under GPLv3. Based on Qiuchenly/InjectLib.")
+                Text("Released under GPLv3. Based on QiuChenly/InjectLib.")
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .opacity(0.5)
             }

@@ -169,7 +169,7 @@ struct AppDetailView: View {
                         .foregroundColor((appInjectConfDetail?.tccutil?.allStrings ?? []).count > 0 ? .green : .red)
 
                     HStack {
-                        Text("This app need use tccutil to reset")
+                        Text("This app needs to use tccutil to reset")
                             .font(.subheadline)
                         Text(appInjectConfDetail?.tccutil?.allStrings.joined(separator: ", ") ?? "")
                             .font(.subheadline)
