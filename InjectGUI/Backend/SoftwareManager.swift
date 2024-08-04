@@ -21,13 +21,23 @@ class SoftwareManager: ObservableObject {
     static let shared = SoftwareManager()
 
     @Published var appListCache: [String: AppDetail] = [:]
+       @Published var isLoading = false
 
-    init() {
-        DispatchQueue.main.async {
-            self.getList()
-        }
-    }
-
+       private init() {
+           refreshAppList()
+       }
+    func refreshAppList() {
+           DispatchQueue.main.async {
+               self.isLoading = true
+           }
+           
+           DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+               self?.getList()
+               DispatchQueue.main.async {
+                   self?.isLoading = false
+               }
+           }
+       }
     private func loadAppInfo(
         from plistPath: String
     ) -> AppDetail? {
@@ -97,31 +107,33 @@ class SoftwareManager: ObservableObject {
     }
 
     func getList() {
-        print(
-            "[*] Getting app list..."
-        )
-        let applicationDirectories = [
-            "/Applications",
-            "/Applications/Setapp",
-        ]
-        let fileManager = FileManager.default
+         print("[*] Getting app list...")
+         let applicationDirectories = [
+             "/Applications",
+             "/Applications/Setapp",
+         ]
+         let fileManager = FileManager.default
 
-        for directory in applicationDirectories {
-            guard let appPaths = try? fileManager.contentsOfDirectory(atPath: directory) else {
-                continue
-            }
+         var newAppListCache: [String: AppDetail] = [:]
 
-            for appPath in appPaths {
-                let fullPath = "\(directory)/\(appPath)"
-                let infoPlistPath = "\(fullPath)/Contents/Info.plist"
-                if let appInfo = loadAppInfo(from: infoPlistPath) {
-                    appListCache[appInfo.identifier] = appInfo
-                }
-            }
-        }
+         for directory in applicationDirectories {
+             guard let appPaths = try? fileManager.contentsOfDirectory(atPath: directory) else {
+                 continue
+             }
 
-        // print("[*] App list: \(appListCache.keys)")
-    }
+             for appPath in appPaths {
+                 let fullPath = "\(directory)/\(appPath)"
+                 let infoPlistPath = "\(fullPath)/Contents/Info.plist"
+                 if let appInfo = loadAppInfo(from: infoPlistPath) {
+                     newAppListCache[appInfo.identifier] = appInfo
+                 }
+             }
+         }
+
+         DispatchQueue.main.async { [weak self] in
+             self?.appListCache = newAppListCache
+         }
+     }
 
     func addAnMaybeExistAppToList(appBaseLocate: String) {
 //        print("[*] try to add \(appBaseLocate) to list...")
