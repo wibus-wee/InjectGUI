@@ -14,106 +14,105 @@ struct AppEntry: Identifiable {
 
 struct SidebarView: View {
     @ObservedObject var injectConfiguration = InjectConfiguration.shared
-
-    @State var searchText: String = ""
-
     @StateObject var softwareManager = SoftwareManager.shared
-
+    @State var searchText: String = ""
     @State var filteredApps: [AppEntry] = []
 
-    private func getFilteredApps() -> [AppEntry] {
-        let apps = softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }
-        // injectConfiguration.checkPackageIsSupported(package: app.detail.identifier)
-        if searchText.isEmpty {
-            return apps
-                .filter { injectConfiguration.checkPackageIsSupported(package: $0.detail.identifier) }
-                .sorted { $0.detail.name < $1.detail.name }
-        } else {
-            return apps
-                .filter {
-                    injectConfiguration.checkPackageIsSupported(package: $0.detail.identifier) &&
-                        $0.detail.name.lowercased().contains(searchText.lowercased()) ||
-                        $0.detail.identifier.lowercased().contains(searchText.lowercased())
-                }
-                .sorted { $0.detail.name < $1.detail.name }
-        }
-    }
-
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
+            // 搜索栏
             HStack {
-                Image(systemName: "magnifyingglass") // 添加放大镜图标
+                Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
-                TextField("Search all local app", text: $searchText) // 添加搜索栏
+                TextField("Search all local app", text: $searchText)
                     .textFieldStyle(PlainTextFieldStyle())
             }
             .padding(8)
+            .background(Color(NSColor.textBackgroundColor))
             .cornerRadius(8)
             .padding(.horizontal)
+            .padding(.vertical, 8)
 
-            Divider() // 添加分隔线
+            Divider()
 
-            if filteredApps.count > 0 {
-                Group {
-                    List(filteredApps, id: \.id) { app in
-                        NavigationLink {
-                            AppDetailView(appId: app.detail.identifier)
-                        } label: {
-                            HStack {
-                                Image(nsImage: app.detail.icon)
-                                    .resizable()
-                                    .frame(width: 32, height: 32)
-                                    .cornerRadius(4)
-                                VStack(alignment: .leading) {
-                                    Text(app.detail.name)
-                                        .font(.headline)
-                                    VStack(alignment: .leading) {
-                                        Text(app.detail.identifier)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                                        Text("Version: \(app.detail.version)")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 8)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .contentShape(Rectangle())
-                        }
-                        .contextMenu {
-                            Button("Open in Finder") {
-                                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: app.detail.path)
-                            }
-                            Button("Copy Bundle ID") {
-                                NSPasteboard.general.clearContents()
-                                NSPasteboard.general.setString(app.detail.identifier, forType: .string)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                .listStyle(SidebarListStyle())
-                .frame(minWidth: 280)
-            } else {
-                VStack {
-                    Spacer()
+            // 应用列表或状态信息
+            ZStack {
+                if softwareManager.isLoading {
+                    ProgressView("Scanning apps...")
+                } else if filteredApps.isEmpty {
                     Text("No apps found.")
                         .font(.headline)
                         .foregroundColor(.secondary)
-                    Spacer()
+                } else {
+                    appList
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(minWidth: 280)
+        .onReceive(softwareManager.$appListCache) { _ in
+            updateFilteredApps()
         }
         .onChange(of: injectConfiguration.remoteConf) { _ in
-            filteredApps = getFilteredApps()
+            updateFilteredApps()
         }
         .onChange(of: searchText) { _ in
-            filteredApps = getFilteredApps()
+            updateFilteredApps()
         }
+        .onAppear {
+            softwareManager.refreshAppList()
+        }
+    }
+
+    private var appList: some View {
+        List(filteredApps, id: \.id) { app in
+            NavigationLink {
+                AppDetailView(appId: app.detail.identifier)
+            } label: {
+                HStack {
+                    Image(nsImage: app.detail.icon)
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                        .cornerRadius(4)
+                    VStack(alignment: .leading) {
+                        Text(app.detail.name)
+                            .font(.headline)
+                        Text(app.detail.identifier)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        Text("Version: \(app.detail.version)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+            .contextMenu {
+                Button("Open in Finder") {
+                    NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: app.detail.path)
+                }
+                Button("Copy Bundle ID") {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(app.detail.identifier, forType: .string)
+                }
+            }
+        }
+        .listStyle(SidebarListStyle())
+    }
+
+    private func updateFilteredApps() {
+        filteredApps = getFilteredApps()
+    }
+
+    private func getFilteredApps() -> [AppEntry] {
+        let apps = softwareManager.appListCache.map { AppEntry(id: $0.key, detail: $0.value) }
+        return apps
+            .filter { app in
+                injectConfiguration.checkPackageIsSupported(package: app.detail.identifier) &&
+                (searchText.isEmpty ||
+                 app.detail.name.lowercased().contains(searchText.lowercased()) ||
+                 app.detail.identifier.lowercased().contains(searchText.lowercased()))
+            }
+            .sorted { $0.detail.name < $1.detail.name }
     }
 }
