@@ -32,18 +32,16 @@ struct ContentView: View {
                 }
             }
 
-            if !showAdminPrivilegeView {
-                ToolbarItem {
-                    Button {
-                        executor.password = ""
-                        showAdminPrivilegeView = true
-                    } label: {
-                        Label("Enter password again", systemImage: "lock")
-                    }
+            ToolbarItem {
+                Button {
+                    executor.password = ""
+                    showAdminPrivilegeView = true
+                } label: {
+                    Label("Enter password again", systemImage: "lock")
                 }
             }
-            
-            ToolbarItem() {
+
+            ToolbarItem {
                 Button {
                     softwareManager.getList()
                     injectConfiguration.updateRemoteConf()

@@ -85,8 +85,10 @@ struct StatusView: View {
                                             .foregroundColor(.red)
                                     }
                                     Text("\(stage.description)")
-                                        .fontDesign(.rounded)
-                                        .fontWeight(injector.stage.stages[index].status == .running ? .bold : .regular)
+                                        .fontDesignAndWeight(
+                                            font: .rounded,
+                                            weight: injector.stage.stages[index].status == .running ? .bold : .regular
+                                        )
                                     // Text(injector.stage.stages[index].message)
                                     //     .font(.subheadline)
                                     //     .foregroundColor(.secondary)
@@ -103,7 +105,7 @@ struct StatusView: View {
                                     Image(systemName: "questionmark.circle.fill")
                                         .foregroundColor(.secondary)
                                     Text("\(stage.description)")
-                                        .fontDesign(.rounded)
+                                        .fontDesignAndWeight(font: .rounded, weight: .regular)
                                 }
                             }
                         }

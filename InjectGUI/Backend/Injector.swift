@@ -285,11 +285,11 @@ class Injector: ObservableObject {
     private func transformPath(path: String, to type: GenScriptType) -> String {
         switch type {
         case .none:
-            return path.replacing("%20", with: " ")
+            return path.replacingOccurrences(of: "%20", with: " ")
         case .appleScript:
-            return path.replacing("%20", with: " ").replacing(" ", with: "\\\\ ")
+            return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\\\ ")
         case .bash:
-            return path.replacing("%20", with: " ").replacing(" ", with: "\\ ")
+            return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\ ")
         }
     }
 
@@ -332,7 +332,7 @@ class Injector: ObservableObject {
 
     func handleKeygenCommands() -> [(command: String, isAdmin: Bool)] {
         let userName = NSFullUserName()
-        let keygenStarterURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "KeygenStarter")?.path())
+        let keygenStarterURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "KeygenStarter")?.pathWithFallback())
         let bundleIdentifier = self.appDetail?.identifier ?? ""
         if self.injectDetail?.keygen ?? false {
             return [("\(keygenStarterURL) '\(bundleIdentifier)' '\(userName)'", false)]
@@ -347,8 +347,8 @@ class Injector: ObservableObject {
         let source = self.genSourcePath(for: .bash)
         let destination = source.appending(".backup")
 
-        let insert_dylib_URL = injectConfiguration.getInjecToolPath(name: "insert_dylib")?.path().replacing("%20", with: " ")
-        let QiuchenlyDylib_URL = injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.path().replacing("%20", with: " ")
+        let insert_dylib_URL = injectConfiguration.getInjecToolPath(name: "insert_dylib")?.pathWithFallback().replacingOccurrences(of: "%20", with: " ")
+        let QiuchenlyDylib_URL = injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.pathWithFallback().replacingOccurrences(of: "%20", with: " ")
 
         if insert_dylib_URL == nil || QiuchenlyDylib_URL == nil {
             let alert = NSAlert()
@@ -448,22 +448,22 @@ class Injector: ObservableObject {
         var replaceSpecialShell: [(String, String)] = [] // (from, to)
 
         // tool/optool
-        let optoolPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "optool")?.path())
+        let optoolPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "optool")?.pathWithFallback())
         replaceSpecialShell.append(("tool/optool", optoolPath))
         replaceSpecialShell.append(("./tool/optool", optoolPath))
 
         // tool/insert_dylib
-        let insert_dylibPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.path())
+        let insert_dylibPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.pathWithFallback())
         replaceSpecialShell.append(("tool/insert_dylib", insert_dylibPath))
         replaceSpecialShell.append(("./tool/insert_dylib", insert_dylibPath))
 
         // tool/91QiuChenly.dylib
-        let dylibPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.path())
+        let dylibPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.pathWithFallback())
         replaceSpecialShell.append(("tool/91QiuChenly.dylib", dylibPath))
         replaceSpecialShell.append(("./tool/91QiuChenly.dylib", dylibPath))
 
         // tool/GenShineImpactStarter
-        let genShineImpactStarterPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.path())
+        let genShineImpactStarterPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.pathWithFallback())
         replaceSpecialShell.append(("tool/GenShineImpactStarter", genShineImpactStarterPath))
         replaceSpecialShell.append(("./tool/GenShineImpactStarter", genShineImpactStarterPath))
 
@@ -494,10 +494,10 @@ class Injector: ObservableObject {
                 helpers = helperFile
 
                 for helper in helpers {
-                    let genShineImpactStarterURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.path())
+                    let genShineImpactStarterURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.pathWithFallback())
                     var targetHelper = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + helper
                     let bridgeFile = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + (self.injectDetail?.bridgeFile ?? "")
-                    let insertDylibURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.path())
+                    let insertDylibURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.pathWithFallback())
                     let helperName = targetHelper.split(separator: "/").last
                     let target = self.genSourcePath(for: .appleScript, path: "/Library/LaunchDaemons/\(helperName!).plist")
 

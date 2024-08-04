@@ -9,7 +9,7 @@ import Foundation
 
 extension String {
     func transformTo(to targetType: Injector.GenScriptType) -> String {
-        let original = self.replacing("\\\\ ", with: " ").replacing("\\ ", with: " ")
+        let original = self.replacingOccurrences(of: "\\\\ ", with: " ").replacingOccurrences(of: "\\ ", with: " ")
         
         print(original)
         
@@ -18,9 +18,9 @@ extension String {
         case .none:
             return original
         case .appleScript:
-            return original.replacing(" ", with: "\\\\ ")
+            return original.replacingOccurrences(of: " ", with: "\\\\ ")
         case .bash:
-            return original.replacing(" ", with: "\\ ")
+            return original.replacingOccurrences(of: " ", with: "\\ ")
         }
     }
 }

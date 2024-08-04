@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027DF2C5F784F00348460 /* Extension+Scene.swift */; };
+		381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E12C5F7C4800348460 /* Extension+Font.swift */; };
+		381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E32C5F7E1100348460 /* Extension+URL.swift */; };
 		387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */; };
 		387CEA7B2C5DEF0600E3A5AC /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CEA7A2C5DEF0600E3A5AC /* Extension+String.swift */; };
 		38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A1C2C4A6F83009F5910 /* InjectGUIApp.swift */; };
@@ -33,6 +36,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		381027DF2C5F784F00348460 /* Extension+Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Scene.swift"; sourceTree = "<group>"; };
+		381027E12C5F7C4800348460 /* Extension+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Font.swift"; sourceTree = "<group>"; };
+		381027E32C5F7E1100348460 /* Extension+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+URL.swift"; sourceTree = "<group>"; };
 		387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPrivilegeView.swift; sourceTree = "<group>"; };
 		387CEA7A2C5DEF0600E3A5AC /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
 		38877A192C4A6F83009F5910 /* InjectGUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InjectGUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +150,9 @@
 				38877A322C4A7222009F5910 /* PublishedStorage.swift */,
 				38877A342C4A7254009F5910 /* ViewKit.swift */,
 				387CEA7A2C5DEF0600E3A5AC /* Extension+String.swift */,
+				381027DF2C5F784F00348460 /* Extension+Scene.swift */,
+				381027E12C5F7C4800348460 /* Extension+Font.swift */,
+				381027E32C5F7E1100348460 /* Extension+URL.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -253,13 +262,16 @@
 				38AD95EA2C58E70E0032E79F /* Injector.swift in Sources */,
 				38877A302C4A70DB009F5910 /* SoftwareManager.swift in Sources */,
 				38877A332C4A7222009F5910 /* PublishedStorage.swift in Sources */,
+				381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */,
 				38E944F22C5A761B00B252A3 /* Executor.swift in Sources */,
 				38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */,
 				38877A2E2C4A6FFA009F5910 /* InjectConfiguration.swift in Sources */,
 				38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */,
 				38877A352C4A7254009F5910 /* ViewKit.swift in Sources */,
 				38877A3A2C4A730F009F5910 /* Constants.swift in Sources */,
+				381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */,
 				38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */,
+				381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */,
 				387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */,
 				38AD95EE2C58F59C0032E79F /* StatusView.swift in Sources */,
 			);
@@ -402,7 +414,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.wibus-wee.InjectGUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -440,7 +452,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.wibus-wee.InjectGUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";

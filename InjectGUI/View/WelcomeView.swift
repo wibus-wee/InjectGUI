@@ -30,11 +30,20 @@ struct WelcomeView: View {
 
                 Spacer().frame(height: 16)
 
-                Text("Welcome to InjectGUI")
-                    .font(.system(.title2, design: .rounded, weight: .bold))
-                Text("By wibus. Made with ❤️")
-                    .font(.system(.body, design: .rounded, weight: .bold))
-                    .foregroundColor(.secondary)
+                if #available(macOS 13.0, *) {
+                    Text("Welcome to InjectGUI")
+                        .font(.system(.title2, design: .rounded, weight: .bold))
+                    Text("By wibus. Made with ❤️")
+                        .font(.system(.body, design: .rounded, weight: .bold))
+                        .foregroundColor(.secondary)
+                } else {
+                    Text("Welcome to InjectGUI")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Text("By wibus. Made with ❤️")
+                        .foregroundColor(.secondary)
+                }
+                
 
                 Spacer().frame(height: 24)
             }
