@@ -506,7 +506,6 @@ class Injector: ObservableObject {
                         srcInfo.append(contentsOf: componentApps.map { (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + $0 + "/Contents/Info.plist" })
                     }
 
-                    let plistBuddy = "/usr/libexec/PlistBuddy"
                     guard FileManager.default.fileExists(atPath: targetHelper) else {
                         return [("echo Helper file not found: \(targetHelper) && exit 1", true)]
                     }
@@ -520,7 +519,7 @@ class Injector: ObservableObject {
                     let rmCommand = ("sudo /bin/rm \(target)", true)
                     let rmPrivilegedHelper = "sudo /bin/rm /Library/PrivilegedHelperTools/\(helperName!)"
                     let xattrCommand = "sudo xattr -c '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
-                    let plistBuddyCommand = "\(plistBuddy) -c 'Set :SMPrivilegedExecutables:\(helperName!) 'identifier \\\"\(helperName!)\\\"'' \(srcInfo.joined(separator: " "))"
+  
                     let codeSignHelperCommand = "/usr/bin/codesign -f -s - --all-architectures --deep '\(targetHelper)'"
                     let codeSignAppCommand = "/usr/bin/codesign -f -s - --all-architectures --deep '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
 
@@ -528,12 +527,15 @@ class Injector: ObservableObject {
                     shells.append((insertDylibCommand, false))
                     if FileManager.default.fileExists(atPath: target) {
                         shells.append(unloadLaunchctlCommand)
-                        shells.append(killAllCommand)
+                        let isRunning = NSRunningApplication.runningApplications(withBundleIdentifier: helperName!.description).count > 0
+                        if isRunning {
+                            shells.append(killAllCommand)
+                        }
                         shells.append(rmCommand)
                         shells.append((rmPrivilegedHelper, true))
                     }
                     shells.append((xattrCommand, true))
-                    shells.append((plistBuddyCommand, true))
+                    srcInfo.forEach { shells.append(("/usr/libexec/PlistBuddy -c 'Set :SMPrivilegedExecutables:\(helperName!) identifier \\\"\(helperName!)\\\"' \($0)", true)) }
                     shells.append((codeSignHelperCommand, true))
                     shells.append((codeSignAppCommand, true))
 
