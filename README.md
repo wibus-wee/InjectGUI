@@ -13,10 +13,6 @@
   </p>
 </p>
 
-<pre align="center">
-🧪 Working in Progress
-</pre>
-
 ## ⚠️ Warning
 
 _**New to Swift. Poor code quality.**_
