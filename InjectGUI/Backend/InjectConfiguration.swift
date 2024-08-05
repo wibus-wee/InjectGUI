@@ -25,13 +25,21 @@ class InjectConfiguration: ObservableObject {
     ]
 
     private init() {
-        // 开发环境默认关掉每次启动下载捏，因为防止疯狂重新编译而导致一直在获取资源
-        // 可以在 SettingView 里面主动下载资源，不需要动这里
-        // #if !DEBUG && !TEST
-        // update()
-        // #else
-        updateRemoteConf() // 配置还是需要 Fetch 的
-        // #endif
+        firstLoadCheckAndDownload()
+        updateRemoteConf()
+    }
+
+    func firstLoadCheckAndDownload() {
+        let path = getApplicationSupportDirectory().path
+        for tool in injectTools {
+            let _url = URL(fileURLWithPath: path).appendingPathComponent(tool)
+            if !FileManager.default.fileExists(atPath: _url.path) {
+                print("[*] First load, downloading \(tool)...")
+                downloadInjectTool(name: tool)
+            } else {
+                print("[*] First load, \(tool) already exists.")
+            }
+        }
     }
 
     private func downloadConfig(data: Data?) {
