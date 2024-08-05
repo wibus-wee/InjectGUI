@@ -21,6 +21,13 @@
 
 _**New to Swift. Poor code quality.**_
 
+## 🌍 Localization
+
+The localization of InjectGUI is in progress, and some content has not been translated yet. PRs are welcome.
+
+- [x] English
+- [ ] Chinese (Simplified) (Not yet)
+
 ## 🌟 Features
 
 - [x] Basic Functionality
@@ -34,6 +41,8 @@ _**New to Swift. Poor code quality.**_
 - [x] Customize Remote Git Repo, branch, and commit
 - [ ] Drag your favorite InjectLib to inject
 - [ ] Automatically download the original package and inject
+- [ ] MenuBar Helper
+- [ ] More...
 
 ## 👀 Preview
 
