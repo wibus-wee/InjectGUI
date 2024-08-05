@@ -163,3 +163,12 @@
 
 /* No comment provided by engineer. */
 "Why you are seeing this?" = "Why you are seeing this?";
+
+/* No comment provided by engineer. */
+"Remote InjectLib Git URL" = "Remote InjectLib Git URL";
+
+/* No comment provided by engineer. */
+"Remote InjectLib Branch" = "Remote InjectLib Branch";
+
+/* No comment provided by engineer. */
+"Remote InjectLib Commit" = "Remote InjectLib Commit";

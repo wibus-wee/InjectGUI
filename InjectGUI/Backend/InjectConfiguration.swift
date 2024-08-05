@@ -27,11 +27,11 @@ class InjectConfiguration: ObservableObject {
     private init() {
         // 开发环境默认关掉每次启动下载捏，因为防止疯狂重新编译而导致一直在获取资源
         // 可以在 SettingView 里面主动下载资源，不需要动这里
-        #if !DEBUG && !TEST
-        update()
-        #else
+        // #if !DEBUG && !TEST
+        // update()
+        // #else
         updateRemoteConf() // 配置还是需要 Fetch 的
-        #endif
+        // #endif
     }
 
     private func downloadConfig(data: Data?) {
@@ -205,9 +205,11 @@ class InjectConfiguration: ObservableObject {
 
     // MARK: - R/W Metadata Version
 
+    private let VersionMetadataAttributeName = "org.91QiuChenly.InjectLib.Tool.version"
+
     private func writeVersionMetadataIntoInjectTools(name: String, url: URL, version: String) -> Int {
         print("[*] Writing version metadata into  \(name)...")
-        let attributeName = "org.91QiuChenly.InjectLib.Tool.version"
+        let attributeName = self.VersionMetadataAttributeName
         let attributeValue = version.data(using: .utf8)
         let res = setxattr(url.path, attributeName, (attributeValue! as NSData).bytes.bindMemory(to: CChar.self, capacity: attributeValue!.count), attributeValue!.count, 0, 0)
         if res != 0 {
@@ -219,7 +221,7 @@ class InjectConfiguration: ObservableObject {
     }
 
     func getInjectToolVersion(name: String) -> String? {
-        let attributeName = "org.91QiuChenly.version"
+        let attributeName = self.VersionMetadataAttributeName
         let path = getApplicationSupportDirectory().path
         let _url = URL(fileURLWithPath: path).appendingPathComponent(name)
 

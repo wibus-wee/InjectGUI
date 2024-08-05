@@ -76,7 +76,7 @@
 "Open in Finder" = "在访达中打开";
 
 /* No comment provided by engineer. */
-"Open Support Folder" = "打开";
+"Open Support Folder" = "打开应用支持文件夹";
 
 /* No comment provided by engineer. */
 "Password" = "密码";
@@ -151,7 +151,7 @@
 "Universal Version (? Maybe)" = "通用版本（？应该是吧）";
 
 /* No comment provided by engineer. */
-"Update InjectLib & Tools" = "更新 InjectLib & 工具";
+"Update InjectLib & Tools" = "更新 InjectLib & 相关工具";
 
 /* No comment provided by engineer. */
 "URL" = "链接";
@@ -164,3 +164,12 @@
 
 /* No comment provided by engineer. */
 "Why you are seeing this?" = "你怎么看到的？";
+
+/* No comment provided by engineer. */
+"Remote InjectLib Git URL" = "指定 InjectLib 远程 Git URL";
+
+/* No comment provided by engineer. */
+"Remote InjectLib Branch" = "指定 InjectLib 远程分支";
+
+/* No comment provided by engineer. */
+"Remote InjectLib Commit" = "指定 InjectLib 提交 Commit";

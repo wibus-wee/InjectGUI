@@ -72,14 +72,18 @@ struct SettingsView: View {
                             .foregroundColor(.secondary)
                     }
 
-                    Spacer(minLength: 10)
+                    // Spacer(minLength: 10)
 
-                    VStack(alignment: .leading, spacing: 4) {
-                        SettingItemView("Local Version") {
-                            // Text(injectConfiguration.getInjectLibVersion() ?? "Non Exist")
-                            //   .foregroundColor(.secondary)
-                        }
-                    }
+                    // 这里有个问题，就是，很难去拿到InjectLib的版本号，不然就需要去访问 GitHub API 了，但是这样一来很容易会达到 Rate Limit
+                    // 暂时先不做这个功能了
+                    // VStack(alignment: .leading, spacing: 4) {
+                    //     ForEach(injectConfiguration.injectTools, id: \.self) { tool in
+                    //         SettingItemView("\(tool) Version") {
+                    //             Text(injectConfiguration.getInjectToolVersion(name: tool) ?? "Non Exist")
+                    //                 .foregroundColor(.secondary)
+                    //         }
+                    //     }
+                    // }
 
                     Spacer(minLength: 10)
 
