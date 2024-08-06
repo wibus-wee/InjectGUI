@@ -52,6 +52,13 @@ struct WelcomeView: View {
                 Text(version)
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .opacity(0.5)
+                    .onTapGesture {
+                        let alert = NSAlert()
+                        alert.messageText = "InjectGUI"
+                        alert.informativeText = "You're in \(injectConfiguration.mode == injectConfigurationMode.local ? "Local Mode" : "Remote Mode")."
+                        alert.addButton(withTitle: "OK")
+                        alert.runModal()
+                    }
             }
             .padding()
         }

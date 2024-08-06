@@ -9,11 +9,17 @@ import Combine
 import Foundation
 import SwiftUI
 
+enum injectConfigurationMode {
+    case local
+    case remote
+}
+
 // MARK: - InjectConfiguration
 
 class InjectConfiguration: ObservableObject {
     static let shared = InjectConfiguration()
-
+    
+    @Published var mode = injectConfigurationMode.local
     @Published var remoteConf = nil as InjectConfigurationModel?
 
     let injectTools: [String] = [
@@ -25,8 +31,24 @@ class InjectConfiguration: ObservableObject {
     ]
 
     private init() {
+        firstLoadToAppendLocalConfig()
         firstLoadCheckAndDownload()
         updateRemoteConf()
+    }
+    
+    func firstLoadToAppendLocalConfig() {
+        guard let url = Bundle.main.url(forResource: "config", withExtension: "json") else {
+            print("[E] Local JSON file not found")
+            mode = .remote
+            return
+        }
+        let data = try! Data(contentsOf: url)
+        let decoder = JSONDecoder()
+        let conf = try! decoder.decode(InjectConfigurationModel.self, from: data)
+        DispatchQueue.main.async {
+            self.remoteConf = conf
+            print("[I] Loaded local config.json")
+        }
     }
 
     func firstLoadCheckAndDownload() {
@@ -53,6 +75,7 @@ class InjectConfiguration: ObservableObject {
             packages?.forEach { app in
                 softwareManager.addAnMaybeExistAppToList(appBaseLocate: app.appBaseLocate!)
             }
+            self.mode = .remote
         }
     }
 

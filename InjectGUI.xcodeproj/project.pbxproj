@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		380D777B2C61EA56005F3150 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 380D777A2C61EA56005F3150 /* Sparkle */; };
 		380D777D2C61EAB9005F3150 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */; };
+		380D77842C620464005F3150 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 380D77832C620464005F3150 /* config.json */; };
 		381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027DF2C5F784F00348460 /* Extension+Scene.swift */; };
 		381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E12C5F7C4800348460 /* Extension+Font.swift */; };
 		381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E32C5F7E1100348460 /* Extension+URL.swift */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
 		380D777E2C61ED32005F3150 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		380D77832C620464005F3150 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
 		381027DF2C5F784F00348460 /* Extension+Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Scene.swift"; sourceTree = "<group>"; };
 		381027E12C5F7C4800348460 /* Extension+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Font.swift"; sourceTree = "<group>"; };
 		381027E32C5F7E1100348460 /* Extension+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+URL.swift"; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		38877A1B2C4A6F83009F5910 /* InjectGUI */ = {
 			isa = PBXGroup;
 			children = (
+				380D77832C620464005F3150 /* config.json */,
 				380D777E2C61ED32005F3150 /* Info.plist */,
 				38877A3B2C4A9EAB009F5910 /* Util */,
 				38877A382C4A7306009F5910 /* App */,
@@ -250,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38877A252C4A6F87009F5910 /* Preview Assets.xcassets in Resources */,
+				380D77842C620464005F3150 /* config.json in Resources */,
 				381027E72C5F816500348460 /* Localizable.strings in Resources */,
 				38877A212C4A6F87009F5910 /* Assets.xcassets in Resources */,
 			);

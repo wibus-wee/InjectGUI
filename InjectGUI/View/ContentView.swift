@@ -32,6 +32,7 @@ struct ContentView: View {
                 }
             }
 
+
             ToolbarItem {
                 Button {
                     executor.password = ""
