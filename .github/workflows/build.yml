@@ -34,13 +34,18 @@ jobs:
       #     brew install graphicsmagick imagemagick
 
       - name: Set up env.APP_CONF to Debug
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        if: github.event_name != 'release'
         run: |
           echo "APP_CONF=Debug" >> $GITHUB_ENV
       - name: Set up env.APP_CONF to Release
         if: github.event_name == 'release'
         run: |
           echo "APP_CONF=Release" >> $GITHUB_ENV
+          APP_VERSION=$(xcrun agvtool mvers -terse1)
+          APP_BUILD=$(xcrun agvtool vers -terse)
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "APP_BUILD=$APP_BUILD" >> $GITHUB_ENV
+
       - name: Build for macOS (Universal)
         shell: bash
         run: |
@@ -50,18 +55,52 @@ jobs:
         run: |
           hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/${{ env.APP_CONF }}/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
 
-      # - name: Create DMG
-      #   run: |
-      #     npm install --global create-dmg
-      #     create-dmg 'build/Build/Products/Release/InjectGUI.app' --overwrite --dmg-title='InjectGUI'
-
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
           name: InjectGUI
           path: InjectGUI.dmg
+
       - name: Upload DMG to GitHub Release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
           files: InjectGUI.dmg
+
+      ############################
+      # Sparkle Appcast
+      ############################
+      - name: Update Sparkle appcast
+        if: github.event_name == 'release'
+        env:
+          # SPARKLE_KEY: Sparkle EdDSA key exported from `generate_keys -x` as plain text
+          # SPARKLE_CHANNEL: Seperate dev builds from default channel, to be specified in [SPUUpdaterDelegate allowedChannelsForUpdater:]
+          # SPARKLE_DL_PREFIX: Prefix for the URL from where updates will be downloaded
+          # SPARKLE_LINK: CodeEdit Website
+          #   https://github.com/wibus-wee/InjectGUI/releases/download/0.0.1-alpha.11/CodeEdit-9113dc5.dmg
+          # RELEASE_NOTES_PREFIX: The URL to prefix before an update link:
+          #   https://codeedit.app/whats-new/raw/{v0.1.0} -- data in {} is inserted by sparkle
+          # RELEASE_NOTES_URL: The URL of the entire release notes page: https://codeedit.app/whats-new
+          SPARKLE_KEY: ${{ secrets.SPARKLE_KEY }}
+          # SPARKLE_CHANNEL: dev
+          SPARKLE_DL_PREFIX: "https://github.com/wibus-wee/InjectGUI/releases/download"
+          SPARKLE_LINK: "https://github.com/wibus-wee/InjectGUI"
+          APP_VERSION: ${{ env.APP_VERSION }}
+          APP_BUILD: ${{ env.APP_BUILD }}
+          # RELEASE_NOTES_URL: "https://codeedit.app/whats-new/"
+          # RELEASE_NOTES_PREFIX: "https://codeedit.app/sparkle/"
+        run: |
+          SPARKLE_BIN="$RUNNER_TEMP/DerivedData/SourcePackages/artifacts/sparkle/Sparkle/bin"
+          SPARKLE_ARCHIVE="$RUNNER_TEMP/Sparkle_Archive"
+          echo -n "$SPARKLE_KEY" | tee "$RUNNER_TEMP/sparkle_key"
+          mkdir "$SPARKLE_ARCHIVE"
+          cp "$RUNNER_TEMP/InjectGUI.dmg" "$SPARKLE_ARCHIVE"
+          SPARKLE_SIG=$("$SPARKLE_BIN/sign_update" --ed-key-file "$RUNNER_TEMP/sparkle_key" "$SPARKLE_ARCHIVE/InjectGUI.dmg" | cut -d\" -f2)
+          echo "<!DOCTYPE>" > "$SPARKLE_ARCHIVE/InjectGUI.html" # Need a blank html doc with the DOCTYPE tag to trick sparkle into loading our remote release notes.
+          "$SPARKLE_BIN/generate_appcast" --ed-key-file "$RUNNER_TEMP/sparkle_key" --download-url-prefix "${{ env.SPARKLE_DL_PREFIX }}/v${{ env.APP_VERSION }}/" --link "$SPARKLE_LINK" --maximum-deltas 0 "$SPARKLE_ARCHIVE"
+
+      - name: Upload Sparkle Appcast
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "${{ RUNNER.TEMP }}/Sparkle_Archive/appcast.xml"

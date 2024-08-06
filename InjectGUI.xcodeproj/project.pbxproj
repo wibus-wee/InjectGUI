@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		380D777B2C61EA56005F3150 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 380D777A2C61EA56005F3150 /* Sparkle */; };
+		380D777D2C61EAB9005F3150 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */; };
 		381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027DF2C5F784F00348460 /* Extension+Scene.swift */; };
 		381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E12C5F7C4800348460 /* Extension+Font.swift */; };
 		381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E32C5F7E1100348460 /* Extension+URL.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
+		380D777E2C61ED32005F3150 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		381027DF2C5F784F00348460 /* Extension+Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Scene.swift"; sourceTree = "<group>"; };
 		381027E12C5F7C4800348460 /* Extension+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Font.swift"; sourceTree = "<group>"; };
 		381027E32C5F7E1100348460 /* Extension+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+URL.swift"; sourceTree = "<group>"; };
@@ -72,6 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38E944F52C5A7F6A00B252A3 /* Cache in Frameworks */,
+				380D777B2C61EA56005F3150 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +103,7 @@
 		38877A1B2C4A6F83009F5910 /* InjectGUI */ = {
 			isa = PBXGroup;
 			children = (
+				380D777E2C61ED32005F3150 /* Info.plist */,
 				38877A3B2C4A9EAB009F5910 /* Util */,
 				38877A382C4A7306009F5910 /* App */,
 				38877A312C4A7217009F5910 /* Extension */,
@@ -141,6 +147,7 @@
 				38AD95ED2C58F59C0032E79F /* StatusView.swift */,
 				38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */,
 				387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */,
+				380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -193,6 +200,7 @@
 			name = InjectGUI;
 			packageProductDependencies = (
 				38E944F42C5A7F6A00B252A3 /* Cache */,
+				380D777A2C61EA56005F3150 /* Sparkle */,
 			);
 			productName = InjectGUI;
 			productReference = 38877A192C4A6F83009F5910 /* InjectGUI.app */;
@@ -225,6 +233,7 @@
 			mainGroup = 38877A102C4A6F83009F5910;
 			packageReferences = (
 				38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */,
+				380D77792C61EA56005F3150 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = 38877A1A2C4A6F83009F5910 /* Products */;
 			projectDirPath = "";
@@ -275,6 +284,7 @@
 				381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */,
 				387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */,
 				38AD95EE2C58F59C0032E79F /* StatusView.swift in Sources */,
+				380D777D2C61EAB9005F3150 /* CheckForUpdatesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +426,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"InjectGUI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InjectGUI/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -454,6 +465,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"InjectGUI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InjectGUI/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -505,6 +517,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		380D77792C61EA56005F3150 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hyperoslo/Cache";
@@ -516,6 +536,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		380D777A2C61EA56005F3150 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 380D77792C61EA56005F3150 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
 		38E944F42C5A7F6A00B252A3 /* Cache */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */;

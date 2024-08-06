@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Sparkle
 
 let configuration = Configuration.shared
 let injectConfiguration = InjectConfiguration.shared
@@ -16,8 +17,12 @@ let executor = Executor.shared
 @main
 struct InjectGUIApp: App {
     @AppStorage("showAdminPrivilegeView") private var showAdminPrivilegeView: Bool = true
+    private let updaterController: SPUStandardUpdaterController
 
     init() {
+        // If you want to start the updater manually, pass false to startingUpdater and call .startUpdater() later
+        // This is where you can also pass an updater delegate if you need one
+        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
         setupApplicationSupportDirectory()
         checkPassword()
     }
@@ -29,7 +34,12 @@ struct InjectGUIApp: App {
                     AdminPrivilegeView()
                 }
         }
-        .commands { SidebarCommands() }
+        .commands {
+            SidebarCommands()
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesView(updater: updaterController.updater)
+            }
+        }
         .contentSizedWindowResizability()
 
         Settings {
