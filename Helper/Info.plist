@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>dev.wibus-wee.InjectGUI.helper</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>dev.wibus-wee.InjectGUI.helper</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>SMAuthorizedClients</key>
+	<array>
+		<string>identifier "dev.wibus-wee.InjectGUI" and anchor apple generic and certificate leaf[subject.CN] = "Apple Development: 1596355173@qq.com (YX89Z87JNG)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
+	</array>
+</dict>
+</plist>

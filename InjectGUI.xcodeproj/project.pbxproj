@@ -10,6 +10,26 @@
 		380D777B2C61EA56005F3150 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 380D777A2C61EA56005F3150 /* Sparkle */; };
 		380D777D2C61EAB9005F3150 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */; };
 		380D77842C620464005F3150 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 380D77832C620464005F3150 /* config.json */; };
+		380D778C2C620B54005F3150 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D778B2C620B54005F3150 /* main.swift */; };
+		380D77912C620BF7005F3150 /* HelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77902C620BF7005F3150 /* HelperProtocol.swift */; };
+		380D77922C620BF7005F3150 /* HelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77902C620BF7005F3150 /* HelperProtocol.swift */; };
+		380D77942C620C4D005F3150 /* RemoteApplicationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77932C620C4D005F3150 /* RemoteApplicationProtocol.swift */; };
+		380D77952C620C4D005F3150 /* RemoteApplicationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77932C620C4D005F3150 /* RemoteApplicationProtocol.swift */; };
+		380D77972C620C63005F3150 /* HelperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77962C620C63005F3150 /* HelperConstants.swift */; };
+		380D77982C620C63005F3150 /* HelperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77962C620C63005F3150 /* HelperConstants.swift */; };
+		380D779A2C620CC5005F3150 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77992C620CC5005F3150 /* Helper.swift */; };
+		380D779B2C620CC5005F3150 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77992C620CC5005F3150 /* Helper.swift */; };
+		380D779D2C620D6C005F3150 /* ConnectionIdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779C2C620D6C005F3150 /* ConnectionIdentityService.swift */; };
+		380D779E2C620D6C005F3150 /* ConnectionIdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779C2C620D6C005F3150 /* ConnectionIdentityService.swift */; };
+		380D77A02C620D9C005F3150 /* Extension+OSStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779F2C620D9C005F3150 /* Extension+OSStatus.swift */; };
+		380D77A12C620D9C005F3150 /* Extension+OSStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779F2C620D9C005F3150 /* Extension+OSStatus.swift */; };
+		380D77A32C620F6B005F3150 /* HelperRemoteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77A22C620F6B005F3150 /* HelperRemoteProvider.swift */; };
+		380D77A62C620FF9005F3150 /* InjectError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77A52C620FF9005F3150 /* InjectError.swift */; };
+		380D77A72C620FF9005F3150 /* InjectError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77A52C620FF9005F3150 /* InjectError.swift */; };
+		380D77A92C621181005F3150 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 380D77A82C621181005F3150 /* Info.plist */; };
+		380D77AA2C621237005F3150 /* dev.wibus-wee.InjectGUI.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 380D77892C620B54005F3150 /* dev.wibus-wee.InjectGUI.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		380D77AC2C6212E0005F3150 /* Launchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 380D77AB2C6212E0005F3150 /* Launchd.plist */; };
+		380D77AE2C621479005F3150 /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77AD2C621479005F3150 /* Execution.swift */; };
 		381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027DF2C5F784F00348460 /* Extension+Scene.swift */; };
 		381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E12C5F7C4800348460 /* Extension+Font.swift */; };
 		381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E32C5F7E1100348460 /* Extension+URL.swift */; };
@@ -27,6 +47,8 @@
 		38877A372C4A7294009F5910 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A362C4A7294009F5910 /* Configuration.swift */; };
 		38877A3A2C4A730F009F5910 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A392C4A730F009F5910 /* Constants.swift */; };
 		38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A3C2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift */; };
+		38A5747A2C621E7600209B96 /* ExecutionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A574792C621E7600209B96 /* ExecutionService.swift */; };
+		38A5747B2C621E7600209B96 /* ExecutionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A574792C621E7600209B96 /* ExecutionService.swift */; };
 		38AD95EA2C58E70E0032E79F /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AD95E92C58E70E0032E79F /* Injector.swift */; };
 		38AD95EE2C58F59C0032E79F /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AD95ED2C58F59C0032E79F /* StatusView.swift */; };
 		38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F522C4B587900C3B60E /* SidebarView.swift */; };
@@ -38,10 +60,36 @@
 		38E944F72C5A85E200B252A3 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F62C5A85E200B252A3 /* Cache.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		380D77872C620B54005F3150 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = InjectGUI.app/Contents/Library/LaunchServices;
+			dstSubfolderSpec = 16;
+			files = (
+				380D77AA2C621237005F3150 /* dev.wibus-wee.InjectGUI.helper in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
 		380D777E2C61ED32005F3150 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		380D77832C620464005F3150 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
+		380D77892C620B54005F3150 /* dev.wibus-wee.InjectGUI.helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "dev.wibus-wee.InjectGUI.helper"; sourceTree = BUILT_PRODUCTS_DIR; };
+		380D778B2C620B54005F3150 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		380D77902C620BF7005F3150 /* HelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocol.swift; sourceTree = "<group>"; };
+		380D77932C620C4D005F3150 /* RemoteApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteApplicationProtocol.swift; sourceTree = "<group>"; };
+		380D77962C620C63005F3150 /* HelperConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperConstants.swift; sourceTree = "<group>"; };
+		380D77992C620CC5005F3150 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		380D779C2C620D6C005F3150 /* ConnectionIdentityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionIdentityService.swift; sourceTree = "<group>"; };
+		380D779F2C620D9C005F3150 /* Extension+OSStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+OSStatus.swift"; sourceTree = "<group>"; };
+		380D77A22C620F6B005F3150 /* HelperRemoteProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperRemoteProvider.swift; sourceTree = "<group>"; };
+		380D77A52C620FF9005F3150 /* InjectError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectError.swift; sourceTree = "<group>"; };
+		380D77A82C621181005F3150 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		380D77AB2C6212E0005F3150 /* Launchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Launchd.plist; sourceTree = "<group>"; };
+		380D77AD2C621479005F3150 /* Execution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Execution.swift; sourceTree = "<group>"; };
 		381027DF2C5F784F00348460 /* Extension+Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Scene.swift"; sourceTree = "<group>"; };
 		381027E12C5F7C4800348460 /* Extension+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Font.swift"; sourceTree = "<group>"; };
 		381027E32C5F7E1100348460 /* Extension+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+URL.swift"; sourceTree = "<group>"; };
@@ -62,6 +110,8 @@
 		38877A362C4A7294009F5910 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		38877A392C4A730F009F5910 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		38877A3C2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupApplicationSupportDirectory.swift; sourceTree = "<group>"; };
+		38A574792C621E7600209B96 /* ExecutionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionService.swift; sourceTree = "<group>"; };
+		38A5747F2C62284300209B96 /* uninstall-helper.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "uninstall-helper.sh"; sourceTree = "<group>"; };
 		38AD95E92C58E70E0032E79F /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
 		38AD95ED2C58F59C0032E79F /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		38BC1F522C4B587900C3B60E /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
@@ -73,6 +123,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		380D77862C620B54005F3150 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		38877A162C4A6F83009F5910 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -85,11 +142,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		380D778A2C620B54005F3150 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				380D77A82C621181005F3150 /* Info.plist */,
+				380D77AB2C6212E0005F3150 /* Launchd.plist */,
+				380D778B2C620B54005F3150 /* main.swift */,
+				38A5747E2C62276000209B96 /* Service */,
+				38A5747D2C62273200209B96 /* Protocol */,
+				38A5747C2C62272600209B96 /* Extension */,
+				380D77992C620CC5005F3150 /* Helper.swift */,
+				380D77962C620C63005F3150 /* HelperConstants.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		38877A102C4A6F83009F5910 = {
 			isa = PBXGroup;
 			children = (
+				38A5747F2C62284300209B96 /* uninstall-helper.sh */,
 				381027E92C5F816500348460 /* Localizable.strings */,
 				38877A1B2C4A6F83009F5910 /* InjectGUI */,
+				380D778A2C620B54005F3150 /* Helper */,
 				38877A1A2C4A6F83009F5910 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -98,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				38877A192C4A6F83009F5910 /* InjectGUI.app */,
+				380D77892C620B54005F3150 /* dev.wibus-wee.InjectGUI.helper */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,12 +205,14 @@
 		38877A2B2C4A6FCB009F5910 /* Backend */ = {
 			isa = PBXGroup;
 			children = (
+				380D77A22C620F6B005F3150 /* HelperRemoteProvider.swift */,
 				38877A2D2C4A6FFA009F5910 /* InjectConfiguration.swift */,
 				38877A2F2C4A70DB009F5910 /* SoftwareManager.swift */,
 				38877A362C4A7294009F5910 /* Configuration.swift */,
 				38AD95E92C58E70E0032E79F /* Injector.swift */,
 				38E944F12C5A761B00B252A3 /* Executor.swift */,
 				38E944F62C5A85E200B252A3 /* Cache.swift */,
+				380D77AD2C621479005F3150 /* Execution.swift */,
 			);
 			path = Backend;
 			sourceTree = "<group>";
@@ -164,6 +241,7 @@
 				381027DF2C5F784F00348460 /* Extension+Scene.swift */,
 				381027E12C5F7C4800348460 /* Extension+Font.swift */,
 				381027E32C5F7E1100348460 /* Extension+URL.swift */,
+				380D77A52C620FF9005F3150 /* InjectError.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -185,9 +263,52 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		38A5747C2C62272600209B96 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				380D779F2C620D9C005F3150 /* Extension+OSStatus.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		38A5747D2C62273200209B96 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				380D77902C620BF7005F3150 /* HelperProtocol.swift */,
+				380D77932C620C4D005F3150 /* RemoteApplicationProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		38A5747E2C62276000209B96 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				380D779C2C620D6C005F3150 /* ConnectionIdentityService.swift */,
+				38A574792C621E7600209B96 /* ExecutionService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		380D77882C620B54005F3150 /* dev.wibus-wee.InjectGUI.helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 380D778D2C620B54005F3150 /* Build configuration list for PBXNativeTarget "dev.wibus-wee.InjectGUI.helper" */;
+			buildPhases = (
+				380D77852C620B54005F3150 /* Sources */,
+				380D77862C620B54005F3150 /* Frameworks */,
+				380D77872C620B54005F3150 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "dev.wibus-wee.InjectGUI.helper";
+			productName = Helper;
+			productReference = 380D77892C620B54005F3150 /* dev.wibus-wee.InjectGUI.helper */;
+			productType = "com.apple.product-type.tool";
+		};
 		38877A182C4A6F83009F5910 /* InjectGUI */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38877A282C4A6F87009F5910 /* Build configuration list for PBXNativeTarget "InjectGUI" */;
@@ -219,6 +340,9 @@
 				LastSwiftUpdateCheck = 1410;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
+					380D77882C620B54005F3150 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					38877A182C4A6F83009F5910 = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -243,6 +367,7 @@
 			projectRoot = "";
 			targets = (
 				38877A182C4A6F83009F5910 /* InjectGUI */,
+				380D77882C620B54005F3150 /* dev.wibus-wee.InjectGUI.helper */,
 			);
 		};
 /* End PBXProject section */
@@ -252,9 +377,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				380D77AC2C6212E0005F3150 /* Launchd.plist in Resources */,
 				38877A252C4A6F87009F5910 /* Preview Assets.xcassets in Resources */,
 				380D77842C620464005F3150 /* config.json in Resources */,
 				381027E72C5F816500348460 /* Localizable.strings in Resources */,
+				380D77A92C621181005F3150 /* Info.plist in Resources */,
 				38877A212C4A6F87009F5910 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,27 +389,53 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		380D77852C620B54005F3150 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				380D778C2C620B54005F3150 /* main.swift in Sources */,
+				380D77A12C620D9C005F3150 /* Extension+OSStatus.swift in Sources */,
+				380D779B2C620CC5005F3150 /* Helper.swift in Sources */,
+				380D77A72C620FF9005F3150 /* InjectError.swift in Sources */,
+				380D77982C620C63005F3150 /* HelperConstants.swift in Sources */,
+				38A5747B2C621E7600209B96 /* ExecutionService.swift in Sources */,
+				380D779E2C620D6C005F3150 /* ConnectionIdentityService.swift in Sources */,
+				380D77922C620BF7005F3150 /* HelperProtocol.swift in Sources */,
+				380D77952C620C4D005F3150 /* RemoteApplicationProtocol.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		38877A152C4A6F83009F5910 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				38877A1F2C4A6F83009F5910 /* ContentView.swift in Sources */,
+				380D779D2C620D6C005F3150 /* ConnectionIdentityService.swift in Sources */,
+				380D77A32C620F6B005F3150 /* HelperRemoteProvider.swift in Sources */,
 				38BC1F5A2C4B98A300C3B60E /* AppDetailView.swift in Sources */,
 				38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */,
 				38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */,
 				38E944F72C5A85E200B252A3 /* Cache.swift in Sources */,
 				387CEA7B2C5DEF0600E3A5AC /* Extension+String.swift in Sources */,
 				38877A372C4A7294009F5910 /* Configuration.swift in Sources */,
+				380D77942C620C4D005F3150 /* RemoteApplicationProtocol.swift in Sources */,
 				38AD95EA2C58E70E0032E79F /* Injector.swift in Sources */,
+				380D77A02C620D9C005F3150 /* Extension+OSStatus.swift in Sources */,
+				380D77A62C620FF9005F3150 /* InjectError.swift in Sources */,
 				38877A302C4A70DB009F5910 /* SoftwareManager.swift in Sources */,
 				38877A332C4A7222009F5910 /* PublishedStorage.swift in Sources */,
 				381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */,
 				38E944F22C5A761B00B252A3 /* Executor.swift in Sources */,
+				380D77972C620C63005F3150 /* HelperConstants.swift in Sources */,
+				380D779A2C620CC5005F3150 /* Helper.swift in Sources */,
 				38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */,
 				38877A2E2C4A6FFA009F5910 /* InjectConfiguration.swift in Sources */,
 				38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */,
+				380D77AE2C621479005F3150 /* Execution.swift in Sources */,
 				38877A352C4A7254009F5910 /* ViewKit.swift in Sources */,
 				38877A3A2C4A730F009F5910 /* Constants.swift in Sources */,
+				380D77912C620BF7005F3150 /* HelperProtocol.swift in Sources */,
+				38A5747A2C621E7600209B96 /* ExecutionService.swift in Sources */,
 				381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */,
 				38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */,
 				381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */,
@@ -308,6 +461,52 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		380D778E2C620B54005F3150 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 947UYU6LTQ;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_LDFLAGS = (
+					"-sectcreate",
+					__TEXT,
+					__info_plist,
+					"\"$(SRCROOT)/Helper/Info.plist\"",
+					"-sectcreate",
+					__TEXT,
+					__launchd_plist,
+					"\"$(SRCROOT)/Helper/Launchd.plist\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		380D778F2C620B54005F3150 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 947UYU6LTQ;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_LDFLAGS = (
+					"-sectcreate",
+					__TEXT,
+					__info_plist,
+					"\"$(SRCROOT)/Helper/Info.plist\"",
+					"-sectcreate",
+					__TEXT,
+					__launchd_plist,
+					"\"$(SRCROOT)/Helper/Launchd.plist\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		38877A262C4A6F87009F5910 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -425,9 +624,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = InjectGUI/InjectGUI.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"InjectGUI/Preview Content\"";
+				DEVELOPMENT_TEAM = 947UYU6LTQ;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InjectGUI/Info.plist;
@@ -449,6 +652,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.wibus-wee.InjectGUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
@@ -464,9 +668,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = InjectGUI/InjectGUI.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"InjectGUI/Preview Content\"";
+				DEVELOPMENT_TEAM = 947UYU6LTQ;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InjectGUI/Info.plist;
@@ -488,6 +696,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.wibus-wee.InjectGUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
@@ -500,6 +709,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		380D778D2C620B54005F3150 /* Build configuration list for PBXNativeTarget "dev.wibus-wee.InjectGUI.helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				380D778E2C620B54005F3150 /* Debug */,
+				380D778F2C620B54005F3150 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		38877A142C4A6F83009F5910 /* Build configuration list for PBXProject "InjectGUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

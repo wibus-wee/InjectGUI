@@ -31,6 +31,22 @@ struct ContentView: View {
                     Label("Toggle Sidebar", systemImage: "sidebar.leading")
                 }
             }
+            
+            ToolbarItem {
+                Button {
+                    Task {
+                        do {
+                            print("Executing script")
+                            let result = try await Execution.executeScript(at: "~/Desktop/test.sh")
+                            print(result)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                } label: {
+                    Label("Test", systemImage: "hammer")
+                }
+            }
 
 
             ToolbarItem {
