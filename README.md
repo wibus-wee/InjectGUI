@@ -13,6 +13,12 @@
   </p>
 </p>
 
+
+> [!WARNING]
+> [#8](https://github.com/wibus-wee/InjectGUI/issues/8) has not been resolved yet, and the source of the problem cannot be determined.
+>
+> If you encounter such a problem, **please temporarily abandon the use of InjectGUI and use the original InjectLib TUI**
+
 ## ⚠️ Warning
 
 _**New to Swift. Poor code quality.**_
