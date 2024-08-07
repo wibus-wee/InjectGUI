@@ -15,7 +15,7 @@ enum ExecutionService {
 
     // MARK: Constants
 
-    static let programURL = URL(fileURLWithPath: "/bin/zsh")
+    static let programURL = URL(fileURLWithPath: "/usr/bin/env")
 
     // MARK: Execute
 

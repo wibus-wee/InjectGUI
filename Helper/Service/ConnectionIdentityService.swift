@@ -27,7 +27,6 @@ enum ConnectionIdentityService {
     
     private static func verifySecCode(secCode: SecCode) throws {
         var secRequirements: SecRequirement?
-
         try SecRequirementCreateWithString(requirementString, [], &secRequirements)
             .checkError("SecRequirementCreateWithString")
         try SecCodeCheckValidity(secCode, [], secRequirements)

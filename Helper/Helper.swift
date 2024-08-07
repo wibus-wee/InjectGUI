@@ -43,6 +43,8 @@ extension Helper {
 extension Helper: NSXPCListenerDelegate {
 
     func listener(_ listener: NSXPCListener, shouldAcceptNewConnection newConnection: NSXPCConnection) -> Bool {
+//        FIX: Something went wrong here?
+
         do {
             try ConnectionIdentityService.checkConnectionIsValid(connection: newConnection)
         } catch {

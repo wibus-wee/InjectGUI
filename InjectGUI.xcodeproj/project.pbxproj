@@ -15,20 +15,13 @@
 		380D77922C620BF7005F3150 /* HelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77902C620BF7005F3150 /* HelperProtocol.swift */; };
 		380D77942C620C4D005F3150 /* RemoteApplicationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77932C620C4D005F3150 /* RemoteApplicationProtocol.swift */; };
 		380D77952C620C4D005F3150 /* RemoteApplicationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77932C620C4D005F3150 /* RemoteApplicationProtocol.swift */; };
-		380D77972C620C63005F3150 /* HelperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77962C620C63005F3150 /* HelperConstants.swift */; };
 		380D77982C620C63005F3150 /* HelperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77962C620C63005F3150 /* HelperConstants.swift */; };
-		380D779A2C620CC5005F3150 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77992C620CC5005F3150 /* Helper.swift */; };
 		380D779B2C620CC5005F3150 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77992C620CC5005F3150 /* Helper.swift */; };
-		380D779D2C620D6C005F3150 /* ConnectionIdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779C2C620D6C005F3150 /* ConnectionIdentityService.swift */; };
 		380D779E2C620D6C005F3150 /* ConnectionIdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779C2C620D6C005F3150 /* ConnectionIdentityService.swift */; };
-		380D77A02C620D9C005F3150 /* Extension+OSStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779F2C620D9C005F3150 /* Extension+OSStatus.swift */; };
 		380D77A12C620D9C005F3150 /* Extension+OSStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779F2C620D9C005F3150 /* Extension+OSStatus.swift */; };
-		380D77A32C620F6B005F3150 /* HelperRemoteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77A22C620F6B005F3150 /* HelperRemoteProvider.swift */; };
 		380D77A62C620FF9005F3150 /* InjectError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77A52C620FF9005F3150 /* InjectError.swift */; };
 		380D77A72C620FF9005F3150 /* InjectError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77A52C620FF9005F3150 /* InjectError.swift */; };
-		380D77A92C621181005F3150 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 380D77A82C621181005F3150 /* Info.plist */; };
 		380D77AA2C621237005F3150 /* dev.wibus-wee.InjectGUI.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 380D77892C620B54005F3150 /* dev.wibus-wee.InjectGUI.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		380D77AC2C6212E0005F3150 /* Launchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 380D77AB2C6212E0005F3150 /* Launchd.plist */; };
 		380D77AE2C621479005F3150 /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77AD2C621479005F3150 /* Execution.swift */; };
 		381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027DF2C5F784F00348460 /* Extension+Scene.swift */; };
 		381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E12C5F7C4800348460 /* Extension+Font.swift */; };
@@ -47,7 +40,6 @@
 		38877A372C4A7294009F5910 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A362C4A7294009F5910 /* Configuration.swift */; };
 		38877A3A2C4A730F009F5910 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A392C4A730F009F5910 /* Constants.swift */; };
 		38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A3C2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift */; };
-		38A5747A2C621E7600209B96 /* ExecutionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A574792C621E7600209B96 /* ExecutionService.swift */; };
 		38A5747B2C621E7600209B96 /* ExecutionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A574792C621E7600209B96 /* ExecutionService.swift */; };
 		38AD95EA2C58E70E0032E79F /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AD95E92C58E70E0032E79F /* Injector.swift */; };
 		38AD95EE2C58F59C0032E79F /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AD95ED2C58F59C0032E79F /* StatusView.swift */; };
@@ -55,6 +47,9 @@
 		38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F542C4B622500C3B60E /* WelcomeView.swift */; };
 		38BC1F5A2C4B98A300C3B60E /* AppDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F592C4B98A300C3B60E /* AppDetailView.swift */; };
 		38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */; };
+		38E090152C631C42007D1CFD /* HelperRemoteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77A22C620F6B005F3150 /* HelperRemoteProvider.swift */; };
+		38E090162C631C54007D1CFD /* HelperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D77962C620C63005F3150 /* HelperConstants.swift */; };
+		38E090172C631C5E007D1CFD /* Extension+OSStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380D779F2C620D9C005F3150 /* Extension+OSStatus.swift */; };
 		38E944F22C5A761B00B252A3 /* Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F12C5A761B00B252A3 /* Executor.swift */; };
 		38E944F52C5A7F6A00B252A3 /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = 38E944F42C5A7F6A00B252A3 /* Cache */; };
 		38E944F72C5A85E200B252A3 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F62C5A85E200B252A3 /* Cache.swift */; };
@@ -377,11 +372,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				380D77AC2C6212E0005F3150 /* Launchd.plist in Resources */,
 				38877A252C4A6F87009F5910 /* Preview Assets.xcassets in Resources */,
 				380D77842C620464005F3150 /* config.json in Resources */,
 				381027E72C5F816500348460 /* Localizable.strings in Resources */,
-				380D77A92C621181005F3150 /* Info.plist in Resources */,
 				38877A212C4A6F87009F5910 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -410,24 +403,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				38877A1F2C4A6F83009F5910 /* ContentView.swift in Sources */,
-				380D779D2C620D6C005F3150 /* ConnectionIdentityService.swift in Sources */,
-				380D77A32C620F6B005F3150 /* HelperRemoteProvider.swift in Sources */,
 				38BC1F5A2C4B98A300C3B60E /* AppDetailView.swift in Sources */,
 				38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */,
 				38877A3D2C4A9EB7009F5910 /* SetupApplicationSupportDirectory.swift in Sources */,
 				38E944F72C5A85E200B252A3 /* Cache.swift in Sources */,
+				38E090162C631C54007D1CFD /* HelperConstants.swift in Sources */,
 				387CEA7B2C5DEF0600E3A5AC /* Extension+String.swift in Sources */,
 				38877A372C4A7294009F5910 /* Configuration.swift in Sources */,
 				380D77942C620C4D005F3150 /* RemoteApplicationProtocol.swift in Sources */,
 				38AD95EA2C58E70E0032E79F /* Injector.swift in Sources */,
-				380D77A02C620D9C005F3150 /* Extension+OSStatus.swift in Sources */,
 				380D77A62C620FF9005F3150 /* InjectError.swift in Sources */,
+				38E090172C631C5E007D1CFD /* Extension+OSStatus.swift in Sources */,
 				38877A302C4A70DB009F5910 /* SoftwareManager.swift in Sources */,
 				38877A332C4A7222009F5910 /* PublishedStorage.swift in Sources */,
+				38E090152C631C42007D1CFD /* HelperRemoteProvider.swift in Sources */,
 				381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */,
 				38E944F22C5A761B00B252A3 /* Executor.swift in Sources */,
-				380D77972C620C63005F3150 /* HelperConstants.swift in Sources */,
-				380D779A2C620CC5005F3150 /* Helper.swift in Sources */,
 				38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */,
 				38877A2E2C4A6FFA009F5910 /* InjectConfiguration.swift in Sources */,
 				38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */,
@@ -435,7 +426,6 @@
 				38877A352C4A7254009F5910 /* ViewKit.swift in Sources */,
 				38877A3A2C4A730F009F5910 /* Constants.swift in Sources */,
 				380D77912C620BF7005F3150 /* HelperProtocol.swift in Sources */,
-				38A5747A2C621E7600209B96 /* ExecutionService.swift in Sources */,
 				381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */,
 				38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */,
 				381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */,
@@ -467,6 +457,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 947UYU6LTQ;
+				INFOPLIST_FILE = "$(SRCROOT)/Helper/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				OTHER_LDFLAGS = (
 					"-sectcreate",
@@ -490,6 +481,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 947UYU6LTQ;
+				INFOPLIST_FILE = "$(SRCROOT)/Helper/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				OTHER_LDFLAGS = (
 					"-sectcreate",

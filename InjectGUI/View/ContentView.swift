@@ -37,7 +37,7 @@ struct ContentView: View {
                     Task {
                         do {
                             print("Executing script")
-                            let result = try await Execution.executeScript(at: "~/Desktop/test.sh")
+                            let result = try await Execution.executeScript(at: "/Users/wibus/Desktop/test.sh")
                             print(result)
                         } catch {
                             print(error.localizedDescription)

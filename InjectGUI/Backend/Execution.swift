@@ -20,6 +20,6 @@ enum Execution {
 
     /// Execute the script at the provided URL.
     static func executeScript(at path: String) async throws -> String {
-        try await HelperRemoteProvider.remote().executeScript(at: path)
+        return try await HelperRemoteProvider.remote().executeScript(at: path)
     }
 }
