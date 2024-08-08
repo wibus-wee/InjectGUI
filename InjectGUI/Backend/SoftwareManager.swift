@@ -67,15 +67,7 @@ class SoftwareManager: ObservableObject {
         let iconFileRaw = plist["CFBundleIconFile"] as? String ?? plist["CFBundleIconName"] as? String
 
         // 检查文件名并添加扩展名（如果需要）
-        let iconFile: String? = if let iconFileRaw {
-            iconFileRaw.hasSuffix(
-                ".icns"
-            ) ? iconFileRaw : iconFileRaw.appending(
-                ".icns"
-            )
-        } else {
-            nil
-        }
+        let iconFile: String? = iconFileRaw?.hasSuffix(".icns") ?? false ? iconFileRaw : iconFileRaw?.appending(".icns")
 
         // 检查 iconFile 是否为 nil
         guard let finalIconFile = iconFile else {

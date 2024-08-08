@@ -33,25 +33,25 @@ extension InjectStage {
     var description: String {
         switch self {
         case .start:
-            "Start Injecting"
+            return "Start Injecting"
         case .copyExecutableFileAsBackup:
-            "Copying Executable File as Backup"
+            return "Copying Executable File as Backup"
         case .checkPermissionAndRun:
-            "Checking Permission and Run"
+            return "Checking Permission and Run"
         case .handleKeygen:
-            "Handling Keygen"
+            return "Handling Keygen"
         case .handleDeepCodeSign:
-            "Handling Deep Code Sign"
+            return "Handling Deep Code Sign"
         case .handleAutoHandleHelper:
-            "Handling Auto Handle Helper"
+            return "Handling Auto Handle Helper"
         case .handleTccutil:
-            "Handling Tccutil"
+            return "Handling Tccutil"
         case .handleExtraShell:
-            "Handling Extra Shell"
+            return "Handling Extra Shell"
         case .handleInjectLibInject:
-            "Handling Inject Lib Inject"
+            return "Handling Inject Lib Inject"
         case .end:
-            "Injecting Finished"
+            return "Injecting Finished"
         }
     }
 }
@@ -220,26 +220,26 @@ class Injector: ObservableObject {
     func commandsForStage(_ stage: InjectStage) -> [(command: String, isAdmin: Bool)] {
         switch stage {
         case .copyExecutableFileAsBackup:
-            self.copyExecutableFileAsBackupCommands()
+            return self.copyExecutableFileAsBackupCommands()
         case .checkPermissionAndRun:
-            self.checkPermissionAndRunCommands()
+            return self.checkPermissionAndRunCommands()
         case .handleInjectLibInject:
-            self.handleInjectLibInjectAdminCommands()
+            return self.handleInjectLibInjectAdminCommands()
         case .handleKeygen:
-            self.handleKeygenCommands()
+            return self.handleKeygenCommands()
         case .handleDeepCodeSign:
-            self.handleDeepCodeSignCommands()
+            return self.handleDeepCodeSignCommands()
         case .handleAutoHandleHelper:
-            self.handleAutoHandleHelperCommands()
+            return self.handleAutoHandleHelperCommands()
         case .handleTccutil:
-            self.handleTccutilCommands()
+            return self.handleTccutilCommands()
         case .handleExtraShell:
-            self.handleExtraShellCommands()
+            return self.handleExtraShellCommands()
         // case .end:
         //     let openApp = "open '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
         //     return [(openApp, false)]
         default:
-            []
+            return []
         }
     }
 
@@ -257,9 +257,9 @@ class Injector: ObservableObject {
 
     private func getBridgeDir(executable: Bool? = nil, injectDetail: AppList?) -> String {
         if (executable ?? false) || injectDetail?.autoHandleSetapp == true {
-            "/MacOS/"
+           return "/MacOS/"
         } else {
-            injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+            return injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
         }
     }
 
@@ -292,17 +292,17 @@ class Injector: ObservableObject {
     }
 
     private func genSourcePath(for type: GenScriptType, path: String?) -> String {
-        self.transformPath(path: path ?? "", to: type)
+        return self.transformPath(path: path ?? "", to: type)
     }
 
     private func transformPath(path: String, to type: GenScriptType) -> String {
         switch type {
         case .none:
-            path.replacingOccurrences(of: "%20", with: " ")
+            return path.replacingOccurrences(of: "%20", with: " ")
         case .appleScript:
-            path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\\\ ")
+            return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\\\ ")
         case .bash:
-            path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\ ")
+            return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\ ")
         }
     }
 
