@@ -20,7 +20,7 @@ class Executor: ObservableObject {
     private var currentTask: Process?
     private let queue = DispatchQueue(label: "com.executor.taskQueue", attributes: .concurrent)
 
-    // 执行单个命令
+    /// 执行单个命令
     func executeShellCommand(_ command: String) -> Future<String, Error> {
         Future { promise in
             self.runShellCommand(command)
@@ -35,7 +35,7 @@ class Executor: ObservableObject {
         }
     }
 
-    // 执行多个命令
+    /// 执行多个命令
     func executeShellCommands(_ commands: [(command: String, isAdmin: Bool)]) -> Future<Void, Error> {
         Future { promise in
             self.executeCommandsSequentially(commands, promise: promise)
@@ -64,7 +64,7 @@ class Executor: ObservableObject {
             .store(in: &self.cancellables)
     }
 
-    // 执行单个需要管理员权限的命令
+    /// 执行单个需要管理员权限的命令
     func executeAdminCommand(_ command: String) -> Future<String, Error> {
         Future { promise in
             self.runAdminCommand(command)
@@ -120,31 +120,51 @@ class Executor: ObservableObject {
     /// TIPS: 命令可能是有一个 Application\ Support 的，这个地方需要转义：Application\\ Support
     /// 这里懒的搞了，我只想让它能跑起来，麻烦传过来的时候就转义好了。
     /// 否则会爆：NSAppleScriptErrorMessage = Expected \U201c\"\U201d but found unknown token.
-    private func runAdminCommand(_ command: String) -> Future<String, Error> {
-        Future { promise in
-            let username = NSFullUserName()
-            let appleScript = """
-            do shell script "\(command)" user name "\(username)" password "\(self.password)" with administrator privileges
-            """
-            // let appleScript = """
-            // do shell script "echo testAppleScript" user name "\(username)" password "\(self.password)" with administrator privileges
-            // """
-            #if DEBUG
-            print("Admin Command: \(command)")
-            print("Admin AppleScript: \(appleScript)")
-            #endif
+    func runAdminCommand(_ command: String) -> Future<String, Error> {
+        Future { [weak self] promise in
+            guard let self else {
+                promise(.failure(NSError(domain: "ProcessError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Self is nil"])))
+                return
+            }
 
-            var error: NSDictionary?
-            if let scriptObject = NSAppleScript(source: appleScript) {
-                let output = scriptObject.executeAndReturnError(&error)
-                if let error = error {
-                    print("AppleScript Error: \(error)")
-                    promise(.failure(NSError(domain: "Executor", code: 2, userInfo: error.dictionaryWithValues(forKeys: [NSAppleScript.errorMessage]))))
+            let task = Process()
+            let outputPipe = Pipe()
+            let errorPipe = Pipe()
+
+            task.standardOutput = outputPipe
+            task.standardError = errorPipe
+
+            let escapedCommand = command.replacingOccurrences(of: "\"", with: "\\\"")
+            task.arguments = ["-c", "echo \(self.password) | sudo -S bash -c \"\(escapedCommand)\""]
+            task.executableURL = URL(fileURLWithPath: "/bin/bash")
+
+            do {
+                try task.run()
+
+                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+
+                task.waitUntilExit()
+
+                let output = String(data: outputData, encoding: .utf8) ?? ""
+                let errorOutput = String(data: errorData, encoding: .utf8) ?? ""
+
+                if task.terminationStatus == 0 {
+                    promise(.success(output))
                 } else {
-                    promise(.success(output.stringValue ?? ""))
+                    let errorMessage = errorOutput.isEmpty ? "Unknown error occurred" : errorOutput
+                    if errorMessage.contains("Operation not permitted") {
+                        promise(.failure(NSError(domain: "Operation not permitted",
+                                                 code: Int(task.terminationStatus),
+                                                 userInfo: [NSLocalizedDescriptionKey: "请同意隐私安全后,重新运行"])))
+                    } else {
+                        promise(.failure(NSError(domain: "ProcessError",
+                                                 code: Int(task.terminationStatus),
+                                                 userInfo: [NSLocalizedDescriptionKey: errorMessage])))
+                    }
                 }
-            } else {
-                promise(.failure(NSError(domain: "Executor", code: 3, userInfo: [NSLocalizedDescriptionKey: "Can't create NSAppleScript object"])))
+            } catch {
+                promise(.failure(error))
             }
         }
     }
