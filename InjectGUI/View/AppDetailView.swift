@@ -54,7 +54,7 @@ struct AppDetailView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .onAppear {
             let inInjectLibList = injectConfiguration.checkPackageIsSupported(package: appId)
-            self.compatibility = Compatibility(
+            compatibility = Compatibility(
                 id: appId,
                 inInjectLibList: inInjectLibList
             )
@@ -70,8 +70,15 @@ struct AppDetailView: View {
                 .frame(width: 64, height: 64)
                 .cornerRadius(4)
             VStack(alignment: .leading, spacing: 4) {
-                Text(appDetail.name)
-                    .font(.headline)
+                HStack {
+                    Text(appDetail.name)
+                        .font(.headline)
+
+                    Label("已注入", systemImage: "checkmark.circle.fill")
+                        .font(.caption2)
+                        .foregroundStyle(.green)
+                        .opacity(appDetail.isInjected ? 1 : 0)
+                }
                 Text(appDetail.identifier)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -145,8 +152,8 @@ struct AppDetailView: View {
                 }
 
                 HStack {
-                    Image(systemName: (appInjectConfDetail?.componentApp ?? []).count > 0 ? CompatibilityIcon.compatible.rawValue : CompatibilityIcon.incompatible.rawValue)
-                        .foregroundColor((appInjectConfDetail?.componentApp ?? []).count > 0 ? .green : .red)
+                    Image(systemName: !(appInjectConfDetail?.componentApp ?? []).isEmpty ? CompatibilityIcon.compatible.rawValue : CompatibilityIcon.incompatible.rawValue)
+                        .foregroundColor(!(appInjectConfDetail?.componentApp ?? []).isEmpty ? .green : .red)
 
                     HStack {
                         Text("This app has sub app")
@@ -165,8 +172,8 @@ struct AppDetailView: View {
                 }
 
                 HStack {
-                    Image(systemName: (appInjectConfDetail?.tccutil?.allStrings ?? []).count > 0 ? CompatibilityIcon.compatible.rawValue : CompatibilityIcon.incompatible.rawValue)
-                        .foregroundColor((appInjectConfDetail?.tccutil?.allStrings ?? []).count > 0 ? .green : .red)
+                    Image(systemName: !(appInjectConfDetail?.tccutil?.allStrings ?? []).isEmpty ? CompatibilityIcon.compatible.rawValue : CompatibilityIcon.incompatible.rawValue)
+                        .foregroundColor(!(appInjectConfDetail?.tccutil?.allStrings ?? []).isEmpty ? .green : .red)
 
                     HStack {
                         Text("This app needs to use tccutil to reset")

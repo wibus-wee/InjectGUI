@@ -33,25 +33,25 @@ extension InjectStage {
     var description: String {
         switch self {
         case .start:
-            return "Start Injecting"
+            "Start Injecting"
         case .copyExecutableFileAsBackup:
-            return "Copying Executable File as Backup"
+            "Copying Executable File as Backup"
         case .checkPermissionAndRun:
-            return "Checking Permission and Run"
+            "Checking Permission and Run"
         case .handleKeygen:
-            return "Handling Keygen"
+            "Handling Keygen"
         case .handleDeepCodeSign:
-            return "Handling Deep Code Sign"
+            "Handling Deep Code Sign"
         case .handleAutoHandleHelper:
-            return "Handling Auto Handle Helper"
+            "Handling Auto Handle Helper"
         case .handleTccutil:
-            return "Handling Tccutil"
+            "Handling Tccutil"
         case .handleExtraShell:
-            return "Handling Extra Shell"
+            "Handling Extra Shell"
         case .handleInjectLibInject:
-            return "Handling Inject Lib Inject"
+            "Handling Inject Lib Inject"
         case .end:
-            return "Injecting Finished"
+            "Injecting Finished"
         }
     }
 }
@@ -94,6 +94,7 @@ class Injector: ObservableObject {
 
     func startInjectApp(package: String) {
         // MARK: - 拦截 Setapp 旗下软件
+
         if package.contains("com.setapp") {
             let alert = NSAlert()
             alert.messageText = "Please read the Setapp inject document first"
@@ -162,7 +163,7 @@ class Injector: ObservableObject {
                 if case .failure(let error) = completion {
                     let alert = NSAlert()
                     alert.messageText = "Command Execution Error"
-                    
+
                     // Extracting the AppleScript error message
                     var errorMessage = error.localizedDescription
                     if let appleScriptError = error as NSError? {
@@ -219,26 +220,26 @@ class Injector: ObservableObject {
     func commandsForStage(_ stage: InjectStage) -> [(command: String, isAdmin: Bool)] {
         switch stage {
         case .copyExecutableFileAsBackup:
-            return self.copyExecutableFileAsBackupCommands()
+            self.copyExecutableFileAsBackupCommands()
         case .checkPermissionAndRun:
-            return self.checkPermissionAndRunCommands()
+            self.checkPermissionAndRunCommands()
         case .handleInjectLibInject:
-            return self.handleInjectLibInjectAdminCommands()
+            self.handleInjectLibInjectAdminCommands()
         case .handleKeygen:
-            return self.handleKeygenCommands()
+            self.handleKeygenCommands()
         case .handleDeepCodeSign:
-            return self.handleDeepCodeSignCommands()
+            self.handleDeepCodeSignCommands()
         case .handleAutoHandleHelper:
-            return self.handleAutoHandleHelperCommands()
+            self.handleAutoHandleHelperCommands()
         case .handleTccutil:
-            return self.handleTccutilCommands()
+            self.handleTccutilCommands()
         case .handleExtraShell:
-            return self.handleExtraShellCommands()
+            self.handleExtraShellCommands()
         // case .end:
         //     let openApp = "open '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
         //     return [(openApp, false)]
         default:
-            return []
+            []
         }
     }
 
@@ -249,47 +250,59 @@ class Injector: ObservableObject {
         case appleScript
         case bash
     }
-    
+
     private func getBridgeDir(executable: Bool? = nil) -> String {
-        if (executable ?? false) || self.injectDetail?.autoHandleSetapp == true {
-            return "/MacOS/"
+        self.getBridgeDir(executable: executable, injectDetail: self.injectDetail)
+    }
+
+    private func getBridgeDir(executable: Bool? = nil, injectDetail: AppList?) -> String {
+        if (executable ?? false) || injectDetail?.autoHandleSetapp == true {
+            "/MacOS/"
         } else {
-            return self.injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
+            injectDetail?.bridgeFile?.replacingOccurrences(of: "/Contents", with: "") ?? "/Frameworks/"
         }
     }
 
-    private func genSourcePath(for type: GenScriptType) -> String {
+    func genSourcePath(for type: GenScriptType) -> String {
         let bridgeDir = self.getBridgeDir()
         let source = (self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? "")
         return self.transformPath(path: source, to: type)
     }
-    
-    private func genSourcePath(for type: GenScriptType, executable: Bool? = nil) -> String {
+
+    private func genSourcePath(for type: GenScriptType, executable: Bool) -> String {
         let bridgeDir = self.getBridgeDir(executable: executable)
-        let source = (self.appDetail?.path ?? "") + bridgeDir + (executable ?? true ? (self.appDetail?.executable ?? "") : (self.injectDetail?.injectFile ?? ""))
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (executable ? (self.appDetail?.executable ?? "") : (self.injectDetail?.injectFile ?? ""))
         return self.transformPath(path: source, to: type)
     }
 
-    private func genSourcePath(for type: GenScriptType, file: String? = nil) -> String {
-        let bridgeDir = self.getBridgeDir()
-        let source = (self.appDetail?.path ?? "") + bridgeDir + (file ?? (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? ""))
+    func genSourcePath(for type: GenScriptType, file: String?) -> String {
+        self.genSourcePath(for: type, appList: self.injectDetail, file: file)
+    }
+
+    func genSourcePath(for type: GenScriptType, appList: AppList?, file: String?) -> String {
+        let bridgeDir = self.getBridgeDir(injectDetail: appList)
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (file ?? "")
         return self.transformPath(path: source, to: type)
     }
 
-    private func genSourcePath(for type: GenScriptType, path: String? = nil) -> String {
-        let bridgeDir = self.getBridgeDir()
-        let source = path ?? ((self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? ""))
+    func genSourcePath(for type: GenScriptType, appList: AppList) -> String {
+        let bridgeDir = self.getBridgeDir(injectDetail: appList)
+        let source = (self.appDetail?.path ?? "") + bridgeDir + (self.injectDetail?.injectFile ?? self.appDetail?.executable ?? "")
         return self.transformPath(path: source, to: type)
+    }
+
+    private func genSourcePath(for type: GenScriptType, path: String?) -> String {
+        self.transformPath(path: path ?? "", to: type)
     }
 
     private func transformPath(path: String, to type: GenScriptType) -> String {
         switch type {
         case .none:
-            return path.replacingOccurrences(of: "%20", with: " ")
+            path.replacingOccurrences(of: "%20", with: " ")
         case .appleScript:
-            return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\\\ ")
+            path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\\\ ")
         case .bash:
-            return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\ ")
+            path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\ ")
         }
     }
 
@@ -392,7 +405,7 @@ class Injector: ObservableObject {
         }
 
         let entitlements = self.injectDetail?.entitlements
-        if let entitlements = entitlements {
+        if let entitlements {
             let entitlementDownloadURL = injectConfiguration.generateInjectToolDownloadURL(name: entitlements)
             let downloadIntoTmpPath = try? FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: URL(fileURLWithPath: "/"), create: true)
             let entitlementsPath = downloadIntoTmpPath?.appendingPathComponent(entitlements).path
@@ -477,7 +490,7 @@ class Injector: ObservableObject {
 
         shells.append((downloadCommand, false))
         shells.append(("chmod +x \(downloadPath)", false))
-        if replaceCommands.count > 0 {
+        if !replaceCommands.isEmpty {
             shells.append(contentsOf: replaceCommands.map { ($0, false) })
         }
         shells.append(("sudo sh \(downloadPath)", true))
@@ -491,7 +504,7 @@ class Injector: ObservableObject {
         var shells: [(command: String, isAdmin: Bool)] = []
         let helperFile = self.injectDetail?.helperFile?.allStrings // [String]?
         let autoHandleHelper = self.injectDetail?.autoHandleHelper // Bool?
-        if let helperFile = helperFile, let autoHandleHelper = autoHandleHelper {
+        if let helperFile, let autoHandleHelper {
             var helpers: [String] = []
             if autoHandleHelper {
                 helpers = helperFile
@@ -522,7 +535,7 @@ class Injector: ObservableObject {
                     let rmCommand = ("sudo /bin/rm \(target)", true)
                     let rmPrivilegedHelper = "sudo /bin/rm /Library/PrivilegedHelperTools/\(helperName!)"
                     let xattrCommand = "sudo xattr -c '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
-  
+
                     let codeSignHelperCommand = "/usr/bin/codesign -f -s - --all-architectures --deep '\(targetHelper)'"
                     let codeSignAppCommand = "/usr/bin/codesign -f -s - --all-architectures --deep '\((self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))'"
 
@@ -554,7 +567,7 @@ class Injector: ObservableObject {
 
     func handleTccutilCommands() -> [(command: String, isAdmin: Bool)] {
         let tccutil = self.injectDetail?.tccutil?.allStrings // [String]?
-        if let tccutil = tccutil {
+        if let tccutil {
             var ids = [self.appDetail?.identifier]
             if let componentApp = self.injectDetail?.componentApp {
                 ids.append(contentsOf: componentApp.map { self.readBundleID(app: URL(fileURLWithPath: (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + $0)) })
