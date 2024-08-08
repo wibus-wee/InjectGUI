@@ -403,7 +403,10 @@ class Injector: ObservableObject {
 
         let dest = self.genSourcePath(for: .bash)
 
-        shells.append((sign_prefix_with_deep + " '\(dest)'", false))
+        if !(injectDetail?.noSignTarget ?? false) {
+            shells.append((sign_prefix_with_deep + " '\(dest)'", false))
+        }
+//        shells.append((sign_prefix_with_deep + " '\(dest)'", false))
 
         let deepSignApp = self.injectDetail?.deepSignApp // Bool
         if deepSignApp == true {
@@ -496,7 +499,7 @@ class Injector: ObservableObject {
                 for helper in helpers {
                     let genShineImpactStarterURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.pathWithFallback())
                     var targetHelper = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + helper
-                    let bridgeFile = (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + (self.injectDetail?.bridgeFile ?? "")
+                    let bridgeFile = (self.appDetail?.path ?? "") + (self.getBridgeDir())
                     let insertDylibURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.pathWithFallback())
                     let helperName = targetHelper.split(separator: "/").last
                     let target = self.genSourcePath(for: .appleScript, path: "/Library/LaunchDaemons/\(helperName!).plist")
