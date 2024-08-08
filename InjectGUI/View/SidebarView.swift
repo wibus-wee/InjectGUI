@@ -75,8 +75,17 @@ struct SidebarView: View {
                         .frame(width: 32, height: 32)
                         .cornerRadius(4)
                     VStack(alignment: .leading) {
-                        Text(app.detail.name)
-                            .font(.headline)
+                        HStack {
+                            Text(app.detail.name)
+                                .font(.headline)
+
+                            Label("已注入", systemImage: "checkmark.circle.fill")
+                                .font(.caption2)
+                                .foregroundStyle(.green)
+                                .labelStyle(.iconOnly)
+                                .opacity(app.detail.isInjected ? 1 : 0)
+                        }
+
                         Text(app.detail.identifier)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
@@ -109,9 +118,9 @@ struct SidebarView: View {
         return apps
             .filter { app in
                 injectConfiguration.checkPackageIsSupported(package: app.detail.identifier) &&
-                (searchText.isEmpty ||
-                 app.detail.name.lowercased().contains(searchText.lowercased()) ||
-                 app.detail.identifier.lowercased().contains(searchText.lowercased()))
+                    (searchText.isEmpty ||
+                        app.detail.name.lowercased().contains(searchText.lowercased()) ||
+                        app.detail.identifier.lowercased().contains(searchText.lowercased()))
             }
             .sorted { $0.detail.name < $1.detail.name }
     }

@@ -15,29 +15,32 @@ struct AppDetail {
     let path: String // -> path
     let executable: String // -> CFBundleExecutable
     let icon: NSImage
+    var isInjected: Bool = false
 }
 
 class SoftwareManager: ObservableObject {
     static let shared = SoftwareManager()
 
     @Published var appListCache: [String: AppDetail] = [:]
-       @Published var isLoading = false
+    @Published var isLoading = false
 
-       private init() {
-           refreshAppList()
-       }
+    private init() {
+        refreshAppList()
+    }
+
     func refreshAppList() {
-           DispatchQueue.main.async {
-               self.isLoading = true
-           }
-           
-           DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-               self?.getList()
-               DispatchQueue.main.async {
-                   self?.isLoading = false
-               }
-           }
-       }
+        DispatchQueue.main.async {
+            self.isLoading = true
+        }
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.getList()
+            DispatchQueue.main.async {
+                self?.isLoading = false
+            }
+        }
+    }
+
     private func loadAppInfo(
         from plistPath: String
     ) -> AppDetail? {
@@ -64,15 +67,14 @@ class SoftwareManager: ObservableObject {
         let iconFileRaw = plist["CFBundleIconFile"] as? String ?? plist["CFBundleIconName"] as? String
 
         // 检查文件名并添加扩展名（如果需要）
-        let iconFile: String?
-        if let iconFileRaw = iconFileRaw {
-            iconFile = iconFileRaw.hasSuffix(
+        let iconFile: String? = if let iconFileRaw {
+            iconFileRaw.hasSuffix(
                 ".icns"
             ) ? iconFileRaw : iconFileRaw.appending(
                 ".icns"
             )
         } else {
-            iconFile = nil
+            nil
         }
 
         // 检查 iconFile 是否为 nil
@@ -102,38 +104,39 @@ class SoftwareManager: ObservableObject {
             version: bundleVersion,
             path: path,
             executable: bundleExecutable,
-            icon: icon ?? NSImage()
+            icon: icon ?? NSImage(),
+            isInjected: checkForInjection(appPath: path)
         )
     }
 
     func getList() {
-         print("[*] Getting app list...")
-         let applicationDirectories = [
-             "/Applications",
-             "/Applications/Setapp",
-         ]
-         let fileManager = FileManager.default
+        print("[*] Getting app list...")
+        let applicationDirectories = [
+            "/Applications",
+            "/Applications/Setapp",
+        ]
+        let fileManager = FileManager.default
 
-         var newAppListCache: [String: AppDetail] = [:]
+        var newAppListCache: [String: AppDetail] = [:]
 
-         for directory in applicationDirectories {
-             guard let appPaths = try? fileManager.contentsOfDirectory(atPath: directory) else {
-                 continue
-             }
+        for directory in applicationDirectories {
+            guard let appPaths = try? fileManager.contentsOfDirectory(atPath: directory) else {
+                continue
+            }
 
-             for appPath in appPaths {
-                 let fullPath = "\(directory)/\(appPath)"
-                 let infoPlistPath = "\(fullPath)/Contents/Info.plist"
-                 if let appInfo = loadAppInfo(from: infoPlistPath) {
-                     newAppListCache[appInfo.identifier] = appInfo
-                 }
-             }
-         }
+            for appPath in appPaths {
+                let fullPath = "\(directory)/\(appPath)"
+                let infoPlistPath = "\(fullPath)/Contents/Info.plist"
+                if let appInfo = loadAppInfo(from: infoPlistPath) {
+                    newAppListCache[appInfo.identifier] = appInfo
+                }
+            }
+        }
 
-         DispatchQueue.main.async { [weak self] in
-             self?.appListCache = newAppListCache
-         }
-     }
+        DispatchQueue.main.async { [weak self] in
+            self?.appListCache = newAppListCache
+        }
+    }
 
     func addAnMaybeExistAppToList(appBaseLocate: String) {
 //        print("[*] try to add \(appBaseLocate) to list...")
@@ -149,5 +152,40 @@ class SoftwareManager: ObservableObject {
     func checkSoftwareIsInstalled(package: String) -> Bool {
         print("[*] Checking if \(package) is installed...")
         return appListCache[package] != nil
+    }
+
+    private func checkForInjection(appPath: String) -> Bool {
+        let frameworksPath = "\(appPath)/Frameworks"
+        let fileManager = FileManager.default
+
+        if !fileManager.fileExists(atPath: frameworksPath) {
+            print("Frameworks directory does not exist for app: \(appPath)")
+            return false
+        }
+
+        do {
+            let contents = try fileManager.contentsOfDirectory(atPath: frameworksPath)
+            for item in contents {
+                let fullPath = "\(frameworksPath)/\(item)"
+                let attributes = try fileManager.attributesOfItem(atPath: fullPath)
+
+                if attributes[.type] as? FileAttributeType == .typeSymbolicLink {
+                    if let destination = try? fileManager.destinationOfSymbolicLink(atPath: fullPath) {
+                        if destination.contains("91Qiuchenly.dylib") {
+                            print("Injection (symbolic link) found in app: \(appPath)")
+                            print("Link destination: \(destination)")
+                            return true
+                        }
+                    }
+                }
+            }
+        } catch {
+            print("Error reading Frameworks directory for app: \(appPath)")
+            print("Error details: \(error)")
+            return false
+        }
+
+        print("No injection found in app: \(appPath)")
+        return false
     }
 }
