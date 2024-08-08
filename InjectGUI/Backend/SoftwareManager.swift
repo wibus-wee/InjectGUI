@@ -155,37 +155,30 @@ class SoftwareManager: ObservableObject {
     }
 
     private func checkForInjection(appPath: String) -> Bool {
-        let frameworksPath = "\(appPath)/Frameworks"
         let fileManager = FileManager.default
+        func checkDirectory(_ path: String, condition: (String) -> Bool) -> Bool {
+            guard fileManager.fileExists(atPath: path) else { return false }
 
-        if !fileManager.fileExists(atPath: frameworksPath) {
-            print("Frameworks directory does not exist for app: \(appPath)")
-            return false
-        }
-
-        do {
-            let contents = try fileManager.contentsOfDirectory(atPath: frameworksPath)
-            for item in contents {
-                let fullPath = "\(frameworksPath)/\(item)"
-                let attributes = try fileManager.attributesOfItem(atPath: fullPath)
-
-                if attributes[.type] as? FileAttributeType == .typeSymbolicLink {
-                    if let destination = try? fileManager.destinationOfSymbolicLink(atPath: fullPath) {
-                        if destination.contains("91Qiuchenly.dylib") {
-                            print("Injection (symbolic link) found in app: \(appPath)")
-                            print("Link destination: \(destination)")
-                            return true
-                        }
-                    }
-                }
+            do {
+                let contents = try fileManager.contentsOfDirectory(atPath: path)
+                return contents.contains(where: condition)
+            } catch {
+                return false
             }
-        } catch {
-            print("Error reading Frameworks directory for app: \(appPath)")
-            print("Error details: \(error)")
-            return false
         }
 
-        print("No injection found in app: \(appPath)")
-        return false
+        // check Frameworks
+        let frameworksInjected = checkDirectory("\(appPath)/Frameworks") { item in
+            let fullPath = "\(appPath)/Frameworks/\(item)"
+            return (try? fileManager.attributesOfItem(atPath: fullPath)[.type] as? FileAttributeType) == .typeSymbolicLink
+                && (try? fileManager.destinationOfSymbolicLink(atPath: fullPath).contains("91Qiuchenly.dylib")) == true
+        }
+
+        if frameworksInjected {
+            return true
+        }
+
+        // check MacOS
+        return checkDirectory("\(appPath)/MacOS") { $0.lowercased().contains("backup") }
     }
 }
