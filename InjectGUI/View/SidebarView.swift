@@ -55,12 +55,10 @@ struct SidebarView: View {
         }
         .onChange(of: injectConfiguration.remoteConf) { _ in
             updateFilteredApps()
+            softwareManager.refreshAppList()
         }
         .onChange(of: searchText) { _ in
             updateFilteredApps()
-        }
-        .onAppear {
-            softwareManager.refreshAppList()
         }
     }
 

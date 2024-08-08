@@ -105,7 +105,7 @@ class SoftwareManager: ObservableObject {
             path: path,
             executable: bundleExecutable,
             icon: icon ?? NSImage(),
-            isInjected: checkForInjection(appPath: path)
+            isInjected: checkForInjection(appPath: path, package: bundleIdentifier)
         )
     }
 
@@ -154,31 +154,18 @@ class SoftwareManager: ObservableObject {
         return appListCache[package] != nil
     }
 
-    private func checkForInjection(appPath: String) -> Bool {
-        let fileManager = FileManager.default
-        func checkDirectory(_ path: String, condition: (String) -> Bool) -> Bool {
-            guard fileManager.fileExists(atPath: path) else { return false }
+    private func checkForInjection(appPath: String, package: String) -> Bool {
+        let injector = Injector.shared
 
-            do {
-                let contents = try fileManager.contentsOfDirectory(atPath: path)
-                return contents.contains(where: condition)
-            } catch {
-                return false
-            }
+        guard let appList = InjectConfiguration.shared.injectDetail(package: package) else {
+            return false
         }
+        let paths = [
+            injector.genSourcePath(for: .none, appList: appList, file: "91Qiuchenly.dylib"),
+            injector.genSourcePath(for: .none, appList: appList).appending("_backup"),
+            injector.genSourcePath(for: .none, appList: appList).appending(".backup"),
+        ]
 
-        // check Frameworks
-        let frameworksInjected = checkDirectory("\(appPath)/Frameworks") { item in
-            let fullPath = "\(appPath)/Frameworks/\(item)"
-            return (try? fileManager.attributesOfItem(atPath: fullPath)[.type] as? FileAttributeType) == .typeSymbolicLink
-                && (try? fileManager.destinationOfSymbolicLink(atPath: fullPath).contains("91Qiuchenly.dylib")) == true
-        }
-
-        if frameworksInjected {
-            return true
-        }
-
-        // check MacOS
-        return checkDirectory("\(appPath)/MacOS") { $0.lowercased().contains("backup") }
+        return paths.contains { FileManager.default.fileExists(atPath: appPath + $0) }
     }
 }
