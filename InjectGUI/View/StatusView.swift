@@ -138,10 +138,10 @@ struct StatusView: View {
                         return
                     }
                     let alert = NSAlert()
-                    alert.messageText = "Are you sure you want to stop injecting?"
-                    alert.informativeText = "The app may not work properly if you stop injecting."
-                    alert.addButton(withTitle: "Stop")
-                    alert.addButton(withTitle: "Cancel")
+                    alert.messageText = String(localized: "Are you sure you want to stop injecting?")
+                    alert.informativeText = String(localized: "The app may not work properly if you stop injecting.")
+                    alert.addButton(withTitle: String(localized: "Stop"))
+                    alert.addButton(withTitle: String(localized: "Cancel"))
                     alert.beginSheetModal(for: NSApp.keyWindow!) { response in
                         if response == .alertFirstButtonReturn {
                             injector.stopInjectApp()

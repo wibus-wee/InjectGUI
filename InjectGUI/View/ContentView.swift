@@ -18,7 +18,7 @@ struct ContentView: View {
             }
             .navigationTitle(Constants.appName)
 
-            WelcomeView()
+            AboutView()
         }
         .toolbar {
             ToolbarItem(placement: .navigation) {

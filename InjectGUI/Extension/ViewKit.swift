@@ -76,8 +76,8 @@ enum ViewKit {
     
     static func useSheet(
         title: String,
-        secondaryButton: String = "Cancel",
-        primaryButton: String = "OK",
+        secondaryButton: String = String(localized: "Cancel"),
+        primaryButton: String = String(localized: "OK"),
         toolbar: (() -> (AnyView))? = nil,
         content: @escaping () -> AnyView,
         action: @escaping (IsClickPrimaryButton) -> Void?
@@ -97,8 +97,8 @@ enum ViewKit {
     static func useAlert(
         title: String,
         message: String,
-        primaryButton: String = "OK",
-        secondaryButton: String = "Cancel",
+        primaryButton: String = String(localized: "OK"),
+        secondaryButton: String = String(localized: "Cancel"),
         action: @escaping (IsClickPrimaryButton) -> Void?
     ) {
         let alert = NSAlert()
@@ -127,8 +127,8 @@ enum ViewKit {
     static func useFilePanel(
         title: String,
         message: String,
-        primaryButton: String = "OK",
-        secondaryButton: String = "Cancel",
+        primaryButton: String = String(localized: "OK"),
+        secondaryButton: String = String(localized: "Cancel"),
         action: @escaping (URL?) -> Void
     ) {
         let panel = NSOpenPanel()
@@ -147,8 +147,8 @@ enum ViewKit {
     static func useDirectoryPanel(
         title: String,
         message: String,
-        primaryButton: String = "OK",
-        secondaryButton: String = "Cancel",
+        primaryButton: String = String(localized: "OK"),
+        secondaryButton: String = String(localized: "Cancel"),
         action: @escaping (URL?) -> Void
     ) {
         let panel = NSOpenPanel()
@@ -167,8 +167,8 @@ enum ViewKit {
     static func saveFilePanel(
         title: String,
         message: String,
-        primaryButton: String = "OK",
-        secondaryButton: String = "Cancel",
+        primaryButton: String = String(localized: "OK"),
+        secondaryButton: String = String(localized: "Cancel"),
         action: @escaping (URL?) -> Void
     ) {
         let panel = NSSavePanel()

@@ -1,16 +1,15 @@
 //
-//  SettingsView.swift
+//  GeneralView.swift
 //  InjectGUI
 //
-//  Created by wibus on 2024/7/20.
+//  Created by Licardo on 2024/8/9.
 //
 
-import Foundation
 import SwiftUI
 
-struct SettingsView: View {
+struct GeneralView: View {
     @StateObject var configuration = Configuration.shared
-
+    
     var version: String {
         var ret = "Version: " +
             (Constants.appVersion)
@@ -21,34 +20,8 @@ struct SettingsView: View {
         #endif
         return ret
     }
-
-    private enum Tabs: Hashable {
-        case general
-        case about
-    }
-
+    
     var body: some View {
-        return TabView {
-            generalView
-            aboutView
-        }
-
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-
-    func SettingItemView(_ title: String, @ViewBuilder content: @escaping () -> some View) -> some View {
-        HStack {
-            Text(title)
-            Spacer()
-            content()
-        }
-        .padding(10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.secondary.opacity(0.1))
-        .cornerRadius(6)
-    }
-
-    var generalView: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 // Project info
@@ -181,47 +154,17 @@ struct SettingsView: View {
         .tabItem {
             Label("General", systemImage: "gear")
         }
-        .tag(Tabs.general)
     }
-
-    var aboutView: some View {
-        ZStack {
-            VStack(spacing: 4) {
-                Image("Avatar")
-                    .antialiased(true)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 128, height: 128)
-
-                Spacer().frame(height: 16)
-
-                if #available(macOS 13.0, *) {
-                    Text("InjectGUI")
-                        .font(.system(.title2, design: .rounded, weight: .bold))
-                    Text("By wibus. Made with ❤️")
-                        .font(.system(.body, design: .rounded, weight: .bold))
-                        .foregroundColor(.secondary)
-                } else {
-                    Text("Welcome to InjectGUI")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    Text("By wibus. Made with ❤️")
-                        .foregroundColor(.secondary)
-                }
-
-                Spacer().frame(height: 24)
-            }
-            VStack {
-                Spacer()
-                Text("Released under GPLv3. Based on QiuChenly/InjectLib.")
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .opacity(0.5)
-            }
-            .padding()
+    
+    func SettingItemView(_ title: String, @ViewBuilder content: @escaping () -> some View) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            content()
         }
-        .tabItem {
-            Label("About", systemImage: "info.circle")
-        }
-        .tag(Tabs.about)
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.secondary.opacity(0.1))
+        .cornerRadius(6)
     }
 }

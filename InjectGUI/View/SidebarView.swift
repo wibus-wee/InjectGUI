@@ -38,7 +38,7 @@ struct SidebarView: View {
             // 应用列表或状态信息
             ZStack {
                 if softwareManager.isLoading {
-                    ProgressView("Scanning apps...")
+                    ProgressView("Scanning Apps...")
                 } else if filteredApps.isEmpty {
                     Text("No apps found.")
                         .font(.headline)
@@ -77,7 +77,7 @@ struct SidebarView: View {
                             Text(app.detail.name)
                                 .font(.headline)
 
-                            Label("已注入", systemImage: "checkmark.circle.fill")
+                            Label("Injected", systemImage: "checkmark.circle.fill")
                                 .font(.caption2)
                                 .foregroundStyle(.green)
                                 .labelStyle(.iconOnly)
@@ -95,6 +95,9 @@ struct SidebarView: View {
                 .padding(.vertical, 4)
             }
             .contextMenu {
+                Button("Run App") {
+                    NSWorkspace.shared.openApplication(at: URL(fileURLWithPath: app.detail.path).deletingLastPathComponent(), configuration: NSWorkspace.OpenConfiguration())
+                }
                 Button("Open in Finder") {
                     NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: app.detail.path)
                 }
