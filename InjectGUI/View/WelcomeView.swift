@@ -55,8 +55,8 @@ struct WelcomeView: View {
                     .onTapGesture {
                         let alert = NSAlert()
                         alert.messageText = "InjectGUI"
-                        alert.informativeText = "You're in \(injectConfiguration.mode == injectConfigurationMode.local ? "Local Mode" : "Remote Mode")."
-                        alert.addButton(withTitle: "OK")
+                        alert.informativeText = String(localized: "You're in") + (injectConfiguration.mode == injectConfigurationMode.local ? String(localized: "Local Mode") : String(localized: "Remote Mode"))
+                        alert.addButton(withTitle: String(localized: "OK"))
                         alert.runModal()
                     }
             }

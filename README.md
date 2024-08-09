@@ -22,7 +22,7 @@ _**New to Swift. Poor code quality.**_
 The localization of InjectGUI is in progress, and some content has not been translated yet. PRs are welcome.
 
 - [x] English
-- [ ] Chinese (Simplified) (Not yet)
+- [x] Chinese (Simplified)
 
 ## 🌟 Features
 

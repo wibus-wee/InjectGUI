@@ -60,10 +60,10 @@ struct AdminPrivilegeView: View {
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     let alert = NSAlert()
-                    alert.messageText = "Incorrect password"
-                    alert.informativeText = "Please try again."
+                    alert.messageText = String(localized: "Incorrect password")
+                    alert.informativeText = String(localized: "Please try again.")
                     alert.alertStyle = .warning
-                    alert.addButton(withTitle: "OK")
+                    alert.addButton(withTitle: String(localized: "OK"))
                     alert.runModal()
                 }
             }, receiveValue: { _ in

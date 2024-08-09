@@ -74,7 +74,7 @@ struct AppDetailView: View {
                     Text(appDetail.name)
                         .font(.headline)
 
-                    Label("已注入", systemImage: "checkmark.circle.fill")
+                    Label("Injected", systemImage: "checkmark.circle.fill")
                         .font(.caption2)
                         .foregroundStyle(.green)
                         .opacity(appDetail.isInjected ? 1 : 0)
@@ -94,10 +94,10 @@ struct AppDetailView: View {
                         injector.startInjectApp(package: appId)
                     } else {
                         let alert = NSAlert()
-                        alert.messageText = "Inject is running"
-                        alert.informativeText = "It's a abnormal situation, it shouldn't be running, please report to developer."
+                        alert.messageText = String(localized: "Inject is running")
+                        alert.informativeText = String(localized: "It's a abnormal situation, it shouldn't be running, please report to developer.")
                         alert.alertStyle = .warning
-                        alert.addButton(withTitle: "OK")
+                        alert.addButton(withTitle: String(localized: "OK"))
                         alert.runModal()
                     }
                 }

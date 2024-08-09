@@ -33,25 +33,25 @@ extension InjectStage {
     var description: String {
         switch self {
         case .start:
-            return "Start Injecting"
+            return String(localized: "Start Injecting")
         case .copyExecutableFileAsBackup:
-            return "Copying Executable File as Backup"
+            return String(localized: "Copying Executable File as Backup")
         case .checkPermissionAndRun:
-            return "Checking Permission and Run"
+            return String(localized: "Checking Permission and Run")
         case .handleKeygen:
-            return "Handling Keygen"
+            return String(localized: "Handling Keygen")
         case .handleDeepCodeSign:
-            return "Handling Deep Code Sign"
+            return String(localized: "Handling Deep Code Sign")
         case .handleAutoHandleHelper:
-            return "Handling Auto Handle Helper"
+            return String(localized: "Handling Auto Handle Helper")
         case .handleTccutil:
-            return "Handling Tccutil"
+            return String(localized: "Handling Tccutil")
         case .handleExtraShell:
-            return "Handling Extra Shell"
+            return String(localized: "Handling Extra Shell")
         case .handleInjectLibInject:
-            return "Handling Inject Lib Inject"
+            return String(localized: "Handling InjectLib Inject")
         case .end:
-            return "Injecting Finished"
+            return String(localized: "Injecting Finished")
         }
     }
 }
@@ -97,12 +97,12 @@ class Injector: ObservableObject {
 
         if package.contains("com.setapp") {
             let alert = NSAlert()
-            alert.messageText = "Please read the Setapp inject document first"
-            alert.informativeText = "It's important to read the Setapp inject document first before using the tool. Please"
+            alert.messageText = String(localized: "Please read the Setapp inject document first")
+            alert.informativeText = String(localized: "It's important to read the Setapp inject document first before using the tool. Please")
             alert.alertStyle = .informational
-            alert.addButton(withTitle: "I have read the document")
-            alert.addButton(withTitle: "Read the document")
-            alert.addButton(withTitle: "Cancel")
+            alert.addButton(withTitle: String(localized: "I have read the document"))
+            alert.addButton(withTitle: String(localized: "Read the document"))
+            alert.addButton(withTitle: String(localized: "Cancel"))
             let response = alert.runModal()
             if response == .alertFirstButtonReturn {
                 // Continue
@@ -119,10 +119,10 @@ class Injector: ObservableObject {
         }
         if injectConfiguration.allToolsExist() == false {
             let alert = NSAlert()
-            alert.messageText = "Inject Tools Not Found"
-            alert.informativeText = "Inject tools not found, it may be caused by network issues or the tools are not available. Please try again later."
+            alert.messageText = String(localized: "Inject Tools Not Found")
+            alert.informativeText = String(localized: "Inject tools not found, it may be caused by network issues or the tools are not available. Please try again later.")
             alert.alertStyle = .warning
-            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: String(localized: "OK"))
             alert.runModal()
             return
         }
@@ -162,7 +162,7 @@ class Injector: ObservableObject {
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     let alert = NSAlert()
-                    alert.messageText = "Command Execution Error"
+                    alert.messageText = String(localized: "Command Execution Error")
 
                     // Extracting the AppleScript error message
                     var errorMessage = error.localizedDescription
@@ -172,9 +172,9 @@ class Injector: ObservableObject {
                         }
                     }
 
-                    alert.informativeText = "\(errorMessage) \n\nPlease check your application integrity and try again.\n\n(Stage: \(stage.description))"
+                    alert.informativeText = String(localized: "\(errorMessage) \n\nPlease check your application integrity and try again.\n\n(Stage: \(stage.description))")
                     alert.alertStyle = .critical
-                    alert.addButton(withTitle: "OK")
+                    alert.addButton(withTitle: String(localized: "OK"))
                     alert.runModal()
                     self.updateInjectStage(stage: stage, message: "Error: \(errorMessage)", progress: 1, status: .error, error: InjectRunningError(error: errorMessage, stage: stage))
                 } else {
@@ -365,10 +365,10 @@ class Injector: ObservableObject {
 
         if insert_dylib_URL == nil || QiuchenlyDylib_URL == nil {
             let alert = NSAlert()
-            alert.messageText = "Inject Tools Path Not Found"
-            alert.informativeText = "This should not happen here, please report to the developer (Area: MainInject)"
+            alert.messageText = String(localized: "Inject Tools Path Not Found")
+            alert.informativeText = String(localized: "This should not happen here, please report to the developer (Area: MainInject)")
             alert.alertStyle = .warning
-            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: String(localized: "OK"))
             return [("echo Inject Tools Path Not Found && exit 1", true)]
         }
 
