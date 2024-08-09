@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,9 +29,7 @@
 		38AD95EA2C58E70E0032E79F /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AD95E92C58E70E0032E79F /* Injector.swift */; };
 		38AD95EE2C58F59C0032E79F /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AD95ED2C58F59C0032E79F /* StatusView.swift */; };
 		38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F522C4B587900C3B60E /* SidebarView.swift */; };
-		38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F542C4B622500C3B60E /* WelcomeView.swift */; };
 		38BC1F5A2C4B98A300C3B60E /* AppDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F592C4B98A300C3B60E /* AppDetailView.swift */; };
-		38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */; };
 		38E944F22C5A761B00B252A3 /* Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F12C5A761B00B252A3 /* Executor.swift */; };
 		38E944F52C5A7F6A00B252A3 /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = 38E944F42C5A7F6A00B252A3 /* Cache */; };
 		38E944F72C5A85E200B252A3 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F62C5A85E200B252A3 /* Cache.swift */; };
@@ -63,13 +61,27 @@
 		38AD95E92C58E70E0032E79F /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
 		38AD95ED2C58F59C0032E79F /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		38BC1F522C4B587900C3B60E /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
-		38BC1F542C4B622500C3B60E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		38BC1F592C4B98A300C3B60E /* AppDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailView.swift; sourceTree = "<group>"; };
-		38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		38E944F12C5A761B00B252A3 /* Executor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Executor.swift; sourceTree = "<group>"; };
 		38E944F62C5A85E200B252A3 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		96BC7ECF2C65C5E200149818 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = Localizable.xcstrings; path = InjectGUI/Localizables/Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		96BC7EDA2C65E9A500149818 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AboutView.swift,
+				GeneralView.swift,
+				SettingsView.swift,
+			);
+			target = 38877A182C4A6F83009F5910 /* InjectGUI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		96BC7ED92C65E99400149818 /* Settings */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (96BC7EDA2C65E9A500149818 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Settings; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		38877A162C4A6F83009F5910 /* Frameworks */ = {
@@ -142,12 +154,11 @@
 		38877A2C2C4A6FD7009F5910 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				96BC7ED92C65E99400149818 /* Settings */,
 				38877A1E2C4A6F83009F5910 /* ContentView.swift */,
 				38BC1F522C4B587900C3B60E /* SidebarView.swift */,
-				38BC1F542C4B622500C3B60E /* WelcomeView.swift */,
 				38BC1F592C4B98A300C3B60E /* AppDetailView.swift */,
 				38AD95ED2C58F59C0032E79F /* StatusView.swift */,
-				38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */,
 				387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */,
 				380D777C2C61EAB9005F3150 /* CheckForUpdatesView.swift */,
 			);
@@ -277,13 +288,11 @@
 				38877A332C4A7222009F5910 /* PublishedStorage.swift in Sources */,
 				381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */,
 				38E944F22C5A761B00B252A3 /* Executor.swift in Sources */,
-				38BC1F552C4B622500C3B60E /* WelcomeView.swift in Sources */,
 				38877A2E2C4A6FFA009F5910 /* InjectConfiguration.swift in Sources */,
 				38BC1F532C4B587A00C3B60E /* SidebarView.swift in Sources */,
 				38877A352C4A7254009F5910 /* ViewKit.swift in Sources */,
 				38877A3A2C4A730F009F5910 /* Constants.swift in Sources */,
 				381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */,
-				38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */,
 				381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */,
 				387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */,
 				38AD95EE2C58F59C0032E79F /* StatusView.swift in Sources */,

@@ -70,15 +70,8 @@
         }
       }
     },
-    "By wibus. Made with ❤️" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "由 wibus 制作. Made with ❤️"
-          }
-        }
-      }
+    "by wibus" : {
+      "shouldTranslate" : false
     },
     "Cancel" : {
       "localizations" : {
@@ -449,6 +442,9 @@
           }
         }
       }
+    },
+    "Made with" : {
+      "shouldTranslate" : false
     },
     "No apps found." : {
       "localizations" : {
