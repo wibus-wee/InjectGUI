@@ -70,16 +70,15 @@
         }
       }
     },
-    "by wibus" : {
+    "By wibus. Made with ❤️" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "by wibus"
+            "value" : "由 wibus 制作. Made with ❤️"
           }
         }
-      },
-      "shouldTranslate" : false
+      }
     },
     "Cancel" : {
       "localizations" : {
@@ -447,16 +446,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "本地模式"
-          }
-        }
-      }
-    },
-    "Made with ❤️" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Made with ❤️"
           }
         }
       }

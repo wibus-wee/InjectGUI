@@ -18,7 +18,7 @@ struct AboutView: View {
         #endif
         return ret
     }
-    
+
     var body: some View {
         VStack {
             Spacer()
@@ -31,16 +31,19 @@ struct AboutView: View {
 
                 Spacer().frame(height: 16)
 
-                
-                Text("Welcome to InjectGUI")
-                    .font(.system(.title2, design: .rounded, weight: .bold))
-                HStack(spacing: 2) {
-                    Text("Made with ❤️")
+                if #available(macOS 13.0, *) {
+                    Text("Welcome to InjectGUI")
+                        .font(.system(.title2, design: .rounded, weight: .bold))
+                    Text("By wibus. Made with ❤️")
+                        .font(.system(.body, design: .rounded, weight: .bold))
                         .foregroundColor(.secondary)
-                    Text("by wibus")
+                } else {
+                    Text("Welcome to InjectGUI")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Text("By wibus. Made with ❤️")
                         .foregroundColor(.secondary)
                 }
-                .font(.system(.body, design: .rounded, weight: .bold))
 
                 Spacer().frame(height: 24)
             }
@@ -58,8 +61,6 @@ struct AboutView: View {
                 alert.runModal()
             }
             .padding()
-            
-            
         }
         .tabItem {
             Label("About", systemImage: "info.circle")
