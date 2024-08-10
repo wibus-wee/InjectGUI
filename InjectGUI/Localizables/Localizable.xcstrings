@@ -71,6 +71,14 @@
       }
     },
     "by wibus" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "by wibus"
+          }
+        }
+      },
       "shouldTranslate" : false
     },
     "Cancel" : {
@@ -443,8 +451,15 @@
         }
       }
     },
-    "Made with" : {
-      "shouldTranslate" : false
+    "Made with ❤️" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Made with ❤️"
+          }
+        }
+      }
     },
     "No apps found." : {
       "localizations" : {
@@ -571,7 +586,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "根据 GPLv3 发布. 基于 QiuChenly/InjectLib。"
+            "value" : "根据 GPLv3 发布. 基于 QiuChenly/InjectLib."
           }
         }
       }

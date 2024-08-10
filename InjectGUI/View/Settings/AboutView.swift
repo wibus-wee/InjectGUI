@@ -31,45 +31,21 @@ struct AboutView: View {
 
                 Spacer().frame(height: 16)
 
-                if #available(macOS 13.0, *) {
-                    Text("Welcome to InjectGUI")
-                        .font(.system(.title2, design: .rounded, weight: .bold))
-                    HStack(spacing: 2) {
-                        Text("Made with")
-                            .foregroundColor(.secondary)
-                        if #available(macOS 14.0, *) {
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.red)
-                                .symbolEffect(.pulse, options: .speed(1))
-                        } else {
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.red)
-                        }
-                        Text("by wibus")
-                            .foregroundColor(.secondary)
-                    }
-                    .font(.system(.body, design: .rounded, weight: .bold))
-                } else {
-                    Text("Welcome to InjectGUI")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    HStack(spacing: 2) {
-                        Text("Made with")
-                            .foregroundColor(.secondary)
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.red)
-                        Text("by wibus")
-                            .foregroundColor(.secondary)
-                    }
+                
+                Text("Welcome to InjectGUI")
+                    .font(.system(.title2, design: .rounded, weight: .bold))
+                HStack(spacing: 2) {
+                    Text("Made with ❤️")
+                        .foregroundColor(.secondary)
+                    Text("by wibus")
+                        .foregroundColor(.secondary)
                 }
+                .font(.system(.body, design: .rounded, weight: .bold))
 
                 Spacer().frame(height: 24)
             }
             Spacer()
             VStack {
-                Text(version)
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .opacity(0.5)
                 Text("Released under GPLv3. Based on QiuChenly/InjectLib.")
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .opacity(0.5)
@@ -89,4 +65,8 @@ struct AboutView: View {
             Label("About", systemImage: "info.circle")
         }
     }
+}
+
+#Preview {
+    AboutView()
 }
