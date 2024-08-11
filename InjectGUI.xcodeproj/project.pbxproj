@@ -13,6 +13,7 @@
 		381027E02C5F784F00348460 /* Extension+Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027DF2C5F784F00348460 /* Extension+Scene.swift */; };
 		381027E22C5F7C4800348460 /* Extension+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E12C5F7C4800348460 /* Extension+Font.swift */; };
 		381027E42C5F7E1100348460 /* Extension+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381027E32C5F7E1100348460 /* Extension+URL.swift */; };
+		383943792C68458F00E5984E /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 383943782C68458F00E5984E /* Inject */; };
 		387CEA792C5BD9C400E3A5AC /* AdminPrivilegeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CEA782C5BD9C400E3A5AC /* AdminPrivilegeView.swift */; };
 		387CEA7B2C5DEF0600E3A5AC /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CEA7A2C5DEF0600E3A5AC /* Extension+String.swift */; };
 		38877A1D2C4A6F83009F5910 /* InjectGUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38877A1C2C4A6F83009F5910 /* InjectGUIApp.swift */; };
@@ -80,6 +81,7 @@
 			files = (
 				38E944F52C5A7F6A00B252A3 /* Cache in Frameworks */,
 				380D777B2C61EA56005F3150 /* Sparkle in Frameworks */,
+				383943792C68458F00E5984E /* Inject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,6 +216,7 @@
 			packageProductDependencies = (
 				38E944F42C5A7F6A00B252A3 /* Cache */,
 				380D777A2C61EA56005F3150 /* Sparkle */,
+				383943782C68458F00E5984E /* Inject */,
 			);
 			productName = InjectGUI;
 			productReference = 38877A192C4A6F83009F5910 /* InjectGUI.app */;
@@ -247,6 +250,7 @@
 			packageReferences = (
 				38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */,
 				380D77792C61EA56005F3150 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				383943772C68458F00E5984E /* XCRemoteSwiftPackageReference "Inject" */,
 			);
 			productRefGroup = 38877A1A2C4A6F83009F5910 /* Products */;
 			projectDirPath = "";
@@ -449,6 +453,10 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.2.0;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-interposable",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.wibus-wee.InjectGUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -531,6 +539,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		383943772C68458F00E5984E /* XCRemoteSwiftPackageReference "Inject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.2;
+			};
+		};
 		38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hyperoslo/Cache";
@@ -546,6 +562,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 380D77792C61EA56005F3150 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		383943782C68458F00E5984E /* Inject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 383943772C68458F00E5984E /* XCRemoteSwiftPackageReference "Inject" */;
+			productName = Inject;
 		};
 		38E944F42C5A7F6A00B252A3 /* Cache */ = {
 			isa = XCSwiftPackageProductDependency;

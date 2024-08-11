@@ -14,6 +14,10 @@ let softwareManager = SoftwareManager.shared
 let injector = Injector.shared
 let executor = Executor.shared
 
+#if DEBUG
+let injectIII = Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/macOSInjection.bundle")?.load()
+#endif
+
 @main
 struct InjectGUIApp: App {
     @AppStorage("showAdminPrivilegeView") private var showAdminPrivilegeView: Bool = true
