@@ -2,7 +2,7 @@ name: CI - Build Application
 on:
   push:
     branches:
-      - '**'
+      - 'main'
     paths-ignore:
       - 'LICENSE'
       - '**.md'
