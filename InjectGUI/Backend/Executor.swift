@@ -136,11 +136,7 @@ class Executor: ObservableObject {
 
             let escapedCommand = command
                 .replacingOccurrences(of: "\"", with: "\\\"")
-            let escapedPassword = self.password
-                .replacingOccurrences(of: "\\", with: "\\\\") // Escape backslashes
-                .replacingOccurrences(of: "'", with: "\\'") // Escape single quotes
-                .replacingOccurrences(of: "\"", with: "\\\"") // Escape double quotes
-            task.arguments = ["-c", "echo '\(self.password)' | sudo -S bash -c \"\(escapedCommand)\""]
+            task.arguments = ["-c", "echo \(self.password) | base64 --decode | sudo -S bash -c \"\(escapedCommand)\""]
             task.executableURL = URL(fileURLWithPath: "/bin/bash")
 
             do {

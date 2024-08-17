@@ -55,7 +55,7 @@ struct AdminPrivilegeView: View {
     }
     
     func checkAndSavePassword(password: String) {
-        executor.password = password
+        executor.password = password.encode()
         executor.executeAdminCommand("sudo -v")
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
