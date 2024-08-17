@@ -22,7 +22,7 @@ jobs:
           git add .
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "bump build number to $APP_BUILD"
+          git commit -m "chore: bump build number to $APP_BUILD"
       - name: Push Changes
         uses: ad-m/github-push-action@v0.6.0
         with:
@@ -38,4 +38,11 @@ jobs:
           delete-branch: true
           base: main
           title: "chore: bump Build Number to ${{ env.APP_BUILD }}"
-          body: Automatically bump build number of all targets to ${{ env.APP_BUILD }}
+          body: |
+            Automatically bump build number of all targets to ${{ env.APP_BUILD }}
+
+            cc @wibus-wee
+
+            ---
+
+            <sup>This pull request was automatically created by a GitHub Action.</sup>

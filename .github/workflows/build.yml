@@ -17,7 +17,7 @@ permissions:
 jobs:
   build-mac:
     name: Build for macOS (Universal)
-    runs-on: macos-13
+    runs-on: macOS-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/${{ env.APP_CONF }}/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
-
+          cp "InjectGUI.dmg" "$RUNNER_TEMP/InjectGUI.dmg"
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
