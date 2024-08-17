@@ -23,4 +23,11 @@ extension String {
             return original.replacingOccurrences(of: " ", with: "\\ ")
         }
     }
+
+    func encode() -> String {
+        if let data = self.data(using: .utf8) {
+            return data.base64EncodedString()
+        }
+        return ""
+    }
 }
