@@ -71,7 +71,7 @@ jobs:
       # Sparkle Appcast
       ############################
       - name: Update Sparkle appcast
-        if: github.event_name == 'release'
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         env:
           # SPARKLE_KEY: Sparkle EdDSA key exported from `generate_keys -x` as plain text
           # SPARKLE_CHANNEL: Seperate dev builds from default channel, to be specified in [SPUUpdaterDelegate allowedChannelsForUpdater:]
@@ -104,3 +104,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: "${{ RUNNER.TEMP }}/Sparkle_Archive/appcast.xml"
+
+      - name: Upload Sparkle Artifact
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: appcast.xml
+          path: "${{ RUNNER.TEMP }}/Sparkle_Archive/appcast.xml"
