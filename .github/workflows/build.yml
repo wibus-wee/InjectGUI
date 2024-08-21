@@ -56,6 +56,7 @@ jobs:
           hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/${{ env.APP_CONF }}/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
           cp "InjectGUI.dmg" "$RUNNER_TEMP/InjectGUI.dmg"
       - name: Upload DMG Artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: InjectGUI
@@ -111,3 +112,25 @@ jobs:
         with:
           name: appcast.xml
           path: "${{ RUNNER.TEMP }}/Sparkle_Archive/appcast.xml"
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v4
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: 'InjectGUI v'
+      
+      - name: Create Pull Request Comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **InjectGUI** v${{ env.APP_VERSION }} (${env.APP_BUILD}) (`${GITHUB_SHA::8}`) has been built and is available for download.
+
+            You can download the latest artifact from here: ${{ steps.upload-artifact.outputs.artifact_url }}
+
+            > [!WARNING]
+            > This is a PR build and may not be stable. It's only for testing purposes.
