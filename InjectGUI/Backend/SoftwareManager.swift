@@ -119,8 +119,20 @@ class SoftwareManager: ObservableObject {
             for appPath in appPaths {
                 let fullPath = "\(directory)/\(appPath)"
                 let infoPlistPath = "\(fullPath)/Contents/Info.plist"
-                if let appInfo = loadAppInfo(from: infoPlistPath) {
-                    newAppListCache[appInfo.identifier] = appInfo
+                // MARK: - 针对 Adobe 系列软件的特殊处理
+                if appPath.hasPrefix("Adobe") {
+                    let adobeAppPaths = try? fileManager.contentsOfDirectory(atPath: fullPath)
+                    for adobeAppPath in adobeAppPaths ?? [] { // Adobe 系列软件的子目录
+                        let adobeFullPath = "\(fullPath)/\(adobeAppPath)"
+                        let adobeInfoPlistPath = "\(adobeFullPath)/Contents/Info.plist"
+                        if let appInfo = loadAppInfo(from: adobeInfoPlistPath) {
+                            newAppListCache[appInfo.identifier] = appInfo
+                        }
+                    }
+                } else {
+                    if let appInfo = loadAppInfo(from: infoPlistPath) {
+                        newAppListCache[appInfo.identifier] = appInfo
+                    }
                 }
             }
         }

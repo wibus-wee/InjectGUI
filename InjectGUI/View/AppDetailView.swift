@@ -35,6 +35,7 @@ struct AppDetailView: View {
         if getAppDetailFromSoftwareManager != nil {
             self.appDetail = SoftwareManager.shared.appListCache[appId]!
         } else {
+            print("[*] Can't find app detail in SoftwareManager, it's a abnormal situation, please report to developer. appId: \(appId)")
             self.appDetail = AppDetail(name: appInjectConfDetail?.packageName.allStrings.first ?? "", identifier: appInjectConfDetail?.packageName.allStrings.first ?? "", version: "", path: "", executable: "", icon: NSImage())
         }
         // self._appDetail = State(wrappedValue: SoftwareManager.shared.appListCache[appId] ?? AppDetail(name: "", identifier: "", version: "", path: "", icon: NSImage()))

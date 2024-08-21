@@ -329,8 +329,8 @@ class InjectConfiguration: ObservableObject {
         guard let conf = remoteConf else {
             return false
         }
-        let package = conf.appList.first { $0.packageName.allStrings.contains(package) }
-        guard package != nil else {
+        let packageDetail = conf.appList.first { $0.packageName.allStrings.contains(package) }
+        guard packageDetail != nil else {
             return false
         }
         return true
