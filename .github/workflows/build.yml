@@ -139,7 +139,7 @@ jobs:
       - name: Add new build to Previous Builds List
         if: github.event_name == 'pull_request'
         run: |
-          new_sha="${{GITHUB_SHA::8}}"
+          new_sha="${{github.sha::8}}"
           new_link="${{ steps.upload-artifact.outputs.artifact_url }}"
           comment_body="${{ steps.fc.outputs.comment-body }}"
           shas_and_links=$(echo "$comment_body" | grep -oP '\[\K[^]]+(?=\])')
@@ -154,7 +154,7 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            **InjectGUI** (`${{GITHUB_SHA::8}}`) has been built and is available for download.
+            **InjectGUI** (`${{github.sha::8}}`) has been built and is available for download.
 
             You can download the latest artifact from here: ${{ steps.upload-artifact.outputs.artifact_url }}
 
