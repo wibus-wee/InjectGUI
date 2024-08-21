@@ -114,13 +114,39 @@ jobs:
           path: "${{ RUNNER.TEMP }}/Sparkle_Archive/appcast.xml"
 
       - name: Find Comment
+        if: github.event_name == 'pull_request'
         uses: peter-evans/find-comment@v3
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: 'InjectGUI v'
-      
+
+      - name: Gen Previous Builds List
+        if: github.event_name == 'pull_request'
+        run: |
+          shas_and_links=$(echo "${{ steps.fc.outputs.comment-body }}" | grep -oP '(?<=\[)[^]]+(?=\])'))                 
+          result_list=""
+          IFS=',' # 设置内部字段分隔符为逗号
+          for entry in $shas_and_links; do
+            sha=$(echo "$entry" | cut -d';' -f1)
+            link=$(echo "$entry" | cut -d';' -f2)
+            result_list+="<sup><li><a href='${link}'>${sha}</a></li></sup>"
+          done
+
+          echo "PREVIOUS_BUILDS=${result_list}" >> $GITHUB_ENV
+
+      - name: Add new build to Previous Builds List
+        if: github.event_name == 'pull_request'
+        run: |
+          new_sha="${{GITHUB_SHA::8}}"
+          new_link="${{ steps.upload-artifact.outputs.artifact_url }}"
+          comment_body="${{ steps.fc.outputs.comment-body }}"
+          shas_and_links=$(echo "$comment_body" | grep -oP '\[\K[^]]+(?=\])')
+          shas_and_links="${shas_and_links},[${new_sha};${new_link}]"
+
+          echo "NEW_COMMENT_LIST=${shas_and_links}" >> $GITHUB_ENV
+
       - name: Create Pull Request Comment
         if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
@@ -128,9 +154,17 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            **InjectGUI** v${{ env.APP_VERSION }} (${env.APP_BUILD}) (`${GITHUB_SHA::8}`) has been built and is available for download.
+            **InjectGUI** (`${{GITHUB_SHA::8}}`) has been built and is available for download.
 
             You can download the latest artifact from here: ${{ steps.upload-artifact.outputs.artifact_url }}
 
             > [!WARNING]
             > This is a PR build and may not be stable. It's only for testing purposes.
+
+            ---
+
+            <!--${{ env.NEW_COMMENT_LIST }}-->
+            
+            <sup>Previous builds:</sup>
+
+            ${{ env.PREVIOUS_BUILDS }}
