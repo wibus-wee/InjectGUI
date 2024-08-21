@@ -125,7 +125,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }
+          comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             **InjectGUI** v${{ env.APP_VERSION }} (${env.APP_BUILD}) (`${GITHUB_SHA::8}`) has been built and is available for download.
