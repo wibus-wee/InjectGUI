@@ -114,7 +114,7 @@ jobs:
           path: "${{ RUNNER.TEMP }}/Sparkle_Archive/appcast.xml"
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v4
+        uses: peter-evans/find-comment@v3
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
