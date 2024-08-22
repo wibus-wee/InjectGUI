@@ -164,7 +164,7 @@ jobs:
 
             **InjectGUI** (${{ github.sha }}) has been built and is available for download to test. (Based on PR ${{ github.event.pull_request.number }})
 
-            You can download the latest artifact from here: https://github.com/wibus-wee/InjectGUI/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }} <sup>`${{ steps.upload-artifact.outputs.artifact-id }}`</sup>
+            You can download the latest artifact from here: https://github.com/wibus-wee/InjectGUI/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }} <sup>${{ steps.upload-artifact.outputs.artifact-id }}</sup>
 
             > [!WARNING]
             > This is a PR build and may not be stable. It's only for testing purposes.
