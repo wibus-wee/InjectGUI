@@ -120,12 +120,12 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: 'InjectGUI v'
+          body-includes: 'InjectGUI'
 
       - name: Gen Previous Builds List
         if: github.event_name == 'pull_request'
         run: |
-          shas_and_links=$(echo "${{ steps.fc.outputs.comment-body }}" | grep -oP '(?<=\[)[^]]+(?=\])'))                 
+          shas_and_links=$(echo "${{ steps.fc.outputs.comment-body }}" | grep -oP '(?<=\[)[^]]+(?=\])')
           result_list=""
           IFS=',' # 设置内部字段分隔符为逗号
           for entry in $shas_and_links; do
