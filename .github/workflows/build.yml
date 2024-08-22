@@ -56,6 +56,7 @@ jobs:
           hdiutil create -volname "InjectGUI" -srcfolder "build/Build/Products/${{ env.APP_CONF }}/InjectGUI.app" -ov -format UDZO "InjectGUI.dmg"
           cp "InjectGUI.dmg" "$RUNNER_TEMP/InjectGUI.dmg"
       - name: Upload DMG Artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: InjectGUI
@@ -111,3 +112,67 @@ jobs:
         with:
           name: appcast.xml
           path: "${{ RUNNER.TEMP }}/Sparkle_Archive/appcast.xml"
+
+      - name: Find Comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: 'InjectGUI'
+
+      - name: Gen Previous Builds List
+        if: github.event_name == 'pull_request'
+        run: |
+          shas_and_links=$(echo "${{ steps.fc.outputs.comment-body }}" | sed -n 's/.*\[\([^!][^]]*\)\].*/\1/p')
+          result_list=""
+          IFS=',' # 设置内部字段分隔符为逗号
+          for entry in $shas_and_links; do
+            sha=$(echo "$entry" | cut -d';' -f1)
+            link=$(echo "$entry" | cut -d';' -f2)
+            result_list+="<sup><li><a href='${link}'>${sha}</a></li></sup>"
+          done
+
+          echo "PREVIOUS_BUILDS=${result_list}" >> $GITHUB_ENV
+
+      - name: Add new build to Previous Builds List
+        if: github.event_name == 'pull_request'
+        run: |
+          new_sha="${{github.sha}}"
+          new_link="${{ steps.upload-artifact.outputs.artifact-id }}"
+          new_link="https://github.com/wibus-wee/InjectGUI/actions/runs/${{ github.run_id }}/artifacts/${new_link}"
+          comment_body="${{ steps.fc.outputs.comment-body }}"
+          
+          if [ -z "$new_link" ]; then
+            echo "Artifact URL is empty. Skipping update."
+          else
+            shas_and_links=$(echo "$comment_body" | sed -n 's/.*\[\([^!][^]]*\)\].*/\1/p')
+            shas_and_links="${shas_and_links},[${new_sha};${new_link}]"
+            echo "NEW_COMMENT_LIST=${shas_and_links}" >> $GITHUB_ENV
+          fi
+
+      - name: Create Pull Request Comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          edit-mode: replace
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Hi, thanks for your contribution!
+
+            **InjectGUI** (${{ github.sha }}) has been built and is available for download to test. (Based on PR ${{ github.event.pull_request.number }})
+
+            You can download the latest artifact from here: https://github.com/wibus-wee/InjectGUI/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }}
+
+            > [!WARNING]
+            > This is a PR build and may not be stable. It's only for testing purposes.
+
+            ---
+
+            <!--${{ env.NEW_COMMENT_LIST }}-->
+            
+            <sup>Previous builds:</sup>
+
+            ${{ env.PREVIOUS_BUILDS }}
