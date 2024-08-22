@@ -329,8 +329,43 @@ class InjectConfiguration: ObservableObject {
         guard let conf = remoteConf else {
             return false
         }
-        let package = conf.appList.first { $0.packageName.allStrings.contains(package) }
-        guard package != nil else {
+        let packageDetail = conf.appList.first { $0.packageName.allStrings.contains(package) }
+        guard packageDetail != nil else {
+            // 这种情况适用于软件存在，但是 Bundle ID 改变了，而导致无法注入
+            // 这部分纯纯的为了兼容好目前的 config.json
+            // FIXME: 未来会移除，因为这种情况不应该存在. 应该在 packageName 中使用数组来支持多个 Bundle ID，而不是单个字符串
+            let localPackageInfo = softwareManager.appListCache[package]
+            if localPackageInfo != nil {
+                let app = conf.appList.first { $0.appBaseLocate == localPackageInfo?.path.replacingOccurrences(of: "/Contents", with: "") }
+                if app != nil {
+                    print("[*] Found \(package) in local cache, try to add to supported list...")
+                    let newApp = AppList(
+                        packageName: .string(package),
+                        appBaseLocate: app?.appBaseLocate,
+                        bridgeFile: app?.bridgeFile,
+                        injectFile: app?.injectFile,
+                        needCopyToAppDir: app?.needCopyToAppDir,
+                        noSignTarget: app?.noSignTarget,
+                        autoHandleHelper: app?.autoHandleHelper,
+                        helperFile: app?.helperFile,
+                        tccutil: app?.tccutil,
+                        forQiuChenly: app?.forQiuChenly,
+                        onlysh: app?.onlysh,
+                        extraShell: app?.extraShell,
+                        smExtra: app?.smExtra,
+                        componentApp: app?.componentApp,
+                        deepSignApp: app?.deepSignApp,
+                        noDeep: app?.noDeep,
+                        entitlements: app?.entitlements,
+                        useOptool: app?.useOptool,
+                        autoHandleSetapp: app?.autoHandleSetapp,
+                        keygen: app?.keygen
+                    )
+                    remoteConf!.appList.append(newApp)
+                    print("[*] Added \(package) to supported list.")
+                    return true
+                }
+            }
             return false
         }
         return true
@@ -354,7 +389,7 @@ struct InjectConfigurationModel: Codable, Equatable {
     let project, author: String
     let version: Double
     let basePublicConfig: BasePublicConfig
-    let appList: [AppList]
+    var appList: [AppList]
 
     enum CodingKeys: String, CodingKey {
         case project
