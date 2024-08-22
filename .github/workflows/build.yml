@@ -125,7 +125,7 @@ jobs:
       - name: Gen Previous Builds List
         if: github.event_name == 'pull_request'
         run: |
-          shas_and_links=$(echo "${{ steps.fc.outputs.comment-body }}" | grep -oP '(?<=\[)[^]]+(?=\])')
+          shas_and_links=$(echo "${{ steps.fc.outputs.comment-body }}" | sed -n 's/.*\[\([^]]*\)\].*/\1/p')
           result_list=""
           IFS=',' # 设置内部字段分隔符为逗号
           for entry in $shas_and_links; do
@@ -142,7 +142,7 @@ jobs:
           new_sha="${{github.sha}}"
           new_link="${{ steps.upload-artifact.outputs.artifact_url }}"
           comment_body="${{ steps.fc.outputs.comment-body }}"
-          shas_and_links=$(echo "$comment_body" | grep -oP '\[\K[^]]+(?=\])')
+          shas_and_links=$(echo "$comment_body" | sed -n 's/.*\[\([^]]*\)\].*/\1/p')
           shas_and_links="${shas_and_links},[${new_sha};${new_link}]"
 
           echo "NEW_COMMENT_LIST=${shas_and_links}" >> $GITHUB_ENV
@@ -154,7 +154,9 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            **InjectGUI** (`${{github.sha}}`) has been built and is available for download.
+            Hi, thanks for your contribution!
+
+            **InjectGUI** (`${{github.sha}}`) has been built and is available for download to test. (Based on PR ${{ github.event.pull_request.number }})
 
             You can download the latest artifact from here: ${{ steps.upload-artifact.outputs.artifact_url }}
 
