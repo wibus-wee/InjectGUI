@@ -140,7 +140,8 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           new_sha="${{github.sha}}"
-          new_link="${{ steps.upload-artifact.outputs.artifact_url }}"
+          new_link="${{ steps.upload-artifact.outputs.artifact-id }}"
+          new_link="https://github.com/wibus-wee/InjectGUI/actions/runs/${{ github.run_id }}/artifacts/${new_link}"
           comment_body="${{ steps.fc.outputs.comment-body }}"
           
           if [ -z "$new_link" ]; then
@@ -155,6 +156,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
         with:
+          edit-mode: replace
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
@@ -162,7 +164,7 @@ jobs:
 
             **InjectGUI** (${{ github.sha }}) has been built and is available for download to test. (Based on PR ${{ github.event.pull_request.number }})
 
-            You can download the latest artifact <sup>`${{ steps.upload-artifact.outputs.artifact-id }}`</sup> from here: ${{ steps.upload-artifact.outputs.artifact_url }}
+            You can download the latest artifact from here: https://github.com/wibus-wee/InjectGUI/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }} <sup>`${{ steps.upload-artifact.outputs.artifact-id }}`</sup>
 
             > [!WARNING]
             > This is a PR build and may not be stable. It's only for testing purposes.
