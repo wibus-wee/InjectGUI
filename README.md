@@ -13,9 +13,17 @@
   </p>
 </p>
 
+> [!IMPORTANT]
+>
+> InjectGUI is currently in development and not yet recommended for production use, however you can take part in improving our project!
+>
+> If you have any errors or suggestions, please feel free to [open an issue](https://github.com/wibus-wee/InjectGUI/issues) or [pull request](https://github.com/wibus-wee/InjectGUI/pulls). We will be very grateful for your help.
+
 ## ⚠️ Warning
 
 _**New to Swift. Poor code quality.**_
+
+You should back to the [InjectLib](https://github.com/QiuChenly/InjectLib) project to continue your operation once you meet any problems with InjectGUI.
 
 > [!Warning]
 >
@@ -37,7 +45,7 @@ The localization of InjectGUI is in progress, and some content has not been tran
 - [x] Basic Functionality
   - [x] Backup Executable File
   - [x] Check Permission and kill process
-  - [x] Handle Keygen
+  - [ ] Handle Keygen *(Coming soon)*
   - [x] Handle Deep Code Sign
   - [x] Handle Tccutil
   - [x] Handle Extra Shell
