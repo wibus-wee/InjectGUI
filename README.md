@@ -17,6 +17,14 @@
 
 _**New to Swift. Poor code quality.**_
 
+> [!Warning]
+>
+> Recently, I found that some joking websites have been particularly "considerate" to create Pro pricing for InjectGUI.
+> 
+> InjectGUI **is always open source and subject to code audits**. All information will only be published in README and Release Notes.
+>
+> _**There are no third-party websites on the Internet that are personally approved by the author.**_
+
 ## 🌍 Localization
 
 The localization of InjectGUI is in progress, and some content has not been translated yet. PRs are welcome.
