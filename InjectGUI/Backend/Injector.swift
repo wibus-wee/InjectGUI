@@ -132,6 +132,7 @@ class Injector: ObservableObject {
         guard let injectDetail = injectConfiguration.injectDetail(package: package) else {
             return
         }
+        print("[*] Start inject \(package)")
         self.injectDetail = injectDetail
         self.appDetail = appDetail
         self.shouldShowStatusSheet = true
@@ -326,7 +327,7 @@ class Injector: ObservableObject {
         case .none:
             return path.replacingOccurrences(of: "%20", with: " ")
         case .appleScript:
-            return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\\\ ")
+           return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\\\ ")
         case .bash:
             return path.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: " ", with: "\\ ")
         }
@@ -340,14 +341,14 @@ class Injector: ObservableObject {
 
         if !FileManager.default.fileExists(atPath: source) {
             print("Source file not found: \(source)")
-            return [("echo Source file not found: \(source.transformTo(to: .appleScript)) && exit 1", true)] // 借用一下 AppleScript 来弹窗
+            return [("echo Source file not found: \(source.transformTo(to: .bash)) && exit 1", true)] // 借用一下 AppleScript 来弹窗
         }
         if FileManager.default.fileExists(atPath: destination) {
             print("Destination file already exists: \(destination)")
             return []
         }
         return [
-            ("sudo cp \(source.transformTo(to: .appleScript)) \(destination.transformTo(to: .appleScript))", true)
+            ("sudo cp \(source.transformTo(to: .bash)) \(destination.transformTo(to: .bash))", true)
         ]
     }
 
@@ -355,14 +356,14 @@ class Injector: ObservableObject {
 
     func checkPermissionAndRunCommands() -> [(command: String, isAdmin: Bool)] {
         var shells: [(command: String, isAdmin: Bool)] = []
-        let source = self.genSourcePath(for: .appleScript)
+        let source = self.genSourcePath(for: .bash)
         shells.append(("sudo xattr -cr \(source)", true))
         shells.append(("sudo chmod -R 777 \(source)", true))
 
         // 检查是否运行中, 如果运行中则杀掉进程
         let isRunning = NSRunningApplication.runningApplications(withBundleIdentifier: self.appDetail?.identifier ?? "").count > 0
         if isRunning {
-            shells.append(("sudo pkill -f \(self.genSourcePath(for: .appleScript, executable: true))", true))
+            shells.append(("sudo pkill -f \(self.genSourcePath(for: .bash, executable: true))", true))
         }
         return shells
     }
@@ -410,12 +411,12 @@ class Injector: ObservableObject {
             let componentApp = componentAppList.map { appBaseLocate + $0 }
             let componentAppExecutable = componentApp.map { $0 + "/Contents/MacOS/" + (self.readExecutableFile(app: URL(fileURLWithPath: $0)) ?? "") }
             let desireAppList = desireApp + componentAppExecutable
-            let insert_dylib_commands = desireAppList.map { "sudo \(self.genSourcePath(for: .appleScript, path: insert_dylib_URL!)) '\(copyedQiuchenly_URL)' '\(destination.transformTo(to: .none))' '\($0)'" }
+            let insert_dylib_commands = desireAppList.map { "sudo \(self.genSourcePath(for: .bash, path: insert_dylib_URL!)) '\(copyedQiuchenly_URL)' '\(destination.transformTo(to: .none))' '\($0)'" }
 
             return [softLink] + insert_dylib_commands.map { ($0, true) }
         }
 
-        return [("sudo \(self.genSourcePath(for: .appleScript, path: insert_dylib_URL!)) '\(QiuchenlyDylib_URL!)' '\(source.transformTo(to: .none))' '\(destination.transformTo(to: .none))'", true)]
+        return [("sudo \(self.genSourcePath(for: .bash, path: insert_dylib_URL!)) '\(QiuchenlyDylib_URL!)' '\(source.transformTo(to: .none))' '\(destination.transformTo(to: .none))'", true)]
     }
 
     // MARK: - 注入原神之 DeepCodeSign
@@ -483,29 +484,29 @@ class Injector: ObservableObject {
         let downloadPath = downloadIntoTmpPath.appendingPathComponent(extraShell).path
         let downloadCommand = "curl -L -o \(downloadPath) \(getToolDownloadURL)"
 
-        let dest = self.genSourcePath(for: .appleScript)
+        let dest = self.genSourcePath(for: .bash)
 
         // MARK: - Sub: 对某些 shell 脚本进行内容替换
 
         var replaceSpecialShell: [(String, String)] = [] // (from, to)
 
         // tool/optool
-        let optoolPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "optool")?.pathWithFallback())
+        let optoolPath = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "optool")?.pathWithFallback())
         replaceSpecialShell.append(("tool/optool", optoolPath))
         replaceSpecialShell.append(("./tool/optool", optoolPath))
 
         // tool/insert_dylib
-        let insert_dylibPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.pathWithFallback())
+        let insert_dylibPath = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.pathWithFallback())
         replaceSpecialShell.append(("tool/insert_dylib", insert_dylibPath))
         replaceSpecialShell.append(("./tool/insert_dylib", insert_dylibPath))
 
         // tool/91QiuChenly.dylib
-        let dylibPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.pathWithFallback())
+        let dylibPath = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "91Qiuchenly.dylib")?.pathWithFallback())
         replaceSpecialShell.append(("tool/91QiuChenly.dylib", dylibPath))
         replaceSpecialShell.append(("./tool/91QiuChenly.dylib", dylibPath))
 
         // tool/GenShineImpactStarter
-        let genShineImpactStarterPath = self.genSourcePath(for: .appleScript, path: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.pathWithFallback())
+        let genShineImpactStarterPath = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "GenShineImpactStarter")?.pathWithFallback())
         replaceSpecialShell.append(("tool/GenShineImpactStarter", genShineImpactStarterPath))
         replaceSpecialShell.append(("./tool/GenShineImpactStarter", genShineImpactStarterPath))
 
@@ -541,7 +542,7 @@ class Injector: ObservableObject {
                     let bridgeFile = (self.appDetail?.path ?? "") + (self.getBridgeDir())
                     let insertDylibURL = self.genSourcePath(for: .bash, path: injectConfiguration.getInjecToolPath(name: "insert_dylib")?.pathWithFallback())
                     let helperName = targetHelper.split(separator: "/").last
-                    let target = self.genSourcePath(for: .appleScript, path: "/Library/LaunchDaemons/\(helperName!).plist")
+                    let target = self.genSourcePath(for: .bash, path: "/Library/LaunchDaemons/\(helperName!).plist")
 
                     var srcInfo = [(self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: "") + "/Contents/Info.plist"]
                     if let componentApps = self.injectDetail?.componentApp {
