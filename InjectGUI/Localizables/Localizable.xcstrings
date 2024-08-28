@@ -631,6 +631,16 @@
         }
       }
     },
+    "Report an issue" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提交 issue"
+          }
+        }
+      }
+    },
     "Restarting the app will require your password again." : {
       "localizations" : {
         "zh-Hans" : {
