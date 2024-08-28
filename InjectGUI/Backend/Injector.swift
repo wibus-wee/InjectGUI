@@ -174,9 +174,35 @@ class Injector: ObservableObject {
 
                     alert.informativeText = String(localized: "\(errorMessage) \n\nPlease check your application integrity and try again.\n\n(Stage: \(stage.description))")
                     alert.alertStyle = .critical
+                    // 加一个 Open an issue 按钮，点击后打开 GitHub Issues
                     alert.addButton(withTitle: String(localized: "OK"))
-                    alert.runModal()
+                    alert.addButton(withTitle: String(localized: "Report an issue"))
+                    let response = alert.runModal()
+                    if response == .alertSecondButtonReturn {
+                        // 构建一个 issue 链接
+                        let title = "[Bug] Error when injecting \(self.appDetail?.name ?? "")"
+                        let body = """
+                        ### Error Message
+                        
+                        ```
+                        \(errorMessage)
+                        ```
+
+                        ### Info
+
+                        - Name: \(self.appDetail?.name ?? "")
+                        - Identifier: \(self.appDetail?.identifier ?? "")
+                        - \(self.appDetail?.name ?? "") Version: \(self.appDetail?.version ?? "")
+                        - Stage: \(stage.description)
+                        - InjectGUI version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
+
+                        """
+                        let url = URL(string: "\(Constants.projectUrl)/issues/new?assignees=&labels=bug&title=\(title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")")!
+                        NSWorkspace.shared.open(url)
+                    }
                     self.updateInjectStage(stage: stage, message: "Error: \(errorMessage)", progress: 1, status: .error, error: InjectRunningError(error: errorMessage, stage: stage))
+                    self.isRunning = false
+                    self.emergencyStop = true
                 } else {
                     self.updateInjectStage(stage: stage, message: stage.description, progress: 1, status: .finished)
                     self.executeNextStage(stages: stages, index: index + 1)
