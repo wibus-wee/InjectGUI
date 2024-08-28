@@ -107,7 +107,7 @@ class Injector: ObservableObject {
             if response == .alertFirstButtonReturn {
                 // Continue
             } else if response == .alertSecondButtonReturn {
-                let url = URL(string: "https://qiuchenlyopensource.github.io/Documentaions/setapp%E6%BF%80%E6%B4%BB%E5%BF%85%E8%AF%BB.html")!
+                let url = URL(string: "https://qiuchenlyopensource.github.io/Documentaions/setapp.html")!
                 NSWorkspace.shared.open(url)
                 return
             } else {
