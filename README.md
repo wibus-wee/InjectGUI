@@ -23,22 +23,7 @@
 
 _**New to Swift. Poor code quality.**_
 
-You should back to the [InjectLib](https://github.com/QiuChenly/InjectLib) project to continue your operation once you meet any problems with InjectGUI.
-
-> [!Warning]
->
-> Recently, I found that some joking websites have been *particularly "considerate"* to create Pro pricing for InjectGUI.
-> 
-> InjectGUI is **always free and open source and is subject to code review**. All information will be published in README and Release Notes only.
->
-> _**There are no third-party websites on the Internet that are personally approved by the author. Once found, please help me condemn them. Thank you.**_
-
-## 🌍 Localization
-
-The localization of InjectGUI is in progress, and some content has not been translated yet. PRs are welcome.
-
-- [x] English
-- [x] Chinese (Simplified)
+Once you meet any problems with *InjectGUI*, You should back to the [InjectLib](https://github.com/QiuChenly/InjectLib) project to continue your operation.
 
 ## 🌟 Features
 
