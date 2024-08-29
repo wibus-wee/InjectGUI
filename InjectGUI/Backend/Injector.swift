@@ -132,6 +132,7 @@ class Injector: ObservableObject {
         guard let injectDetail = injectConfiguration.injectDetail(package: package) else {
             return
         }
+        print("----------------------------")
         print("[*] Start inject \(package)")
         self.injectDetail = injectDetail
         self.appDetail = appDetail
@@ -340,11 +341,11 @@ class Injector: ObservableObject {
         let destination = source.appending(".backup")
 
         if !FileManager.default.fileExists(atPath: source) {
-            print("Source file not found: \(source)")
+            print("[*] Source file not found: \(source)")
             return [("echo Source file not found: \(source.transformTo(to: .bash)) && exit 1", true)] // 借用一下 AppleScript 来弹窗
         }
         if FileManager.default.fileExists(atPath: destination) {
-            print("Destination file already exists: \(destination)")
+            print("[*] Destination file already exists: \(destination)")
             return []
         }
         return [
@@ -396,10 +397,13 @@ class Injector: ObservableObject {
             alert.informativeText = String(localized: "This should not happen here, please report to the developer (Area: MainInject)")
             alert.alertStyle = .warning
             alert.addButton(withTitle: String(localized: "OK"))
+            alert.runModal()
+            print("[*] Inject Tools Path Not Found.")
             return [("echo Inject Tools Path Not Found && exit 1", true)]
         }
 
         if self.injectDetail?.needCopyToAppDir == true {
+            print("[*] Copying 91Qiuchenly.dylib to app dir")
 //            let copyedQiuchenly_URL = (self.appDetail?.path ?? "") + bridgeDir + "91Qiuchenly.dylib"
             let copyedQiuchenly_URL = self.genSourcePath(for: .none, file: "91Qiuchenly.dylib")
             let softLink = ("sudo ln -f -s '\(QiuchenlyDylib_URL!)' '\(copyedQiuchenly_URL)'", true) // 为了防止原神更新后导致的插件失效，这里使用软链接
@@ -441,17 +445,17 @@ class Injector: ObservableObject {
             sign_prefix_with_deep += " --entitlements \(entitlementsPath!)"
         }
 
-        let dest = self.genSourcePath(for: .bash)
+        let dest = self.genSourcePath(for: .none)
 
         if !(injectDetail?.noSignTarget ?? false) {
-            shells.append((sign_prefix_with_deep + " '\(dest)'", false))
+            shells.append((sign_prefix_with_deep + " '\(dest)'", true))
         }
 //        shells.append((sign_prefix_with_deep + " '\(dest)'", false))
 
         let deepSignApp = self.injectDetail?.deepSignApp // Bool
         if deepSignApp == true {
-            let deepSignAppPath = self.genSourcePath(for: .bash, path: (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))
-            shells.append((sign_prefix_with_deep + " '\(deepSignAppPath)'", false))
+            let deepSignAppPath = self.genSourcePath(for: .none, path: (self.appDetail?.path ?? "").replacingOccurrences(of: "/Contents", with: ""))
+            shells.append((sign_prefix_with_deep + " '\(deepSignAppPath)'", true))
         }
 
 //        let disableLibraryValidate = self.injectDetail?.dis
