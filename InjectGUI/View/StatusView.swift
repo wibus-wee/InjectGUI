@@ -12,11 +12,10 @@ struct StatusView: View {
     @Environment(\.dismiss) var dismiss // dismiss the sheet
 
     @StateObject var injector = Injector.shared
-    @State var appDetail: AppDetail = .init(name: "", identifier: "", version: "", path: "", executable: "", icon: NSImage())
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if appDetail.name.isEmpty {
+            if self.injector.appDetail?.name == nil {
                 Text("Why you are seeing this?")
                     .font(.title)
                     .bold()
@@ -45,18 +44,18 @@ struct StatusView: View {
                 // MARK: - App Info Display Box
 
                 HStack(spacing: 20) {
-                    Image(nsImage: appDetail.icon)
+                    Image(nsImage: self.injector.appDetail!.icon)
                         .resizable()
                         .frame(width: 64, height: 64)
                         .cornerRadius(4)
                     // Spacer()
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(appDetail.name)
+                        Text(self.injector.appDetail!.name)
                             .font(.headline)
-                        Text(appDetail.identifier)
+                        Text(self.injector.appDetail!.identifier)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
-                        Text("Version: \(appDetail.version)")
+                        Text("Version: \(self.injector.appDetail!.version)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -155,20 +154,15 @@ struct StatusView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .onChange(of: injector.stage.appId) { appId in
-            guard let appDetail = softwareManager.appListCache[appId] else {
-                return
-            }
-            self.appDetail = appDetail
-        }
-        .frame(minWidth: 350, minHeight: appDetail.name.isEmpty ? 200 : 400)
+//        .onChange(of: injector.isRunning) { _ in
+//            let appId = injector.stage.appId
+//            guard let self.injector.appDetail = softwareManager.appListCache[appId] else {
+//                return
+//            }
+//            self.self.injector.appDetail = self.injector.appDetail
+//        }
+        .frame(minWidth: 350, minHeight: 400)
         .padding()
-        .onAppear {
-            guard let appDetail = softwareManager.appListCache[injector.stage.appId] else {
-                return
-            }
-            self.appDetail = appDetail
-        }
         .background(Color(.windowBackgroundColor))
     }
 }
