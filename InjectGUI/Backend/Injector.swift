@@ -516,7 +516,7 @@ class Injector: ObservableObject {
 
         // 把 [0] 替换为 [1] 的内容
         let replaceCommands = replaceSpecialShell.map { from, to in
-            "sed -i '' 's|\(from)|\(to)|g' \(downloadPath)"
+            "sed -i '' 's|\(from)|\"\(to)\"|g' \(downloadPath)"
         }
 
         shells.append((downloadCommand, false))
