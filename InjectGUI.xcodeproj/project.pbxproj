@@ -33,7 +33,6 @@
 		38BC1F5A2C4B98A300C3B60E /* AppDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F592C4B98A300C3B60E /* AppDetailView.swift */; };
 		38BC1F5C2C4BB02200C3B60E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC1F5B2C4BB02200C3B60E /* SettingsView.swift */; };
 		38E944F22C5A761B00B252A3 /* Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F12C5A761B00B252A3 /* Executor.swift */; };
-		38E944F52C5A7F6A00B252A3 /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = 38E944F42C5A7F6A00B252A3 /* Cache */; };
 		38E944F72C5A85E200B252A3 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E944F62C5A85E200B252A3 /* Cache.swift */; };
 		96BC7ED02C65C5E200149818 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 96BC7ECF2C65C5E200149818 /* Localizable.xcstrings */; };
 		96BC7ED62C65E7B100149818 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BC7ED52C65E7B100149818 /* AboutView.swift */; };
@@ -79,7 +78,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38E944F52C5A7F6A00B252A3 /* Cache in Frameworks */,
 				380D777B2C61EA56005F3150 /* Sparkle in Frameworks */,
 				383943792C68458F00E5984E /* Inject in Frameworks */,
 			);
@@ -214,7 +212,6 @@
 			);
 			name = InjectGUI;
 			packageProductDependencies = (
-				38E944F42C5A7F6A00B252A3 /* Cache */,
 				380D777A2C61EA56005F3150 /* Sparkle */,
 				383943782C68458F00E5984E /* Inject */,
 			);
@@ -248,7 +245,6 @@
 			);
 			mainGroup = 38877A102C4A6F83009F5910;
 			packageReferences = (
-				38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */,
 				380D77792C61EA56005F3150 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				383943772C68458F00E5984E /* XCRemoteSwiftPackageReference "Inject" */,
 			);
@@ -548,14 +544,6 @@
 				minimumVersion = 1.5.2;
 			};
 		};
-		38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hyperoslo/Cache";
-			requirement = {
-				kind = exactVersion;
-				version = 7.2.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -568,11 +556,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 383943772C68458F00E5984E /* XCRemoteSwiftPackageReference "Inject" */;
 			productName = Inject;
-		};
-		38E944F42C5A7F6A00B252A3 /* Cache */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 38E944F32C5A7F6A00B252A3 /* XCRemoteSwiftPackageReference "Cache" */;
-			productName = Cache;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
