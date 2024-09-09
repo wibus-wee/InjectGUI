@@ -17,7 +17,7 @@ permissions:
 jobs:
   build-mac:
     name: Build for macOS (Universal)
-    runs-on: macOS-latest
+    runs-on: macOS-13
     steps:
       - name: Checkout
         uses: actions/checkout@v4
