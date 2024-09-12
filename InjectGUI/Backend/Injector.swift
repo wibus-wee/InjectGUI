@@ -440,8 +440,24 @@ class Injector: ObservableObject {
             let entitlementDownloadURL = injectConfiguration.generateInjectToolDownloadURL(name: entitlements)
             let downloadIntoTmpPath = try? FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: URL(fileURLWithPath: "/"), create: true)
             let entitlementsPath = downloadIntoTmpPath?.appendingPathComponent(entitlements).path
-            let downloadCommand = "curl -L -o \(entitlementsPath!) \(entitlementDownloadURL!)"
-            shells.append((downloadCommand, false))
+//            let downloadCommand = "curl -L -o \(entitlementsPath!) \(entitlementDownloadURL!)"
+
+            let semaphore = DispatchSemaphore(value: 0)
+            
+            let task = URLSession.shared.downloadTask(with: entitlementDownloadURL!) { (location, response, error) in
+                if let location = location {
+                    try? FileManager.default.moveItem(at: location, to: URL(fileURLWithPath: entitlementsPath!))
+                    print("[*] Download Entitlements Success: \(entitlementDownloadURL!)")
+                } else {
+                    print("[*] Download Entitlements Failed: \(entitlementDownloadURL!)")
+                    shells.append(("echo Download Entitlements Failed: \(entitlementDownloadURL!) && exit 1", false))
+                }
+                semaphore.signal()
+            }
+
+            task.resume()
+            semaphore.wait()
+            
             sign_prefix_with_deep += " --entitlements \(entitlementsPath!)"
         }
 
@@ -486,7 +502,24 @@ class Injector: ObservableObject {
             try? FileManager.default.createDirectory(at: extraShellDir, withIntermediateDirectories: true, attributes: nil)
         }
         let downloadPath = downloadIntoTmpPath.appendingPathComponent(extraShell).path
-        let downloadCommand = "curl -L -o \(downloadPath) \(getToolDownloadURL)"
+//        let downloadCommand = "curl -L -o \(downloadPath) \(getToolDownloadURL)"
+        // 创建信号量，等待下载完成
+
+        let semaphore = DispatchSemaphore(value: 0)
+
+        let task = URLSession.shared.downloadTask(with: getToolDownloadURL) { (location, response, error) in
+            if let location = location {
+                try? FileManager.default.moveItem(at: location, to: URL(fileURLWithPath: downloadPath))
+                print("[*] Download Extra Shell Success: \(getToolDownloadURL)")
+            } else {
+                print("[*] Download Extra Shell Failed: \(getToolDownloadURL)")
+                shells.append(("echo Download Extra Shell Failed: \(getToolDownloadURL) && exit 1", false))
+            }
+            semaphore.signal()
+        }
+
+        task.resume()
+        semaphore.wait()
 
         let dest = self.genSourcePath(for: .bash)
 
@@ -519,8 +552,9 @@ class Injector: ObservableObject {
             "sed -i '' 's|\(from)|\"\(to)\"|g' \(downloadPath)"
         }
 
-        shells.append((downloadCommand, false))
-        shells.append(("chmod +x \(downloadPath)", false))
+        // shells.append((downloadCommand, false))
+        shells.append(("sudo chmod -R 777 \(downloadPath)", true))
+        shells.append(("chmod +x \(downloadPath)", true))
         if !replaceCommands.isEmpty {
             shells.append(contentsOf: replaceCommands.map { ($0, false) })
         }
