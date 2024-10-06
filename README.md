@@ -1,9 +1,17 @@
+> [!IMPORTANT]
+>
+> InjectGUI is about to complete its mission and reach the end of its development.
+> 
+> Where is the next generation? Stay tuned!
+
 <p align="center">
   <p align="center">
    <img width="150" height="150" src="/InjectGUI/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png" alt="Logo">
   </p>
 	<h1 align="center"><b>InjectGUI</b></h1>
 	<p align="center">
+		<b><small><code>STOP MAINTENANCE</code></small><b>
+		<br>
 		macOS Integrated Injection Framework (GUI version)
     <br />
     <br />
@@ -13,11 +21,11 @@
   </p>
 </p>
 
-> [!IMPORTANT]
+## Stop maintenance
+
+> I know that InjectGUI currently has a lot of injection problems on some systems and models, but it takes a lot of time to solve it. Maybe I don't have so much time, QiuChenly will launch more powerful software.
 >
-> InjectGUI is currently in development and not yet recommended for production use, however you can take part in improving our project!
->
-> If you have any errors or suggestions, please feel free to [open an issue](https://github.com/wibus-wee/InjectGUI/issues) or [pull request](https://github.com/wibus-wee/InjectGUI/pulls). We will be very grateful for your help.
+> So far, thanks QiuChenlyOpenSource.
 
 ## ⚠️ Warning
 
